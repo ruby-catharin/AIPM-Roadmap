@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef, useCallback } from "react";
+import { useRoadmapStore } from "./store";
 
 // ─── WEEK DATA ───────────────────────────────────────────────────────────────
 const WEEKS = [
@@ -686,8 +687,13 @@ const typeStyles = {
 // ─── SECTION COMPONENT ───────────────────────────────────────────────────────
 
 function Section({ section, weekColor }) {
-  const [expanded, setExpanded] = useState(false);
-  const [depth, setDepth] = useState("eli5");
+  const expandedSections = useRoadmapStore((state) => state.expandedSections);
+  const selectedDepthLevels = useRoadmapStore((state) => state.selectedDepthLevels);
+  const toggleExpandSection = useRoadmapStore((state) => state.toggleExpandSection);
+  const setDepthLevel = useRoadmapStore((state) => state.setDepthLevel);
+
+  const expanded = expandedSections.has(section.id);
+  const depth = selectedDepthLevels[section.id] || "eli5";
   const depths = ["eli5", "normal", "technical", "pm"];
   const depthLabels = { eli5: "ELI5 🧒", normal: "Normal 📖", technical: "Technical ⚙️", pm: "PM Lens 🎯" };
 
@@ -704,7 +710,7 @@ function Section({ section, weekColor }) {
     <div style={{ background: "#0d0d22", border: "1px solid #1a1a35", borderRadius: 16, marginBottom: 14, overflow: "hidden", transition: "border-color 0.3s" }}
       onMouseEnter={e => e.currentTarget.style.borderColor = weekColor + "44"}
       onMouseLeave={e => e.currentTarget.style.borderColor = "#1a1a35"}>
-      <button onClick={() => setExpanded(!expanded)} style={{
+      <button onClick={() => toggleExpandSection(section.id)} style={{
         width: "100%", padding: "18px 20px", background: "none", border: "none",
         display: "flex", alignItems: "center", gap: 14, cursor: "pointer", textAlign: "left"
       }}>
@@ -726,7 +732,7 @@ function Section({ section, weekColor }) {
           {/* Depth Tabs */}
           <div style={{ display: "flex", gap: 4, marginBottom: 16, background: "#111128", borderRadius: 10, padding: 4 }}>
             {depths.map(d => (
-              <button key={d} onClick={() => setDepth(d)} style={{
+              <button key={d} onClick={() => setDepthLevel(section.id, d)} style={{
                 flex: 1, padding: "8px 4px", borderRadius: 8, border: "none",
                 background: depth === d ? weekColor : "transparent",
                 color: depth === d ? "#fff" : "#666", fontSize: 12, fontWeight: 600,
@@ -779,8 +785,11 @@ function Section({ section, weekColor }) {
 // ─── MAIN APP ────────────────────────────────────────────────────────────────
 
 export default function AIRoadmap() {
-  const [activeWeek, setActiveWeek] = useState(0);
+  const currentWeekId = useRoadmapStore((state) => state.currentWeekId);
+  const setCurrentWeek = useRoadmapStore((state) => state.setCurrentWeek);
   const contentRef = useRef(null);
+
+  const activeWeek = WEEKS.findIndex((w) => w.id === currentWeekId);
   const week = WEEKS[activeWeek];
 
   useEffect(() => {
@@ -824,7 +833,7 @@ export default function AIRoadmap() {
         {/* Sidebar */}
         <div className="sidebar" style={{ width: 300, flexShrink: 0, padding: 16, borderRight: "1px solid #151530", position: "sticky", top: 0, maxHeight: "calc(100vh - 120px)", overflowY: "auto" }}>
           {WEEKS.map((w, i) => (
-            <button key={w.id} onClick={() => setActiveWeek(i)} style={{
+            <button key={w.id} onClick={() => setCurrentWeek(w.id)} style={{
               width: "100%", padding: "16px 14px", marginBottom: 6, borderRadius: 12, border: i === activeWeek ? `1px solid ${w.color}55` : "1px solid transparent",
               background: i === activeWeek ? `${w.color}0c` : "transparent", cursor: "pointer", textAlign: "left", transition: "all 0.25s"
             }}
@@ -878,9 +887,9 @@ export default function AIRoadmap() {
 
           {/* Week nav */}
           <div style={{ display: "flex", gap: 12, marginTop: 28, paddingBottom: 40 }}>
-            <button onClick={() => setActiveWeek(Math.max(0, activeWeek - 1))} disabled={activeWeek === 0}
+            <button onClick={() => setCurrentWeek(WEEKS[Math.max(0, activeWeek - 1)].id)} disabled={activeWeek === 0}
               style={{ flex: 1, padding: "12px 0", borderRadius: 10, border: "1px solid #252545", background: "transparent", color: activeWeek === 0 ? "#252545" : "#888", cursor: activeWeek === 0 ? "default" : "pointer", fontSize: 13, fontWeight: 600, fontFamily: "var(--mono)" }}>← Previous Week</button>
-            <button onClick={() => setActiveWeek(Math.min(WEEKS.length - 1, activeWeek + 1))} disabled={activeWeek === WEEKS.length - 1}
+            <button onClick={() => setCurrentWeek(WEEKS[Math.min(WEEKS.length - 1, activeWeek + 1)].id)} disabled={activeWeek === WEEKS.length - 1}
               style={{ flex: 1, padding: "12px 0", borderRadius: 10, border: `1px solid ${week.color}44`, background: activeWeek === WEEKS.length - 1 ? "transparent" : `${week.color}18`, color: activeWeek === WEEKS.length - 1 ? "#252545" : week.color, cursor: activeWeek === WEEKS.length - 1 ? "default" : "pointer", fontSize: 13, fontWeight: 600, fontFamily: "var(--mono)" }}>Next Week →</button>
           </div>
         </div>
