@@ -69,7 +69,9 @@ The 4-week structure exists to create a learning arc — a beginning, middle, an
 ### Non-Goals
 
 **NG1 — Not a course with completion tracking**
-There is no progress state, no login, no localStorage. This is deliberate: completion mechanics optimise for finishing, not understanding. A PM who clicks through all sections in a weekend and checks every box has learned nothing useful. The absence of tracking is a feature — it puts the reader in charge of their own standard.
+There are no gamification mechanics, no badges, no streaks, and no metrics that *pressure* progress. This is deliberate: completion mechanics optimise for finishing, not understanding. A PM who clicks through all sections in a weekend and checks every box has learned nothing useful.
+
+The application does persist navigation and depth level preferences to localStorage for user convenience (so you can close and resume without manual navigation), but there is no login, no server-side storage, and no pressure to complete. The absence of *pressure* mechanics is a feature — it puts the reader in charge of their own standard.
 
 **NG2 — Not a comprehensive AI curriculum**
 This roadmap does not cover every AI topic. It covers the topics a PM encounters in their first year of building AI products. Computer vision, reinforcement learning, model training from scratch — these are excluded not because they are unimportant, but because they are not where a product-focused PM should start.
@@ -116,30 +118,47 @@ The single-file choice has real costs. At 890 lines, the file is difficult to na
 
 ---
 
-### Decision 3.2 — Local state only (`useState`), no state management library
+### Decision 3.2 — Lightweight state management with Zustand for progress persistence
 
 **Context**
 
-React apps that share data across many components often introduce a state management library (Redux, Zustand, Context API) to avoid passing data through many layers of components manually.
+React apps that share data across many components or need to persist state across sessions often require a state management library. Initially, this roadmap used only React's built-in `useState` because the design philosophy (Decision 3.1) explicitly avoided persistence features — "no progress tracking, no completion badges."
+
+However, user feedback and observed behavior indicated that while users rejected *gamification mechanics*, they did value being able to return to where they left off without manually navigating back. This represented a shift in the non-goal boundary: persistence for user convenience (not completion optimization) became valuable.
 
 **Decision**
 
-All state in this application is managed with React's built-in `useState`. No external state management library was introduced.
+The application now uses Zustand for centralized state management with automatic persistence to localStorage. Three types of state are tracked:
+- Navigation state (`currentWeekId`, `currentSectionId`) — which section the user is viewing
+- UI state (`expandedSections`, `selectedDepthLevels`) — which sections are expanded and which depth level is selected per section
+- Progress tracking (`completedSections`, `quizAnswers`) — optional future integration for quiz performance
 
-There are only three types of state in this application:
-- Which week is active — one variable at the top level (`activeWeek`)
-- Whether a section is expanded — local to each `Section` component (`expanded`)
-- Which depth tab is selected — local to each `Section` component (`depth`)
-
-No state needs to be shared between unrelated components. No state needs to persist beyond a session. No state needs to be updated from multiple places simultaneously.
+All state is automatically persisted to localStorage under the key `'roadmap-progress'` and restored on page load.
 
 **Rationale**
 
-A state management library solves a coordination problem. This application does not have a coordination problem — it has three local variables. Introducing Redux or Zustand here would be solving for a scale that does not exist, at the cost of added dependencies and indirection that make the codebase harder to read for a single-author project.
+Zustand was chosen over React Context API or Redux for three reasons:
+
+1. **Minimal complexity** — Zustand requires no providers, no reducers, no action types. A component subscribes to only the state it uses, resulting in fine-grained reactivity and minimal unnecessary re-renders. This keeps the pattern lightweight despite adding persistence.
+
+2. **Built-in localStorage integration** — Zustand's `persist` middleware handles serialization/deserialization automatically. This eliminates the need for manual `useEffect` cleanup and boilerplate that Context API would require.
+
+3. **Alignment with project scale** — Redux would be over-engineered. Context API would require provider wrapping and manual persistence logic. Zustand's minimal API surface matches this project's single-author, bounded-scope nature while staying simpler than either alternative.
+
+The decision preserves the original non-goal (NG1: "not a course with completion tracking") — there are no badges, streaks, or metrics that *pressure* completion. The persistence is purely convenience: users can close the tab and resume where they left off, without being nudged to progress.
 
 **Consequences**
 
-If the roadmap were extended to support user accounts, saved progress, or cross-session bookmarks, `useState` alone would become insufficient. That would be the signal to introduce a lightweight store like Zustand. Until that feature exists, the simpler tool is the right tool.
+State now lives in a separate file (`src/store.js`), creating a new abstraction layer. This is acceptable because:
+- The store is single-purpose and under 100 lines
+- Components no longer carry local state for things that benefit from persistence, reducing their individual complexity
+- The persistence boundary is explicit and testable
+
+Future features that could leverage this state:
+- Export progress as JSON for shareable snapshots
+- Analytics on which sections spend the most time
+- Dark/light mode preference persistence
+- Quiz performance tracking and review
 
 ---
 
