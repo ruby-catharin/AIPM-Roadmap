@@ -412,39 +412,39 @@ function TemperatureDemo() {
   const normalized = probs.map(p => p / total);
 
   return (
-    <div style={{ background: "#111128", border: "1px solid #252545", borderRadius: 14, padding: 20 }}>
-      <div style={{ fontSize: 13, fontWeight: 700, color: "#F76707", fontFamily: "var(--mono)", letterSpacing: 1, marginBottom: 14 }}>
-        🌡️ TEMPERATURE VISUALIZER
+    <div style={{ background: "#f9f9f9", border: "1px solid #e0e0e0", borderRadius: 12, padding: 20 }}>
+      <div style={{ fontSize: 12, fontWeight: 600, color: "#000", fontFamily: "var(--mono)", letterSpacing: 1, marginBottom: 16 }}>
+        🌡️ Temperature Visualizer
       </div>
-      <div style={{ display: "flex", justifyContent: "space-between", fontSize: 12, color: "#8a8aa0", marginBottom: 4, fontFamily: "var(--mono)" }}>
-        <span>Temperature</span><span style={{ color: temp < 0.3 ? "#2F9E44" : temp < 0.8 ? "#F76707" : "#E03131", fontWeight: 700 }}>{temp.toFixed(1)}</span>
+      <div style={{ display: "flex", justifyContent: "space-between", fontSize: 12, color: "#666", marginBottom: 8, fontFamily: "var(--mono)" }}>
+        <span>Temperature</span><span style={{ color: temp < 0.3 ? "#2F9E44" : temp < 0.8 ? "#F59F00" : "#E03131", fontWeight: 600 }}>{temp.toFixed(1)}</span>
       </div>
       <input type="range" min={0} max={2} step={0.1} value={temp} onChange={e => setTemp(+e.target.value)}
-        style={{ width: "100%", accentColor: "#F76707", height: 4 }} />
-      <div style={{ display: "flex", gap: 4, marginTop: 8, fontSize: 11, justifyContent: "space-between", fontFamily: "var(--mono)", color: "#555" }}>
+        style={{ width: "100%", accentColor: "#555555", height: 4 }} />
+      <div style={{ display: "flex", gap: 4, marginTop: 10, fontSize: 11, justifyContent: "space-between", fontFamily: "var(--mono)", color: "#999" }}>
         <span>Deterministic</span><span>Balanced</span><span>Creative</span><span>Chaotic</span>
       </div>
-      <div style={{ marginTop: 16 }}>
-        <div style={{ fontSize: 11, color: "#666", fontFamily: "var(--mono)", marginBottom: 8 }}>CANDIDATE TOKENS (probability distribution)</div>
+      <div style={{ marginTop: 18 }}>
+        <div style={{ fontSize: 11, color: "#666", fontFamily: "var(--mono)", marginBottom: 10, fontWeight: 600 }}>DISTRIBUTION</div>
         {available.map((word, i) => (
-          <div key={word} style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 4 }}>
-            <span style={{ width: 100, fontSize: 12, color: i === 0 ? "#2F9E44" : i < 3 ? "#e0e0e0" : "#888", fontFamily: "var(--mono)", textAlign: "right" }}>{word}</span>
-            <div style={{ flex: 1, height: 16, background: "#1a1a35", borderRadius: 4, overflow: "hidden" }}>
+          <div key={word} style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 6 }}>
+            <span style={{ width: 100, fontSize: 12, color: i === 0 ? "#2F9E44" : i < 3 ? "#333" : "#999", fontFamily: "var(--mono)", textAlign: "right" }}>{word}</span>
+            <div style={{ flex: 1, height: 16, background: "#e0e0e0", borderRadius: 4, overflow: "hidden" }}>
               <div style={{
                 width: `${normalized[i] * 100}%`, height: "100%", borderRadius: 4,
                 background: i === 0 ? "#2F9E44" : `hsl(${200 - i * 15}, 70%, ${55 - i * 3}%)`,
                 transition: "width 0.4s ease"
               }} />
             </div>
-            <span style={{ width: 40, fontSize: 10, color: "#666", fontFamily: "var(--mono)" }}>{(normalized[i] * 100).toFixed(1)}%</span>
+            <span style={{ width: 40, fontSize: 10, color: "#999", fontFamily: "var(--mono)" }}>{(normalized[i] * 100).toFixed(1)}%</span>
           </div>
         ))}
       </div>
-      <div style={{ marginTop: 12, padding: 10, background: "#1a1a35", borderRadius: 8, fontSize: 12, color: "#8a8aa0", lineHeight: 1.5 }}>
-        {temp < 0.3 ? "🎯 Deterministic mode — always picks the top token. Best for: data extraction, classification, factual Q&A."
-         : temp < 0.8 ? "⚖️ Balanced mode — mostly picks likely tokens with some variety. Best for: customer support, summarization."
-         : temp < 1.2 ? "🎨 Creative mode — explores many options. Best for: brainstorming, marketing copy, creative writing."
-         : "🌪️ Chaotic mode — even unlikely tokens get selected. Outputs may be incoherent. Rarely useful in production."}
+      <div style={{ marginTop: 14, padding: 12, background: "#fff", border: "1px solid #f0f0f0", borderRadius: 8, fontSize: 12, color: "#555", lineHeight: 1.6 }}>
+        {temp < 0.3 ? "🎯 Deterministic — always picks the top token. Best for: data extraction, classification, factual Q&A."
+         : temp < 0.8 ? "⚖️ Balanced — mostly picks likely tokens with some variety. Best for: customer support, summarization."
+         : temp < 1.2 ? "🎨 Creative — explores many options. Best for: brainstorming, marketing copy, creative writing."
+         : "🌪️ Chaotic — even unlikely tokens get selected. Rarely useful in production."}
       </div>
     </div>
   );
@@ -461,30 +461,30 @@ function SystemPromptBuilder() {
   const scoreColors = ["#E03131", "#F76707", "#F59F00", "#2F9E44", "#1C7ED6"];
 
   return (
-    <div style={{ background: "#111128", border: "1px solid #252545", borderRadius: 14, padding: 20 }}>
-      <div style={{ fontSize: 13, fontWeight: 700, color: "#F76707", fontFamily: "var(--mono)", letterSpacing: 1, marginBottom: 4 }}>
-        🏗️ SYSTEM PROMPT BUILDER
+    <div style={{ background: "#f9f9f9", border: "1px solid #e0e0e0", borderRadius: 12, padding: 20 }}>
+      <div style={{ fontSize: 12, fontWeight: 600, color: "#000", fontFamily: "var(--mono)", letterSpacing: 1, marginBottom: 6 }}>
+        🏗️ System Prompt Builder
       </div>
-      <div style={{ fontSize: 11, color: "#666", marginBottom: 14 }}>Build a system prompt and get instant quality feedback</div>
+      <div style={{ fontSize: 12, color: "#666", marginBottom: 16 }}>Get instant quality feedback</div>
       {[
         { label: "1. ROLE", placeholder: "You are a senior financial analyst specializing in...", value: role, set: setRole, tip: "Be specific: domain, seniority, expertise" },
         { label: "2. CONSTRAINTS", placeholder: "Never provide investment advice. Always cite sources...", value: constraints, set: setConstraints, tip: "What should it do and NOT do?" },
-        { label: "3. OUTPUT FORMAT", placeholder: "Respond with: Summary (2-3 sentences), Key Findings (bullets), Confidence (high/medium/low)", value: format, set: setFormat, tip: "How should responses be structured?" },
-        { label: "4. GUARDRAILS", placeholder: "If asked about topics outside finance, politely redirect...", value: guardrails, set: setGuardrails, tip: "How to handle edge cases and off-topic" },
+        { label: "3. OUTPUT FORMAT", placeholder: "Respond with: Summary (2-3 sentences), Key Findings (bullets)", value: format, set: setFormat, tip: "How should responses be structured?" },
+        { label: "4. GUARDRAILS", placeholder: "If asked about topics outside finance, politely redirect...", value: guardrails, set: setGuardrails, tip: "How to handle edge cases?" },
       ].map(({ label, placeholder, value, set, tip }) => (
-        <div key={label} style={{ marginBottom: 12 }}>
-          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 4 }}>
-            <span style={{ fontSize: 11, fontWeight: 700, color: "#8a8aa0", fontFamily: "var(--mono)" }}>{label}</span>
-            {value.length > 15 && <span style={{ fontSize: 10, color: "#2F9E44", fontFamily: "var(--mono)" }}>✓</span>}
+        <div key={label} style={{ marginBottom: 14 }}>
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 6 }}>
+            <span style={{ fontSize: 11, fontWeight: 600, color: "#333", fontFamily: "var(--mono)" }}>{label}</span>
+            {value.length > 15 && <span style={{ fontSize: 11, color: "#2F9E44", fontFamily: "var(--mono)" }}>✓</span>}
           </div>
           <textarea value={value} onChange={e => set(e.target.value)} placeholder={placeholder}
-            style={{ width: "100%", boxSizing: "border-box", background: "#1a1a35", border: "1px solid #252545", borderRadius: 8, padding: "10px 12px", color: "#e0e0e0", fontSize: 13, fontFamily: "var(--body)", resize: "vertical", minHeight: 48, outline: "none" }} />
-          <div style={{ fontSize: 10, color: "#555", marginTop: 2 }}>{tip}</div>
+            style={{ width: "100%", boxSizing: "border-box", background: "#ffffff", border: "1px solid #e0e0e0", borderRadius: 8, padding: "10px 12px", color: "#333", fontSize: 13, fontFamily: "var(--body)", resize: "vertical", minHeight: 48, outline: "none" }} />
+          <div style={{ fontSize: 11, color: "#999", marginTop: 4 }}>{tip}</div>
         </div>
       ))}
-      <div style={{ background: scoreColors[score], borderRadius: 8, padding: "10px 14px", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-        <span style={{ fontSize: 13, fontWeight: 700 }}>{scoreLabels[score]}</span>
-        <span style={{ fontSize: 12, fontFamily: "var(--mono)" }}>{score}/4 sections</span>
+      <div style={{ background: scoreColors[score], borderRadius: 8, padding: "12px 16px", display: "flex", justifyContent: "space-between", alignItems: "center", color: "#fff" }}>
+        <span style={{ fontSize: 13, fontWeight: 600 }}>{scoreLabels[score]}</span>
+        <span style={{ fontSize: 12, fontFamily: "var(--mono)" }}>{score}/4</span>
       </div>
     </div>
   );
@@ -509,38 +509,38 @@ function EmbeddingSimilarity() {
   const simColor = sim > 0.95 ? "#2F9E44" : sim > 0.8 ? "#F59F00" : "#E03131";
 
   return (
-    <div style={{ background: "#111128", border: "1px solid #252545", borderRadius: 14, padding: 20 }}>
-      <div style={{ fontSize: 13, fontWeight: 700, color: "#1C7ED6", fontFamily: "var(--mono)", letterSpacing: 1, marginBottom: 14 }}>
-        📐 EMBEDDING SIMILARITY DEMO
+    <div style={{ background: "#f9f9f9", border: "1px solid #e0e0e0", borderRadius: 12, padding: 20 }}>
+      <div style={{ fontSize: 12, fontWeight: 600, color: "#000", fontFamily: "var(--mono)", letterSpacing: 1, marginBottom: 16 }}>
+        📐 Embedding Similarity
       </div>
-      <div style={{ fontSize: 11, color: "#666", fontFamily: "var(--mono)", marginBottom: 8 }}>PHRASE A</div>
-      <div style={{ display: "flex", flexWrap: "wrap", gap: 6, marginBottom: 14 }}>
+      <div style={{ fontSize: 11, color: "#666", fontFamily: "var(--mono)", marginBottom: 10, fontWeight: 600 }}>PHRASE A</div>
+      <div style={{ display: "flex", flexWrap: "wrap", gap: 8, marginBottom: 16 }}>
         {phrases.map((p, i) => (
           <button key={p} onClick={() => setP1(i)} style={{
-            padding: "6px 12px", borderRadius: 8, border: p1 === i ? "1px solid #1C7ED6" : "1px solid #252545",
-            background: p1 === i ? "#1C7ED622" : "transparent", color: p1 === i ? "#1C7ED6" : "#888",
+            padding: "6px 12px", borderRadius: 6, border: p1 === i ? "1.5px solid #333" : "1px solid #e0e0e0",
+            background: p1 === i ? "#000000" : "#ffffff", color: p1 === i ? "#ffffff" : "#666",
             fontSize: 12, cursor: "pointer", fontFamily: "var(--body)"
           }}>{p}</button>
         ))}
       </div>
-      <div style={{ fontSize: 11, color: "#666", fontFamily: "var(--mono)", marginBottom: 8 }}>PHRASE B</div>
-      <div style={{ display: "flex", flexWrap: "wrap", gap: 6, marginBottom: 14 }}>
+      <div style={{ fontSize: 11, color: "#666", fontFamily: "var(--mono)", marginBottom: 10, fontWeight: 600 }}>PHRASE B</div>
+      <div style={{ display: "flex", flexWrap: "wrap", gap: 8, marginBottom: 16 }}>
         {phrases.map((p, i) => (
           <button key={p} onClick={() => setP2(i)} style={{
-            padding: "6px 12px", borderRadius: 8, border: p2 === i ? "1px solid #1C7ED6" : "1px solid #252545",
-            background: p2 === i ? "#1C7ED622" : "transparent", color: p2 === i ? "#1C7ED6" : "#888",
+            padding: "6px 12px", borderRadius: 6, border: p2 === i ? "1.5px solid #333" : "1px solid #e0e0e0",
+            background: p2 === i ? "#000000" : "#ffffff", color: p2 === i ? "#ffffff" : "#666",
             fontSize: 12, cursor: "pointer", fontFamily: "var(--body)"
           }}>{p}</button>
         ))}
       </div>
-      <div style={{ background: "#1a1a35", borderRadius: 10, padding: 16, textAlign: "center" }}>
-        <div style={{ fontSize: 11, color: "#666", fontFamily: "var(--mono)", marginBottom: 4 }}>COSINE SIMILARITY</div>
-        <div style={{ fontSize: 36, fontWeight: 800, color: simColor, fontFamily: "var(--display)" }}>{sim.toFixed(4)}</div>
-        <div style={{ height: 8, background: "#252545", borderRadius: 99, marginTop: 8, overflow: "hidden" }}>
+      <div style={{ background: "#ffffff", border: "1px solid #e0e0e0", borderRadius: 8, padding: 16, textAlign: "center" }}>
+        <div style={{ fontSize: 11, color: "#999", fontFamily: "var(--mono)", marginBottom: 6, fontWeight: 600 }}>COSINE SIMILARITY</div>
+        <div style={{ fontSize: 40, fontWeight: 700, color: simColor, fontFamily: "var(--display)" }}>{sim.toFixed(4)}</div>
+        <div style={{ height: 6, background: "#e0e0e0", borderRadius: 99, marginTop: 10, overflow: "hidden" }}>
           <div style={{ width: `${sim * 100}%`, height: "100%", background: simColor, borderRadius: 99, transition: "all 0.4s" }} />
         </div>
-        <div style={{ fontSize: 11, color: "#888", marginTop: 8 }}>
-          {sim > 0.95 ? "Nearly identical meaning ✨" : sim > 0.8 ? "Semantically related 🔗" : "Different topics 🔀"}
+        <div style={{ fontSize: 12, color: "#666", marginTop: 10 }}>
+          {sim > 0.95 ? "Nearly identical ✨" : sim > 0.8 ? "Semantically related 🔗" : "Different topics 🔀"}
         </div>
       </div>
     </div>
@@ -560,29 +560,29 @@ function RagPipeline() {
   ];
 
   return (
-    <div style={{ background: "#111128", border: "1px solid #252545", borderRadius: 14, padding: 20 }}>
-      <div style={{ fontSize: 13, fontWeight: 700, color: "#1C7ED6", fontFamily: "var(--mono)", letterSpacing: 1, marginBottom: 14 }}>
-        🔄 RAG PIPELINE — STEP BY STEP
+    <div style={{ background: "#f9f9f9", border: "1px solid #e0e0e0", borderRadius: 12, padding: 20 }}>
+      <div style={{ fontSize: 12, fontWeight: 600, color: "#000", fontFamily: "var(--mono)", letterSpacing: 1, marginBottom: 16 }}>
+        🔄 RAG Pipeline
       </div>
       <div style={{ display: "flex", gap: 4, marginBottom: 16 }}>
         {steps.map((_, i) => (
           <button key={i} onClick={() => setStep(i)} style={{
-            flex: 1, height: 6, borderRadius: 99, border: "none", cursor: "pointer",
-            background: i <= step ? "#1C7ED6" : "#252545", transition: "background 0.3s"
+            flex: 1, height: 5, borderRadius: 99, border: "none", cursor: "pointer",
+            background: i <= step ? "#333333" : "#d0d0d0", transition: "background 0.3s"
           }} />
         ))}
       </div>
-      <div style={{ background: "#1a1a35", borderRadius: 10, padding: 16, minHeight: 120 }}>
-        <div style={{ fontSize: 24, marginBottom: 8 }}>{steps[step].icon}</div>
-        <div style={{ fontSize: 16, fontWeight: 700, color: "#e0e0e0", fontFamily: "var(--display)", marginBottom: 4 }}>{steps[step].title}</div>
-        <div style={{ fontSize: 13, color: "#8a8aa0", marginBottom: 10, lineHeight: 1.5 }}>{steps[step].desc}</div>
-        <div style={{ fontSize: 12, color: "#666", lineHeight: 1.6, padding: "8px 12px", background: "#111128", borderRadius: 8, fontFamily: "var(--mono)" }}>{steps[step].detail}</div>
+      <div style={{ background: "#ffffff", border: "1px solid #e0e0e0", borderRadius: 8, padding: 16, minHeight: 130 }}>
+        <div style={{ fontSize: 28, marginBottom: 10 }}>{steps[step].icon}</div>
+        <div style={{ fontSize: 15, fontWeight: 600, color: "#000", fontFamily: "var(--display)", marginBottom: 6 }}>{steps[step].title}</div>
+        <div style={{ fontSize: 13, color: "#666", marginBottom: 12, lineHeight: 1.6 }}>{steps[step].desc}</div>
+        <div style={{ fontSize: 12, color: "#555", lineHeight: 1.6, padding: "10px 12px", background: "#fafafa", border: "1px solid #f0f0f0", borderRadius: 6, fontFamily: "var(--mono)" }}>{steps[step].detail}</div>
       </div>
-      <div style={{ display: "flex", gap: 8, marginTop: 12 }}>
+      <div style={{ display: "flex", gap: 10, marginTop: 14 }}>
         <button onClick={() => setStep(Math.max(0, step - 1))} disabled={step === 0}
-          style={{ flex: 1, padding: "8px 0", borderRadius: 8, border: "1px solid #252545", background: "transparent", color: step === 0 ? "#333" : "#888", cursor: step === 0 ? "default" : "pointer", fontSize: 12, fontFamily: "var(--mono)" }}>← Back</button>
+          style={{ flex: 1, padding: "10px 0", borderRadius: 8, border: "1px solid #e0e0e0", background: step === 0 ? "#f5f5f5" : "#ffffff", color: step === 0 ? "#ccc" : "#000", cursor: step === 0 ? "default" : "pointer", fontSize: 12, fontFamily: "var(--body)" }}>← Back</button>
         <button onClick={() => setStep(Math.min(steps.length - 1, step + 1))} disabled={step === steps.length - 1}
-          style={{ flex: 1, padding: "8px 0", borderRadius: 8, border: "1px solid #1C7ED644", background: step === steps.length - 1 ? "transparent" : "#1C7ED622", color: step === steps.length - 1 ? "#333" : "#1C7ED6", cursor: step === steps.length - 1 ? "default" : "pointer", fontSize: 12, fontWeight: 600, fontFamily: "var(--mono)" }}>Next →</button>
+          style={{ flex: 1, padding: "10px 0", borderRadius: 8, border: "1px solid #e0e0e0", background: step === steps.length - 1 ? "#f5f5f5" : "#ffffff", color: step === steps.length - 1 ? "#ccc" : "#000", cursor: step === steps.length - 1 ? "default" : "pointer", fontSize: 12, fontFamily: "var(--body)" }}>Next →</button>
       </div>
     </div>
   );
@@ -625,44 +625,44 @@ function Quiz({ questions, color }) {
   const reset = () => { setCurrent(0); setSelected(null); setShowResult(false); setScore(0); setCompleted(false); };
 
   if (completed) return (
-    <div style={{ background: "#111128", border: "1px solid #252545", borderRadius: 14, padding: 20, textAlign: "center" }}>
-      <div style={{ fontSize: 36, marginBottom: 8 }}>{score === questions.length ? "🏆" : score > questions.length / 2 ? "👏" : "📚"}</div>
-      <div style={{ fontSize: 20, fontWeight: 700, color: "#e0e0e0", fontFamily: "var(--display)" }}>{score}/{questions.length} correct</div>
-      <div style={{ fontSize: 13, color: "#888", marginTop: 4, marginBottom: 14 }}>
+    <div style={{ background: "#f9f9f9", border: "1px solid #e0e0e0", borderRadius: 12, padding: 24, textAlign: "center" }}>
+      <div style={{ fontSize: 40, marginBottom: 12 }}>{score === questions.length ? "🏆" : score > questions.length / 2 ? "👏" : "📚"}</div>
+      <div style={{ fontSize: 22, fontWeight: 600, color: "#000", fontFamily: "var(--display)" }}>{score}/{questions.length} correct</div>
+      <div style={{ fontSize: 14, color: "#666", marginTop: 6, marginBottom: 16 }}>
         {score === questions.length ? "Perfect score!" : score > questions.length / 2 ? "Great understanding!" : "Review the material and try again."}
       </div>
-      <button onClick={reset} style={{ padding: "8px 24px", borderRadius: 8, border: `1px solid ${color}`, background: `${color}22`, color, cursor: "pointer", fontSize: 13, fontWeight: 600, fontFamily: "var(--mono)" }}>Retry Quiz</button>
+      <button onClick={reset} style={{ padding: "10px 28px", borderRadius: 8, border: "1px solid #d0d0d0", background: "#000000", color: "#ffffff", cursor: "pointer", fontSize: 13, fontWeight: 500, fontFamily: "var(--body)" }}>Retry Quiz</button>
     </div>
   );
 
   return (
-    <div style={{ background: "#111128", border: "1px solid #252545", borderRadius: 14, padding: 20 }}>
-      <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 12 }}>
-        <span style={{ fontSize: 12, fontWeight: 700, color, fontFamily: "var(--mono)" }}>📝 KNOWLEDGE CHECK</span>
-        <span style={{ fontSize: 11, color: "#555", fontFamily: "var(--mono)" }}>{current + 1}/{questions.length}</span>
+    <div style={{ background: "#f9f9f9", border: "1px solid #e0e0e0", borderRadius: 12, padding: 20 }}>
+      <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 16 }}>
+        <span style={{ fontSize: 11, fontWeight: 600, color: "#666", fontFamily: "var(--mono)" }}>📝 KNOWLEDGE CHECK</span>
+        <span style={{ fontSize: 11, color: "#999", fontFamily: "var(--mono)" }}>{current + 1}/{questions.length}</span>
       </div>
-      <div style={{ fontSize: 14, color: "#e0e0e0", lineHeight: 1.6, marginBottom: 14, fontFamily: "var(--body)" }}>{q.q}</div>
-      <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+      <div style={{ fontSize: 14, color: "#333", lineHeight: 1.7, marginBottom: 16, fontFamily: "var(--body)" }}>{q.q}</div>
+      <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
         {q.options.map((opt, i) => {
-          let bg = "#1a1a35", border = "#252545", c = "#bbb";
-          if (showResult && i === q.correct) { bg = "#2F9E4422"; border = "#2F9E44"; c = "#2F9E44"; }
-          else if (showResult && i === selected && i !== q.correct) { bg = "#E0313122"; border = "#E03131"; c = "#E03131"; }
-          else if (selected === i) { bg = `${color}22`; border = color; c = color; }
+          let bg = "#ffffff", border = "#e0e0e0", c = "#333";
+          if (showResult && i === q.correct) { bg = "#e8f5e9"; border = "#2F9E44"; c = "#2F9E44"; }
+          else if (showResult && i === selected && i !== q.correct) { bg = "#ffebee"; border = "#E03131"; c = "#E03131"; }
+          else if (selected === i) { bg = "#f0f0f0"; border = "#333"; c = "#333"; }
           return (
             <button key={i} onClick={() => handleSelect(i)} style={{
-              padding: "10px 14px", borderRadius: 8, border: `1px solid ${border}`, background: bg,
+              padding: "12px 14px", borderRadius: 8, border: `1px solid ${border}`, background: bg,
               color: c, cursor: showResult ? "default" : "pointer", fontSize: 13, textAlign: "left",
-              fontFamily: "var(--body)", transition: "all 0.2s"
+              fontFamily: "var(--body)", transition: "all 0.15s"
             }}>{opt}</button>
           );
         })}
       </div>
       {showResult && (
-        <div style={{ marginTop: 12 }}>
-          <div style={{ fontSize: 12, color: "#8a8aa0", lineHeight: 1.6, padding: "10px 12px", background: "#1a1a35", borderRadius: 8, marginBottom: 10 }}>
+        <div style={{ marginTop: 14 }}>
+          <div style={{ fontSize: 12, color: "#555", lineHeight: 1.6, padding: "12px 14px", background: "#fff", border: "1px solid #f0f0f0", borderRadius: 8, marginBottom: 12 }}>
             💡 {q.explanation}
           </div>
-          <button onClick={next} style={{ width: "100%", padding: "10px 0", borderRadius: 8, border: `1px solid ${color}44`, background: `${color}22`, color, cursor: "pointer", fontSize: 13, fontWeight: 600, fontFamily: "var(--mono)" }}>
+          <button onClick={next} style={{ width: "100%", padding: "10px 0", borderRadius: 8, border: "1px solid #d0d0d0", background: "#000000", color: "#ffffff", cursor: "pointer", fontSize: 13, fontWeight: 500, fontFamily: "var(--body)" }}>
             {current < questions.length - 1 ? "Next Question →" : "See Results"}
           </button>
         </div>
@@ -692,14 +692,14 @@ function Section({ section, weekColor }) {
   const toggleExpandSection = useRoadmapStore((state) => state.toggleExpandSection);
   const setDepthLevel = useRoadmapStore((state) => state.setDepthLevel);
 
-  const expanded = expandedSections.has(section.id);
+  const expanded = expandedSections.includes(section.id);
   const depth = selectedDepthLevels[section.id] || "eli5";
   const depths = ["eli5", "normal", "technical", "pm"];
   const depthLabels = { eli5: "ELI5 🧒", normal: "Normal 📖", technical: "Technical ⚙️", pm: "PM Lens 🎯" };
 
   const renderText = (text) => {
     return text.split(/(\*\*[^*]+\*\*)/g).map((part, i) => {
-      if (part.startsWith("**") && part.endsWith("**")) return <strong key={i} style={{ color: "#e8e8e8" }}>{part.slice(2, -2)}</strong>;
+      if (part.startsWith("**") && part.endsWith("**")) return <strong key={i} style={{ color: "#000000", fontWeight: 600 }}>{part.slice(2, -2)}</strong>;
       return <span key={i}>{part}</span>;
     });
   };
@@ -707,42 +707,42 @@ function Section({ section, weekColor }) {
   const Interactive = section.interactive ? interactiveMap[section.interactive] : null;
 
   return (
-    <div style={{ background: "#0d0d22", border: "1px solid #1a1a35", borderRadius: 16, marginBottom: 14, overflow: "hidden", transition: "border-color 0.3s" }}
-      onMouseEnter={e => e.currentTarget.style.borderColor = weekColor + "44"}
-      onMouseLeave={e => e.currentTarget.style.borderColor = "#1a1a35"}>
+    <div style={{ background: "#ffffff", border: "1px solid #e0e0e0", borderRadius: 12, marginBottom: 20, overflow: "hidden", transition: "all 0.2s" }}
+      onMouseEnter={e => { e.currentTarget.style.borderColor = "#d0d0d0"; e.currentTarget.style.boxShadow = "0 1px 3px rgba(0,0,0,0.08)"; }}
+      onMouseLeave={e => { e.currentTarget.style.borderColor = "#e0e0e0"; e.currentTarget.style.boxShadow = "none"; }}>
       <button onClick={() => toggleExpandSection(section.id)} style={{
-        width: "100%", padding: "18px 20px", background: "none", border: "none",
+        width: "100%", padding: "16px 20px", background: "none", border: "none",
         display: "flex", alignItems: "center", gap: 14, cursor: "pointer", textAlign: "left"
       }}>
-        <div style={{ width: 36, height: 36, borderRadius: 10, background: `${weekColor}18`, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 16, flexShrink: 0 }}>
+        <div style={{ width: 36, height: 36, borderRadius: 8, background: "#f0f0f0", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 16, flexShrink: 0 }}>
           {expanded ? "▾" : "▸"}
         </div>
         <div style={{ flex: 1 }}>
-          <div style={{ color: "#e8e8e8", fontSize: 16, fontWeight: 700, fontFamily: "var(--display)" }}>{section.title}</div>
-          <div style={{ color: "#555", fontSize: 12, fontFamily: "var(--mono)", marginTop: 2 }}>{section.subtitle}</div>
+          <div style={{ color: "#000000", fontSize: 15, fontWeight: 600, fontFamily: "var(--display)" }}>{section.title}</div>
+          <div style={{ color: "#999", fontSize: 12, fontFamily: "var(--body)", marginTop: 3 }}>{section.subtitle}</div>
         </div>
-        <div style={{ display: "flex", gap: 4 }}>
-          {section.interactive && <span style={{ fontSize: 9, padding: "3px 8px", background: "#2F9E4420", color: "#2F9E44", borderRadius: 6, fontWeight: 700, fontFamily: "var(--mono)" }}>INTERACTIVE</span>}
-          {section.quiz && <span style={{ fontSize: 9, padding: "3px 8px", background: "#F59F0020", color: "#F59F00", borderRadius: 6, fontWeight: 700, fontFamily: "var(--mono)" }}>QUIZ</span>}
+        <div style={{ display: "flex", gap: 6 }}>
+          {section.interactive && <span style={{ fontSize: 9, padding: "4px 10px", background: "#e8f5e9", color: "#2e7d32", borderRadius: 4, fontWeight: 600, fontFamily: "var(--mono)" }}>Interactive</span>}
+          {section.quiz && <span style={{ fontSize: 9, padding: "4px 10px", background: "#fff3e0", color: "#e65100", borderRadius: 4, fontWeight: 600, fontFamily: "var(--mono)" }}>Quiz</span>}
         </div>
       </button>
 
       {expanded && (
-        <div style={{ padding: "0 20px 20px" }}>
+        <div style={{ padding: "0 20px 20px", borderTop: "1px solid #f0f0f0" }}>
           {/* Depth Tabs */}
-          <div style={{ display: "flex", gap: 4, marginBottom: 16, background: "#111128", borderRadius: 10, padding: 4 }}>
+          <div style={{ display: "flex", gap: 6, marginTop: 16, marginBottom: 20 }}>
             {depths.map(d => (
               <button key={d} onClick={() => setDepthLevel(section.id, d)} style={{
-                flex: 1, padding: "8px 4px", borderRadius: 8, border: "none",
-                background: depth === d ? weekColor : "transparent",
-                color: depth === d ? "#fff" : "#666", fontSize: 12, fontWeight: 600,
-                cursor: "pointer", fontFamily: "var(--mono)", transition: "all 0.2s"
+                flex: 1, padding: "8px 12px", borderRadius: 6, border: depth === d ? "1.5px solid #000" : "1px solid #e0e0e0",
+                background: depth === d ? "#000000" : "#ffffff",
+                color: depth === d ? "#ffffff" : "#666", fontSize: 12, fontWeight: 500,
+                cursor: "pointer", fontFamily: "var(--body)"
               }}>{depthLabels[d]}</button>
             ))}
           </div>
 
           {/* Content */}
-          <div style={{ color: "#b0b0c0", fontSize: 14, lineHeight: 1.85, fontFamily: "var(--body)", whiteSpace: "pre-line", marginBottom: 16 }}>
+          <div style={{ color: "#333333", fontSize: 14, lineHeight: 1.8, fontFamily: "var(--body)", whiteSpace: "pre-line", marginBottom: 20 }}>
             {renderText(section.depths[depth])}
           </div>
 
@@ -755,21 +755,21 @@ function Section({ section, weekColor }) {
           {/* Resources */}
           {section.resources && (
             <div>
-              <div style={{ fontSize: 11, fontWeight: 700, color: "#555", fontFamily: "var(--mono)", letterSpacing: 1, marginBottom: 10 }}>📚 LEARN MORE</div>
-              <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
+              <div style={{ fontSize: 11, fontWeight: 600, color: "#666", fontFamily: "var(--mono)", letterSpacing: 1, marginBottom: 12 }}>📚 RESOURCES</div>
+              <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
                 {section.resources.map((r, i) => {
                   const style = typeStyles[r.type] || typeStyles.article;
                   return (
                     <a key={i} href={r.url} target="_blank" rel="noopener noreferrer" style={{
-                      display: "flex", alignItems: "center", gap: 10, padding: "8px 12px",
-                      background: "#111128", borderRadius: 8, textDecoration: "none",
-                      border: "1px solid #1a1a35", transition: "border-color 0.2s"
+                      display: "flex", alignItems: "center", gap: 10, padding: "10px 12px",
+                      background: "#ffffff", borderRadius: 8, textDecoration: "none",
+                      border: "1px solid #e0e0e0", transition: "all 0.15s"
                     }}
-                    onMouseEnter={e => e.currentTarget.style.borderColor = "#333"}
-                    onMouseLeave={e => e.currentTarget.style.borderColor = "#1a1a35"}>
-                      <span style={{ fontSize: 10, padding: "2px 8px", background: style.bg, color: style.color, borderRadius: 4, fontWeight: 700, fontFamily: "var(--mono)", flexShrink: 0 }}>{style.label}</span>
-                      <span style={{ fontSize: 13, color: "#b0b0c0", fontFamily: "var(--body)" }}>{r.title}</span>
-                      <span style={{ marginLeft: "auto", fontSize: 11, color: "#444" }}>↗</span>
+                    onMouseEnter={e => { e.currentTarget.style.borderColor = "#d0d0d0"; e.currentTarget.style.boxShadow = "0 1px 2px rgba(0,0,0,0.05)"; }}
+                    onMouseLeave={e => { e.currentTarget.style.borderColor = "#e0e0e0"; e.currentTarget.style.boxShadow = "none"; }}>
+                      <span style={{ fontSize: 9, padding: "3px 8px", background: style.bg, color: style.color, borderRadius: 4, fontWeight: 600, fontFamily: "var(--mono)", flexShrink: 0 }}>{style.label}</span>
+                      <span style={{ fontSize: 13, color: "#333", fontFamily: "var(--body)" }}>{r.title}</span>
+                      <span style={{ marginLeft: "auto", fontSize: 11, color: "#999" }}>↗</span>
                     </a>
                   );
                 })}
@@ -797,14 +797,15 @@ export default function AIRoadmap() {
   }, [activeWeek]);
 
   return (
-    <div style={{ minHeight: "100vh", background: "#080818", color: "#e8e8e8" }}>
+    <div style={{ minHeight: "100vh", background: "#ffffff", color: "#000000" }}>
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Source+Sans+3:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600;700&display=swap');
         :root { --display: 'Outfit', sans-serif; --body: 'Source Sans 3', sans-serif; --mono: 'IBM Plex Mono', monospace; }
         * { box-sizing: border-box; }
         input[type=range] { -webkit-appearance: none; appearance: none; background: #222240; border-radius: 99px; cursor: pointer; }
-        input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; width: 16px; height: 16px; border-radius: 50%; background: #F76707; border: 2px solid #080818; }
-        textarea:focus { border-color: #F76707 !important; }
+        input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; width: 16px; height: 16px; border-radius: 50%; background: #555555; border: 2px solid #080818; }
+        textarea:focus { border-color: #555555 !important; }
+        button { transition: all 0.15s cubic-bezier(0.4, 0, 0.2, 1); }
         @media (max-width: 768px) {
           .layout { flex-direction: column !important; }
           .sidebar { width: 100% !important; max-height: none !important; position: static !important; border-right: none !important; border-bottom: 1px solid #1a1a35 !important; }
@@ -813,17 +814,16 @@ export default function AIRoadmap() {
       `}</style>
 
       {/* Header */}
-      <div style={{ padding: "28px 28px 22px", borderBottom: "1px solid #151530", background: "linear-gradient(180deg, #0c0c22 0%, #080818 100%)" }}>
+      <div style={{ padding: "40px 32px 32px", borderBottom: "1px solid #efefef", background: "#ffffff" }}>
         <div style={{ maxWidth: 1200, margin: "0 auto" }}>
-          <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 8 }}>
-            <span style={{ padding: "4px 10px", background: "linear-gradient(135deg, #F76707, #AE3EC9)", borderRadius: 6, fontSize: 10, fontWeight: 700, letterSpacing: 1.5, fontFamily: "var(--mono)" }}>30-DAY ROADMAP</span>
-            <span style={{ color: "#444", fontSize: 11, fontFamily: "var(--mono)" }}>Based on @EXM7777</span>
+          <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 12 }}>
+            <span style={{ padding: "6px 12px", background: "#f5f5f5", borderRadius: 6, fontSize: 10, fontWeight: 600, letterSpacing: 1.2, fontFamily: "var(--mono)" }}>ROADMAP</span>
           </div>
-          <h1 style={{ fontSize: "clamp(22px, 3.5vw, 32px)", fontWeight: 800, fontFamily: "var(--display)", margin: "4px 0 6px", background: "linear-gradient(135deg, #fff 0%, #777 100%)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" }}>
+          <h1 style={{ fontSize: "clamp(26px, 4vw, 36px)", fontWeight: 600, fontFamily: "var(--display)", margin: "0 0 12px", color: "#000000", letterSpacing: "-0.02em" }}>
             Master AI: Engineer × Product Manager
           </h1>
-          <p style={{ color: "#555", fontSize: 13, fontFamily: "var(--body)", lineHeight: 1.5, margin: 0 }}>
-            4 depth levels per topic · Interactive tools · Quizzes · 150+ free resources · Zero API cost
+          <p style={{ color: "#666666", fontSize: 14, fontFamily: "var(--body)", lineHeight: 1.6, margin: 0 }}>
+            4 depth levels per topic · Interactive tools · Quizzes · 150+ free resources · No login required
           </p>
         </div>
       </div>
@@ -831,52 +831,52 @@ export default function AIRoadmap() {
       {/* Layout */}
       <div className="layout" style={{ display: "flex", maxWidth: 1200, margin: "0 auto" }}>
         {/* Sidebar */}
-        <div className="sidebar" style={{ width: 300, flexShrink: 0, padding: 16, borderRight: "1px solid #151530", position: "sticky", top: 0, maxHeight: "calc(100vh - 120px)", overflowY: "auto" }}>
+        <div className="sidebar" style={{ width: 300, flexShrink: 0, padding: 20, borderRight: "1px solid #efefef", position: "sticky", top: 0, maxHeight: "calc(100vh - 120px)", overflowY: "auto", background: "#fafafa" }}>
           {WEEKS.map((w, i) => (
             <button key={w.id} onClick={() => setCurrentWeek(w.id)} style={{
-              width: "100%", padding: "16px 14px", marginBottom: 6, borderRadius: 12, border: i === activeWeek ? `1px solid ${w.color}55` : "1px solid transparent",
-              background: i === activeWeek ? `${w.color}0c` : "transparent", cursor: "pointer", textAlign: "left", transition: "all 0.25s"
+              width: "100%", padding: "14px 12px", marginBottom: 8, borderRadius: 8, border: i === activeWeek ? "1px solid #d0d0d0" : "1px solid transparent",
+              background: i === activeWeek ? "#f5f5f5" : "transparent", cursor: "pointer", textAlign: "left"
             }}
-            onMouseEnter={e => { if (i !== activeWeek) e.currentTarget.style.background = "#0d0d22"; }}
-            onMouseLeave={e => { if (i !== activeWeek) e.currentTarget.style.background = "transparent"; }}>
+            onMouseEnter={e => { e.currentTarget.style.background = i === activeWeek ? "#f5f5f5" : "#f9f9f9"; e.currentTarget.style.transform = "scale(1.01)"; }}
+            onMouseLeave={e => { e.currentTarget.style.background = i === activeWeek ? "#f5f5f5" : "transparent"; e.currentTarget.style.transform = "scale(1)"; }}>
               <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
                 <span style={{ fontSize: 24 }}>{w.icon}</span>
                 <div>
-                  <div style={{ fontSize: 10, fontWeight: 700, color: i === activeWeek ? w.color : "#444", letterSpacing: 1.5, fontFamily: "var(--mono)", marginBottom: 1 }}>{w.tag}</div>
-                  <div style={{ fontSize: 14, fontWeight: 700, color: i === activeWeek ? "#e0e0e0" : "#777", fontFamily: "var(--display)" }}>Week {w.id}: {w.title.split("—")[0]}</div>
+                  <div style={{ fontSize: 9, fontWeight: 600, color: i === activeWeek ? w.color : "#999", letterSpacing: 1.2, fontFamily: "var(--mono)", marginBottom: 2 }}>{w.tag}</div>
+                  <div style={{ fontSize: 13, fontWeight: 600, color: "#000000", fontFamily: "var(--display)" }}>Week {w.id}</div>
                 </div>
               </div>
-              <div style={{ fontSize: 11, color: "#444", fontFamily: "var(--mono)", marginTop: 6, paddingLeft: 34 }}>
-                {w.sections.length} sections · {w.sections.filter(s => s.interactive).length} interactive · {w.sections.filter(s => s.quiz).length} quizzes
+              <div style={{ fontSize: 11, color: "#999", fontFamily: "var(--body)", marginTop: 6, paddingLeft: 34 }}>
+                {w.sections.length} topics
               </div>
             </button>
           ))}
-          <div style={{ margin: "12px 8px", padding: "14px", background: "#0d0d22", border: "1px solid #1a1a35", borderRadius: 10 }}>
-            <div style={{ fontSize: 10, fontWeight: 700, color: "#444", letterSpacing: 1.5, fontFamily: "var(--mono)", marginBottom: 6 }}>DEPTH LEVELS</div>
-            <div style={{ fontSize: 11, color: "#666", lineHeight: 1.6 }}>
-              🧒 <strong style={{ color: "#888" }}>ELI5</strong> — Analogy-first<br/>
-              📖 <strong style={{ color: "#888" }}>Normal</strong> — Clear explanation<br/>
-              ⚙️ <strong style={{ color: "#888" }}>Technical</strong> — Papers & math<br/>
-              🎯 <strong style={{ color: "#888" }}>PM Lens</strong> — Product strategy
+          <div style={{ margin: "20px 0 0 0", padding: "14px", background: "#f5f5f5", border: "1px solid #efefef", borderRadius: 8 }}>
+            <div style={{ fontSize: 9, fontWeight: 600, color: "#666", letterSpacing: 1.2, fontFamily: "var(--mono)", marginBottom: 8 }}>DEPTH LEVELS</div>
+            <div style={{ fontSize: 11, color: "#555", lineHeight: 1.7 }}>
+              🧒 <strong style={{ color: "#000" }}>ELI5</strong> — Simple<br/>
+              📖 <strong style={{ color: "#000" }}>Normal</strong> — Clear<br/>
+              ⚙️ <strong style={{ color: "#000" }}>Technical</strong> — Deep<br/>
+              🎯 <strong style={{ color: "#000" }}>PM</strong> — Strategy
             </div>
           </div>
         </div>
 
         {/* Content */}
-        <div className="content" ref={contentRef} style={{ flex: 1, padding: "24px 32px", overflowY: "auto", maxHeight: "calc(100vh - 120px)" }}>
-          <div style={{ marginBottom: 24 }}>
-            <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 10 }}>
-              <span style={{ fontSize: 36 }}>{week.icon}</span>
+        <div className="content" ref={contentRef} style={{ flex: 1, padding: "40px 48px", overflowY: "auto", maxHeight: "calc(100vh - 120px)", background: "#ffffff" }}>
+          <div style={{ marginBottom: 40 }}>
+            <div style={{ display: "flex", alignItems: "center", gap: 14, marginBottom: 16 }}>
+              <span style={{ fontSize: 40 }}>{week.icon}</span>
               <div>
-                <div style={{ fontSize: 11, fontWeight: 700, color: week.color, letterSpacing: 2, fontFamily: "var(--mono)" }}>WEEK {week.id} · {week.tag}</div>
-                <h2 style={{ fontSize: 26, fontWeight: 800, fontFamily: "var(--display)", margin: 0, color: "#fff" }}>{week.title}</h2>
+                <div style={{ fontSize: 10, fontWeight: 600, color: "#999", letterSpacing: 1.2, fontFamily: "var(--mono)", marginBottom: 4 }}>WEEK {week.id}</div>
+                <h2 style={{ fontSize: 28, fontWeight: 600, fontFamily: "var(--display)", margin: 0, color: "#000000", letterSpacing: "-0.01em" }}>{week.title}</h2>
               </div>
             </div>
-            <div style={{ padding: "12px 16px", background: `${week.color}0a`, border: `1px solid ${week.color}30`, borderRadius: 10, display: "flex", alignItems: "flex-start", gap: 10 }}>
-              <span style={{ fontSize: 16, flexShrink: 0 }}>🎯</span>
+            <div style={{ padding: "16px 20px", background: "#f9f9f9", border: "1px solid #efefef", borderRadius: 8, display: "flex", alignItems: "flex-start", gap: 12 }}>
+              <span style={{ fontSize: 18, flexShrink: 0 }}>💡</span>
               <div>
-                <div style={{ fontSize: 10, fontWeight: 700, color: week.color, letterSpacing: 1, fontFamily: "var(--mono)", marginBottom: 2 }}>PM PERSPECTIVE</div>
-                <div style={{ fontSize: 13, color: "#8a8aa0", lineHeight: 1.5, fontFamily: "var(--body)" }}>{week.pmAngle}</div>
+                <div style={{ fontSize: 10, fontWeight: 600, color: "#666", letterSpacing: 1, fontFamily: "var(--mono)", marginBottom: 4 }}>WHY THIS MATTERS</div>
+                <div style={{ fontSize: 13, color: "#333333", lineHeight: 1.6, fontFamily: "var(--body)" }}>{week.pmAngle}</div>
               </div>
             </div>
           </div>
@@ -886,11 +886,11 @@ export default function AIRoadmap() {
           ))}
 
           {/* Week nav */}
-          <div style={{ display: "flex", gap: 12, marginTop: 28, paddingBottom: 40 }}>
+          <div style={{ display: "flex", gap: 16, marginTop: 40, paddingTop: 32, paddingBottom: 40, borderTop: "1px solid #efefef" }}>
             <button onClick={() => setCurrentWeek(WEEKS[Math.max(0, activeWeek - 1)].id)} disabled={activeWeek === 0}
-              style={{ flex: 1, padding: "12px 0", borderRadius: 10, border: "1px solid #252545", background: "transparent", color: activeWeek === 0 ? "#252545" : "#888", cursor: activeWeek === 0 ? "default" : "pointer", fontSize: 13, fontWeight: 600, fontFamily: "var(--mono)" }}>← Previous Week</button>
+              style={{ flex: 1, padding: "12px 16px", borderRadius: 8, border: "1px solid #d0d0d0", background: activeWeek === 0 ? "#f5f5f5" : "#ffffff", color: activeWeek === 0 ? "#ccc" : "#000000", cursor: activeWeek === 0 ? "default" : "pointer", fontSize: 13, fontWeight: 500, fontFamily: "var(--body)" }}>← Previous</button>
             <button onClick={() => setCurrentWeek(WEEKS[Math.min(WEEKS.length - 1, activeWeek + 1)].id)} disabled={activeWeek === WEEKS.length - 1}
-              style={{ flex: 1, padding: "12px 0", borderRadius: 10, border: `1px solid ${week.color}44`, background: activeWeek === WEEKS.length - 1 ? "transparent" : `${week.color}18`, color: activeWeek === WEEKS.length - 1 ? "#252545" : week.color, cursor: activeWeek === WEEKS.length - 1 ? "default" : "pointer", fontSize: 13, fontWeight: 600, fontFamily: "var(--mono)" }}>Next Week →</button>
+              style={{ flex: 1, padding: "12px 16px", borderRadius: 8, border: "1px solid #d0d0d0", background: activeWeek === WEEKS.length - 1 ? "#f5f5f5" : "#ffffff", color: activeWeek === WEEKS.length - 1 ? "#ccc" : "#000000", cursor: activeWeek === WEEKS.length - 1 ? "default" : "pointer", fontSize: 13, fontWeight: 500, fontFamily: "var(--body)" }}>Next →</button>
           </div>
         </div>
       </div>

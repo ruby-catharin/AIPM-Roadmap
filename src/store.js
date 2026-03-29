@@ -8,12 +8,12 @@ export const useRoadmapStore = create(
       currentWeekId: 1,
       currentSectionId: '1-1',
 
-      // UI state
-      expandedSections: new Set(),
+      // UI state - using arrays instead of Sets for localStorage compatibility
+      expandedSections: [],
       selectedDepthLevels: {}, // { sectionId: 'eli5' | 'normal' | 'technical' | 'pm' }
 
       // Progress tracking
-      completedSections: new Set(),
+      completedSections: [],
       quizAnswers: {}, // { sectionId: [{ questionIndex, selectedIndex, isCorrect }] }
 
       // Actions
@@ -22,12 +22,9 @@ export const useRoadmapStore = create(
 
       toggleExpandSection: (sectionId) =>
         set((state) => {
-          const expanded = new Set(state.expandedSections);
-          if (expanded.has(sectionId)) {
-            expanded.delete(sectionId);
-          } else {
-            expanded.add(sectionId);
-          }
+          const expanded = state.expandedSections.includes(sectionId)
+            ? state.expandedSections.filter(id => id !== sectionId)
+            : [...state.expandedSections, sectionId];
           return { expandedSections: expanded };
         }),
 
@@ -41,12 +38,9 @@ export const useRoadmapStore = create(
 
       toggleSectionComplete: (sectionId) =>
         set((state) => {
-          const completed = new Set(state.completedSections);
-          if (completed.has(sectionId)) {
-            completed.delete(sectionId);
-          } else {
-            completed.add(sectionId);
-          }
+          const completed = state.completedSections.includes(sectionId)
+            ? state.completedSections.filter(id => id !== sectionId)
+            : [...state.completedSections, sectionId];
           return { completedSections: completed };
         }),
 
@@ -66,27 +60,20 @@ export const useRoadmapStore = create(
         set({
           currentWeekId: 1,
           currentSectionId: '1-1',
-          expandedSections: new Set(),
+          expandedSections: [],
           selectedDepthLevels: {},
-          completedSections: new Set(),
+          completedSections: [],
           quizAnswers: {},
         }),
 
       // Getters for computed values
       getProgressPercentage: (state) => {
-        if (state.completedSections.size === 0) return 0;
-        // You'll need to calculate total sections from WEEKS data
-        return Math.round((state.completedSections.size / 100) * 100); // placeholder
+        if (state.completedSections.length === 0) return 0;
+        return Math.round((state.completedSections.length / 100) * 100);
       },
     }),
     {
       name: 'roadmap-progress', // localStorage key
-      // Custom serialization for Sets
-      partialize: (state) => ({
-        ...state,
-        expandedSections: Array.from(state.expandedSections),
-        completedSections: Array.from(state.completedSections),
-      }),
     }
   )
 );
