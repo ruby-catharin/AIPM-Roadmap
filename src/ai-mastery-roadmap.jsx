@@ -1,6 +1,36 @@
 import { useState, useEffect, useRef, useCallback } from "react";
 import { useRoadmapStore } from "./store";
 
+// ─── DARK MODE TOGGLE COMPONENT ──────────────────────────────────────────────
+
+function DarkModeToggle({ isDarkMode, onToggle }) {
+  return (
+    <button
+      onClick={onToggle}
+      style={{
+        width: 40,
+        height: 40,
+        borderRadius: 6,
+        border: "1px solid var(--border-color)",
+        background: "var(--bg-secondary)",
+        cursor: "pointer",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        transition: "all 0.15s",
+        color: "var(--text-primary)",
+        fontSize: 18,
+        fontWeight: 600
+      }}
+      onMouseEnter={e => { e.currentTarget.style.borderColor = "var(--border-hover)"; }}
+      onMouseLeave={e => { e.currentTarget.style.borderColor = "var(--border-color)"; }}
+      title={isDarkMode ? "Switch to light mode" : "Switch to dark mode"}
+    >
+      {isDarkMode ? "☀" : "☾"}
+    </button>
+  );
+}
+
 // ─── WEEK DATA ───────────────────────────────────────────────────────────────
 const WEEKS = [
   {
@@ -10,7 +40,6 @@ const WEEKS = [
     color: "#F76707",
     accent: "#FFF4E6",
     dark: "#1a0f05",
-    icon: "🧠",
     pmAngle: "Understand what AI can and can't do — so you scope products correctly and set realistic expectations with stakeholders.",
     sections: [
       {
@@ -114,7 +143,6 @@ const WEEKS = [
     color: "#1C7ED6",
     accent: "#E7F5FF",
     dark: "#051525",
-    icon: "📊",
     pmAngle: "Build products that use YOUR proprietary data — not just the model's training knowledge. Data is your moat.",
     sections: [
       {
@@ -193,7 +221,6 @@ const WEEKS = [
     color: "#2F9E44",
     accent: "#EBFBEE",
     dark: "#051a0a",
-    icon: "⚡",
     pmAngle: "Go from prototype to product — shipping real AI applications with reliability, observability, and user trust.",
     sections: [
       {
@@ -268,7 +295,6 @@ const WEEKS = [
     color: "#AE3EC9",
     accent: "#F8F0FC",
     dark: "#1a0525",
-    icon: "🚀",
     pmAngle: "Ship, scale, and sustain AI products in production. 20% model, 80% infrastructure and strategy.",
     sections: [
       {
@@ -360,16 +386,16 @@ function TokenCalculator() {
 
   const Slider = ({ label, value, onChange, min, max, step, unit }) => (
     <div style={{ marginBottom: 14 }}>
-      <div style={{ display: "flex", justifyContent: "space-between", fontSize: 12, color: "#8a8aa0", marginBottom: 4, fontFamily: "var(--mono)" }}>
-        <span>{label}</span><span style={{ color: "#e0e0e0" }}>{value.toLocaleString()}{unit}</span>
+      <div style={{ display: "flex", justifyContent: "space-between", fontSize: 12, color: "var(--text-muted)", marginBottom: 4, fontFamily: "var(--mono)" }}>
+        <span>{label}</span><span style={{ color: "var(--text-secondary)" }}>{value.toLocaleString()}{unit}</span>
       </div>
       <input type="range" min={min} max={max} step={step} value={value} onChange={e => onChange(+e.target.value)}
-        style={{ width: "100%", accentColor: "#F76707", height: 4, background: "#222240" }} />
+        style={{ width: "100%", accentColor: "#F76707", height: 4, background: "var(--bg-tertiary)" }} />
     </div>
   );
 
   return (
-    <div style={{ background: "#111128", border: "1px solid #252545", borderRadius: 14, padding: 20 }}>
+    <div style={{ background: "var(--bg-secondary)", border: "1px solid var(--border-color)", borderRadius: 14, padding: 20 }}>
       <div style={{ fontSize: 13, fontWeight: 700, color: "#F76707", fontFamily: "var(--mono)", letterSpacing: 1, marginBottom: 14 }}>
         🧮 TOKEN COST CALCULATOR
       </div>
@@ -377,16 +403,16 @@ function TokenCalculator() {
       <Slider label="Input tokens / call" value={tokensPerCall} onChange={setTokensPerCall} min={50} max={4000} step={50} unit="" />
       <Slider label="Output tokens / call" value={outputTokens} onChange={setOutputTokens} min={50} max={2000} step={50} unit="" />
       <Slider label="Days / month" value={days} onChange={setDays} min={1} max={31} step={1} unit="" />
-      <div style={{ borderTop: "1px solid #252545", paddingTop: 14, marginTop: 6, display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10 }}>
-        <div style={{ background: "#1a1a35", borderRadius: 10, padding: 12, textAlign: "center" }}>
-          <div style={{ fontSize: 11, color: "#666", fontFamily: "var(--mono)" }}>INPUT COST</div>
+      <div style={{ borderTop: "1px solid var(--border-color)", paddingTop: 14, marginTop: 6, display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10 }}>
+        <div style={{ background: "var(--bg-tertiary)", borderRadius: 10, padding: 12, textAlign: "center" }}>
+          <div style={{ fontSize: 11, color: "var(--text-muted)", fontFamily: "var(--mono)" }}>INPUT COST</div>
           <div style={{ fontSize: 22, fontWeight: 700, color: "#F76707" }}>${monthlyCostIn.toFixed(2)}</div>
-          <div style={{ fontSize: 10, color: "#555", fontFamily: "var(--mono)" }}>{(totalInput/1e6).toFixed(2)}M tokens</div>
+          <div style={{ fontSize: 10, color: "var(--text-light)", fontFamily: "var(--mono)" }}>{(totalInput/1e6).toFixed(2)}M tokens</div>
         </div>
-        <div style={{ background: "#1a1a35", borderRadius: 10, padding: 12, textAlign: "center" }}>
-          <div style={{ fontSize: 11, color: "#666", fontFamily: "var(--mono)" }}>OUTPUT COST</div>
+        <div style={{ background: "var(--bg-tertiary)", borderRadius: 10, padding: 12, textAlign: "center" }}>
+          <div style={{ fontSize: 11, color: "var(--text-muted)", fontFamily: "var(--mono)" }}>OUTPUT COST</div>
           <div style={{ fontSize: 22, fontWeight: 700, color: "#F76707" }}>${monthlyCostOut.toFixed(2)}</div>
-          <div style={{ fontSize: 10, color: "#555", fontFamily: "var(--mono)" }}>{(totalOutput/1e6).toFixed(2)}M tokens</div>
+          <div style={{ fontSize: 10, color: "var(--text-light)", fontFamily: "var(--mono)" }}>{(totalOutput/1e6).toFixed(2)}M tokens</div>
         </div>
       </div>
       <div style={{ background: "linear-gradient(135deg, #F76707 0%, #AE3EC9 100%)", borderRadius: 10, padding: 14, textAlign: "center", marginTop: 10 }}>
@@ -412,35 +438,35 @@ function TemperatureDemo() {
   const normalized = probs.map(p => p / total);
 
   return (
-    <div style={{ background: "#f9f9f9", border: "1px solid #e0e0e0", borderRadius: 12, padding: 20 }}>
-      <div style={{ fontSize: 12, fontWeight: 600, color: "#000", fontFamily: "var(--mono)", letterSpacing: 1, marginBottom: 16 }}>
+    <div style={{ background: "var(--bg-secondary)", border: "1px solid var(--border-light)", borderRadius: 12, padding: 20 }}>
+      <div style={{ fontSize: 12, fontWeight: 600, color: "var(--text-primary)", fontFamily: "var(--mono)", letterSpacing: 1, marginBottom: 16 }}>
         🌡️ Temperature Visualizer
       </div>
-      <div style={{ display: "flex", justifyContent: "space-between", fontSize: 12, color: "#666", marginBottom: 8, fontFamily: "var(--mono)" }}>
+      <div style={{ display: "flex", justifyContent: "space-between", fontSize: 12, color: "var(--text-muted)", marginBottom: 8, fontFamily: "var(--mono)" }}>
         <span>Temperature</span><span style={{ color: temp < 0.3 ? "#2F9E44" : temp < 0.8 ? "#F59F00" : "#E03131", fontWeight: 600 }}>{temp.toFixed(1)}</span>
       </div>
       <input type="range" min={0} max={2} step={0.1} value={temp} onChange={e => setTemp(+e.target.value)}
         style={{ width: "100%", accentColor: "#555555", height: 4 }} />
-      <div style={{ display: "flex", gap: 4, marginTop: 10, fontSize: 11, justifyContent: "space-between", fontFamily: "var(--mono)", color: "#999" }}>
+      <div style={{ display: "flex", gap: 4, marginTop: 10, fontSize: 11, justifyContent: "space-between", fontFamily: "var(--mono)", color: "var(--text-light)" }}>
         <span>Deterministic</span><span>Balanced</span><span>Creative</span><span>Chaotic</span>
       </div>
       <div style={{ marginTop: 18 }}>
-        <div style={{ fontSize: 11, color: "#666", fontFamily: "var(--mono)", marginBottom: 10, fontWeight: 600 }}>DISTRIBUTION</div>
+        <div style={{ fontSize: 11, color: "var(--text-muted)", fontFamily: "var(--mono)", marginBottom: 10, fontWeight: 600 }}>DISTRIBUTION</div>
         {available.map((word, i) => (
           <div key={word} style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 6 }}>
-            <span style={{ width: 100, fontSize: 12, color: i === 0 ? "#2F9E44" : i < 3 ? "#333" : "#999", fontFamily: "var(--mono)", textAlign: "right" }}>{word}</span>
-            <div style={{ flex: 1, height: 16, background: "#e0e0e0", borderRadius: 4, overflow: "hidden" }}>
+            <span style={{ width: 100, fontSize: 12, color: i === 0 ? "#2F9E44" : i < 3 ? "var(--text-primary)" : "var(--text-light)", fontFamily: "var(--mono)", textAlign: "right" }}>{word}</span>
+            <div style={{ flex: 1, height: 16, background: "var(--border-light)", borderRadius: 4, overflow: "hidden" }}>
               <div style={{
                 width: `${normalized[i] * 100}%`, height: "100%", borderRadius: 4,
                 background: i === 0 ? "#2F9E44" : `hsl(${200 - i * 15}, 70%, ${55 - i * 3}%)`,
                 transition: "width 0.4s ease"
               }} />
             </div>
-            <span style={{ width: 40, fontSize: 10, color: "#999", fontFamily: "var(--mono)" }}>{(normalized[i] * 100).toFixed(1)}%</span>
+            <span style={{ width: 40, fontSize: 10, color: "var(--text-light)", fontFamily: "var(--mono)" }}>{(normalized[i] * 100).toFixed(1)}%</span>
           </div>
         ))}
       </div>
-      <div style={{ marginTop: 14, padding: 12, background: "#fff", border: "1px solid #f0f0f0", borderRadius: 8, fontSize: 12, color: "#555", lineHeight: 1.6 }}>
+      <div style={{ marginTop: 14, padding: 12, background: "var(--bg-primary)", border: "1px solid var(--border-light)", borderRadius: 8, fontSize: 12, color: "var(--text-secondary)", lineHeight: 1.6 }}>
         {temp < 0.3 ? "🎯 Deterministic — always picks the top token. Best for: data extraction, classification, factual Q&A."
          : temp < 0.8 ? "⚖️ Balanced — mostly picks likely tokens with some variety. Best for: customer support, summarization."
          : temp < 1.2 ? "🎨 Creative — explores many options. Best for: brainstorming, marketing copy, creative writing."
@@ -461,11 +487,11 @@ function SystemPromptBuilder() {
   const scoreColors = ["#E03131", "#F76707", "#F59F00", "#2F9E44", "#1C7ED6"];
 
   return (
-    <div style={{ background: "#f9f9f9", border: "1px solid #e0e0e0", borderRadius: 12, padding: 20 }}>
-      <div style={{ fontSize: 12, fontWeight: 600, color: "#000", fontFamily: "var(--mono)", letterSpacing: 1, marginBottom: 6 }}>
+    <div style={{ background: "var(--bg-secondary)", border: "1px solid var(--border-light)", borderRadius: 12, padding: 20 }}>
+      <div style={{ fontSize: 12, fontWeight: 600, color: "var(--text-primary)", fontFamily: "var(--mono)", letterSpacing: 1, marginBottom: 6 }}>
         🏗️ System Prompt Builder
       </div>
-      <div style={{ fontSize: 12, color: "#666", marginBottom: 16 }}>Get instant quality feedback</div>
+      <div style={{ fontSize: 12, color: "var(--text-muted)", marginBottom: 16 }}>Get instant quality feedback</div>
       {[
         { label: "1. ROLE", placeholder: "You are a senior financial analyst specializing in...", value: role, set: setRole, tip: "Be specific: domain, seniority, expertise" },
         { label: "2. CONSTRAINTS", placeholder: "Never provide investment advice. Always cite sources...", value: constraints, set: setConstraints, tip: "What should it do and NOT do?" },
@@ -474,12 +500,12 @@ function SystemPromptBuilder() {
       ].map(({ label, placeholder, value, set, tip }) => (
         <div key={label} style={{ marginBottom: 14 }}>
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 6 }}>
-            <span style={{ fontSize: 11, fontWeight: 600, color: "#333", fontFamily: "var(--mono)" }}>{label}</span>
+            <span style={{ fontSize: 11, fontWeight: 600, color: "var(--text-primary)", fontFamily: "var(--mono)" }}>{label}</span>
             {value.length > 15 && <span style={{ fontSize: 11, color: "#2F9E44", fontFamily: "var(--mono)" }}>✓</span>}
           </div>
           <textarea value={value} onChange={e => set(e.target.value)} placeholder={placeholder}
-            style={{ width: "100%", boxSizing: "border-box", background: "#ffffff", border: "1px solid #e0e0e0", borderRadius: 8, padding: "10px 12px", color: "#333", fontSize: 13, fontFamily: "var(--body)", resize: "vertical", minHeight: 48, outline: "none" }} />
-          <div style={{ fontSize: 11, color: "#999", marginTop: 4 }}>{tip}</div>
+            style={{ width: "100%", boxSizing: "border-box", background: "var(--bg-primary)", border: "1px solid var(--border-light)", borderRadius: 8, padding: "10px 12px", color: "var(--text-primary)", fontSize: 13, fontFamily: "var(--body)", resize: "vertical", minHeight: 48, outline: "none" }} />
+          <div style={{ fontSize: 11, color: "var(--text-light)", marginTop: 4 }}>{tip}</div>
         </div>
       ))}
       <div style={{ background: scoreColors[score], borderRadius: 8, padding: "12px 16px", display: "flex", justifyContent: "space-between", alignItems: "center", color: "#fff" }}>
@@ -509,37 +535,37 @@ function EmbeddingSimilarity() {
   const simColor = sim > 0.95 ? "#2F9E44" : sim > 0.8 ? "#F59F00" : "#E03131";
 
   return (
-    <div style={{ background: "#f9f9f9", border: "1px solid #e0e0e0", borderRadius: 12, padding: 20 }}>
-      <div style={{ fontSize: 12, fontWeight: 600, color: "#000", fontFamily: "var(--mono)", letterSpacing: 1, marginBottom: 16 }}>
+    <div style={{ background: "var(--bg-secondary)", border: "1px solid var(--border-light)", borderRadius: 12, padding: 20 }}>
+      <div style={{ fontSize: 12, fontWeight: 600, color: "var(--text-primary)", fontFamily: "var(--mono)", letterSpacing: 1, marginBottom: 16 }}>
         📐 Embedding Similarity
       </div>
-      <div style={{ fontSize: 11, color: "#666", fontFamily: "var(--mono)", marginBottom: 10, fontWeight: 600 }}>PHRASE A</div>
+      <div style={{ fontSize: 11, color: "var(--text-muted)", fontFamily: "var(--mono)", marginBottom: 10, fontWeight: 600 }}>PHRASE A</div>
       <div style={{ display: "flex", flexWrap: "wrap", gap: 8, marginBottom: 16 }}>
         {phrases.map((p, i) => (
           <button key={p} onClick={() => setP1(i)} style={{
-            padding: "6px 12px", borderRadius: 6, border: p1 === i ? "1.5px solid #333" : "1px solid #e0e0e0",
-            background: p1 === i ? "#000000" : "#ffffff", color: p1 === i ? "#ffffff" : "#666",
+            padding: "6px 12px", borderRadius: 6, border: p1 === i ? "1.5px solid var(--text-primary)" : "1px solid var(--border-light)",
+            background: p1 === i ? "var(--text-primary)" : "var(--bg-primary)", color: p1 === i ? "var(--bg-primary)" : "var(--text-muted)",
             fontSize: 12, cursor: "pointer", fontFamily: "var(--body)"
           }}>{p}</button>
         ))}
       </div>
-      <div style={{ fontSize: 11, color: "#666", fontFamily: "var(--mono)", marginBottom: 10, fontWeight: 600 }}>PHRASE B</div>
+      <div style={{ fontSize: 11, color: "var(--text-muted)", fontFamily: "var(--mono)", marginBottom: 10, fontWeight: 600 }}>PHRASE B</div>
       <div style={{ display: "flex", flexWrap: "wrap", gap: 8, marginBottom: 16 }}>
         {phrases.map((p, i) => (
           <button key={p} onClick={() => setP2(i)} style={{
-            padding: "6px 12px", borderRadius: 6, border: p2 === i ? "1.5px solid #333" : "1px solid #e0e0e0",
-            background: p2 === i ? "#000000" : "#ffffff", color: p2 === i ? "#ffffff" : "#666",
+            padding: "6px 12px", borderRadius: 6, border: p2 === i ? "1.5px solid var(--text-primary)" : "1px solid var(--border-light)",
+            background: p2 === i ? "var(--text-primary)" : "var(--bg-primary)", color: p2 === i ? "var(--bg-primary)" : "var(--text-muted)",
             fontSize: 12, cursor: "pointer", fontFamily: "var(--body)"
           }}>{p}</button>
         ))}
       </div>
-      <div style={{ background: "#ffffff", border: "1px solid #e0e0e0", borderRadius: 8, padding: 16, textAlign: "center" }}>
-        <div style={{ fontSize: 11, color: "#999", fontFamily: "var(--mono)", marginBottom: 6, fontWeight: 600 }}>COSINE SIMILARITY</div>
+      <div style={{ background: "var(--bg-primary)", border: "1px solid var(--border-light)", borderRadius: 8, padding: 16, textAlign: "center" }}>
+        <div style={{ fontSize: 11, color: "var(--text-light)", fontFamily: "var(--mono)", marginBottom: 6, fontWeight: 600 }}>COSINE SIMILARITY</div>
         <div style={{ fontSize: 40, fontWeight: 700, color: simColor, fontFamily: "var(--display)" }}>{sim.toFixed(4)}</div>
-        <div style={{ height: 6, background: "#e0e0e0", borderRadius: 99, marginTop: 10, overflow: "hidden" }}>
+        <div style={{ height: 6, background: "var(--border-light)", borderRadius: 99, marginTop: 10, overflow: "hidden" }}>
           <div style={{ width: `${sim * 100}%`, height: "100%", background: simColor, borderRadius: 99, transition: "all 0.4s" }} />
         </div>
-        <div style={{ fontSize: 12, color: "#666", marginTop: 10 }}>
+        <div style={{ fontSize: 12, color: "var(--text-muted)", marginTop: 10 }}>
           {sim > 0.95 ? "Nearly identical ✨" : sim > 0.8 ? "Semantically related 🔗" : "Different topics 🔀"}
         </div>
       </div>
@@ -550,39 +576,38 @@ function EmbeddingSimilarity() {
 function RagPipeline() {
   const [step, setStep] = useState(0);
   const steps = [
-    { title: "1. Document Loading", desc: "Load PDFs, web pages, docs into raw text", icon: "📄", detail: "Loaders: PyPDF, Unstructured, BeautifulSoup. Handle tables, images, headers." },
-    { title: "2. Chunking", desc: "Split into 500-1000 token chunks with overlap", icon: "✂️", detail: "RecursiveCharacterTextSplitter(chunk_size=512, overlap=50). Respect sentence boundaries." },
-    { title: "3. Embedding", desc: "Convert each chunk to a vector", icon: "🔢", detail: "text-embedding-3-small ($0.02/1M tokens) or sentence-transformers (free, local)." },
-    { title: "4. Vector Storage", desc: "Store embeddings + metadata in vector DB", icon: "🗄️", detail: "Chroma for MVP, Pinecone for production. Include metadata: source, page, date." },
-    { title: "5. Query Embedding", desc: "User question → embed → similarity search", icon: "🔍", detail: "Same embedding model as indexing. Retrieve top-K (3-5) most similar chunks." },
-    { title: "6. Reranking (optional)", desc: "Cross-encoder reranks for precision", icon: "⚖️", detail: "Cohere Rerank or ms-marco-MiniLM. Improves precision by 10-30% but adds latency." },
-    { title: "7. Generation", desc: "LLM generates answer grounded in retrieved context", icon: "💬", detail: "Inject chunks as context: 'Based on the following documents: [chunks]. Answer: [query]'" },
+    { title: "1. Document Loading", desc: "Load PDFs, web pages, docs into raw text", detail: "Loaders: PyPDF, Unstructured, BeautifulSoup. Handle tables, images, headers." },
+    { title: "2. Chunking", desc: "Split into 500-1000 token chunks with overlap", detail: "RecursiveCharacterTextSplitter(chunk_size=512, overlap=50). Respect sentence boundaries." },
+    { title: "3. Embedding", desc: "Convert each chunk to a vector", detail: "text-embedding-3-small ($0.02/1M tokens) or sentence-transformers (free, local)." },
+    { title: "4. Vector Storage", desc: "Store embeddings + metadata in vector DB", detail: "Chroma for MVP, Pinecone for production. Include metadata: source, page, date." },
+    { title: "5. Query Embedding", desc: "User question → embed → similarity search", detail: "Same embedding model as indexing. Retrieve top-K (3-5) most similar chunks." },
+    { title: "6. Reranking (optional)", desc: "Cross-encoder reranks for precision", detail: "Cohere Rerank or ms-marco-MiniLM. Improves precision by 10-30% but adds latency." },
+    { title: "7. Generation", desc: "LLM generates answer grounded in retrieved context", detail: "Inject chunks as context: 'Based on the following documents: [chunks]. Answer: [query]'" },
   ];
 
   return (
-    <div style={{ background: "#f9f9f9", border: "1px solid #e0e0e0", borderRadius: 12, padding: 20 }}>
-      <div style={{ fontSize: 12, fontWeight: 600, color: "#000", fontFamily: "var(--mono)", letterSpacing: 1, marginBottom: 16 }}>
-        🔄 RAG Pipeline
+    <div style={{ background: "var(--bg-secondary)", border: "1px solid var(--border-light)", borderRadius: 12, padding: 20 }}>
+      <div style={{ fontSize: 12, fontWeight: 600, color: "var(--text-primary)", fontFamily: "var(--mono)", letterSpacing: 1, marginBottom: 16 }}>
+        RAG Pipeline
       </div>
       <div style={{ display: "flex", gap: 4, marginBottom: 16 }}>
         {steps.map((_, i) => (
           <button key={i} onClick={() => setStep(i)} style={{
             flex: 1, height: 5, borderRadius: 99, border: "none", cursor: "pointer",
-            background: i <= step ? "#333333" : "#d0d0d0", transition: "background 0.3s"
+            background: i <= step ? "var(--text-primary)" : "var(--border-color)", transition: "background 0.3s"
           }} />
         ))}
       </div>
-      <div style={{ background: "#ffffff", border: "1px solid #e0e0e0", borderRadius: 8, padding: 16, minHeight: 130 }}>
-        <div style={{ fontSize: 28, marginBottom: 10 }}>{steps[step].icon}</div>
-        <div style={{ fontSize: 15, fontWeight: 600, color: "#000", fontFamily: "var(--display)", marginBottom: 6 }}>{steps[step].title}</div>
-        <div style={{ fontSize: 13, color: "#666", marginBottom: 12, lineHeight: 1.6 }}>{steps[step].desc}</div>
-        <div style={{ fontSize: 12, color: "#555", lineHeight: 1.6, padding: "10px 12px", background: "#fafafa", border: "1px solid #f0f0f0", borderRadius: 6, fontFamily: "var(--mono)" }}>{steps[step].detail}</div>
+      <div style={{ background: "var(--bg-primary)", border: "1px solid var(--border-light)", borderRadius: 8, padding: 16, minHeight: 130 }}>
+        <div style={{ fontSize: 15, fontWeight: 600, color: "var(--text-primary)", fontFamily: "var(--display)", marginBottom: 6 }}>{steps[step].title}</div>
+        <div style={{ fontSize: 13, color: "var(--text-muted)", marginBottom: 12, lineHeight: 1.6 }}>{steps[step].desc}</div>
+        <div style={{ fontSize: 12, color: "var(--text-secondary)", lineHeight: 1.6, padding: "10px 12px", background: "var(--bg-tertiary)", border: "1px solid var(--border-light)", borderRadius: 6, fontFamily: "var(--mono)" }}>{steps[step].detail}</div>
       </div>
       <div style={{ display: "flex", gap: 10, marginTop: 14 }}>
         <button onClick={() => setStep(Math.max(0, step - 1))} disabled={step === 0}
-          style={{ flex: 1, padding: "10px 0", borderRadius: 8, border: "1px solid #e0e0e0", background: step === 0 ? "#f5f5f5" : "#ffffff", color: step === 0 ? "#ccc" : "#000", cursor: step === 0 ? "default" : "pointer", fontSize: 12, fontFamily: "var(--body)" }}>← Back</button>
+          style={{ flex: 1, padding: "10px 0", borderRadius: 8, border: "1px solid var(--border-light)", background: step === 0 ? "var(--bg-secondary)" : "var(--bg-primary)", color: step === 0 ? "var(--text-light)" : "var(--text-primary)", cursor: step === 0 ? "default" : "pointer", fontSize: 12, fontFamily: "var(--body)" }}>← Back</button>
         <button onClick={() => setStep(Math.min(steps.length - 1, step + 1))} disabled={step === steps.length - 1}
-          style={{ flex: 1, padding: "10px 0", borderRadius: 8, border: "1px solid #e0e0e0", background: step === steps.length - 1 ? "#f5f5f5" : "#ffffff", color: step === steps.length - 1 ? "#ccc" : "#000", cursor: step === steps.length - 1 ? "default" : "pointer", fontSize: 12, fontFamily: "var(--body)" }}>Next →</button>
+          style={{ flex: 1, padding: "10px 0", borderRadius: 8, border: "1px solid var(--border-light)", background: step === steps.length - 1 ? "var(--bg-secondary)" : "var(--bg-primary)", color: step === steps.length - 1 ? "var(--text-light)" : "var(--text-primary)", cursor: step === steps.length - 1 ? "default" : "pointer", fontSize: 12, fontFamily: "var(--body)" }}>Next →</button>
       </div>
     </div>
   );
@@ -625,29 +650,29 @@ function Quiz({ questions, color }) {
   const reset = () => { setCurrent(0); setSelected(null); setShowResult(false); setScore(0); setCompleted(false); };
 
   if (completed) return (
-    <div style={{ background: "#f9f9f9", border: "1px solid #e0e0e0", borderRadius: 12, padding: 24, textAlign: "center" }}>
+    <div style={{ background: "var(--bg-secondary)", border: "1px solid var(--border-color)", borderRadius: 12, padding: 24, textAlign: "center" }}>
       <div style={{ fontSize: 40, marginBottom: 12 }}>{score === questions.length ? "🏆" : score > questions.length / 2 ? "👏" : "📚"}</div>
-      <div style={{ fontSize: 22, fontWeight: 600, color: "#000", fontFamily: "var(--display)" }}>{score}/{questions.length} correct</div>
-      <div style={{ fontSize: 14, color: "#666", marginTop: 6, marginBottom: 16 }}>
+      <div style={{ fontSize: 22, fontWeight: 600, color: "var(--text-primary)", fontFamily: "var(--display)" }}>{score}/{questions.length} correct</div>
+      <div style={{ fontSize: 14, color: "var(--text-muted)", marginTop: 6, marginBottom: 16 }}>
         {score === questions.length ? "Perfect score!" : score > questions.length / 2 ? "Great understanding!" : "Review the material and try again."}
       </div>
-      <button onClick={reset} style={{ padding: "10px 28px", borderRadius: 8, border: "1px solid #d0d0d0", background: "#000000", color: "#ffffff", cursor: "pointer", fontSize: 13, fontWeight: 500, fontFamily: "var(--body)" }}>Retry Quiz</button>
+      <button onClick={reset} style={{ padding: "10px 28px", borderRadius: 8, border: "1px solid var(--border-hover)", background: "var(--text-primary)", color: "var(--bg-primary)", cursor: "pointer", fontSize: 13, fontWeight: 500, fontFamily: "var(--body)" }}>Retry Quiz</button>
     </div>
   );
 
   return (
-    <div style={{ background: "#f9f9f9", border: "1px solid #e0e0e0", borderRadius: 12, padding: 20 }}>
+    <div style={{ background: "var(--bg-secondary)", border: "1px solid var(--border-color)", borderRadius: 12, padding: 20 }}>
       <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 16 }}>
-        <span style={{ fontSize: 11, fontWeight: 600, color: "#666", fontFamily: "var(--mono)" }}>📝 KNOWLEDGE CHECK</span>
-        <span style={{ fontSize: 11, color: "#999", fontFamily: "var(--mono)" }}>{current + 1}/{questions.length}</span>
+        <span style={{ fontSize: 11, fontWeight: 600, color: "var(--text-muted)", fontFamily: "var(--mono)" }}>KNOWLEDGE CHECK</span>
+        <span style={{ fontSize: 11, color: "var(--text-light)", fontFamily: "var(--mono)" }}>{current + 1}/{questions.length}</span>
       </div>
-      <div style={{ fontSize: 14, color: "#333", lineHeight: 1.7, marginBottom: 16, fontFamily: "var(--body)" }}>{q.q}</div>
+      <div style={{ fontSize: 14, color: "var(--text-secondary)", lineHeight: 1.7, marginBottom: 16, fontFamily: "var(--body)" }}>{q.q}</div>
       <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
         {q.options.map((opt, i) => {
-          let bg = "#ffffff", border = "#e0e0e0", c = "#333";
-          if (showResult && i === q.correct) { bg = "#e8f5e9"; border = "#2F9E44"; c = "#2F9E44"; }
+          let bg = "var(--bg-input)", border = "var(--border-color)", c = "var(--text-secondary)";
+          if (showResult && i === q.correct) { bg = "var(--badge-bg-interactive)"; border = "#2F9E44"; c = "#2F9E44"; }
           else if (showResult && i === selected && i !== q.correct) { bg = "#ffebee"; border = "#E03131"; c = "#E03131"; }
-          else if (selected === i) { bg = "#f0f0f0"; border = "#333"; c = "#333"; }
+          else if (selected === i) { bg = "var(--bg-tertiary)"; border = "var(--text-primary)"; c = "var(--text-primary)"; }
           return (
             <button key={i} onClick={() => handleSelect(i)} style={{
               padding: "12px 14px", borderRadius: 8, border: `1px solid ${border}`, background: bg,
@@ -659,10 +684,10 @@ function Quiz({ questions, color }) {
       </div>
       {showResult && (
         <div style={{ marginTop: 14 }}>
-          <div style={{ fontSize: 12, color: "#555", lineHeight: 1.6, padding: "12px 14px", background: "#fff", border: "1px solid #f0f0f0", borderRadius: 8, marginBottom: 12 }}>
-            💡 {q.explanation}
+          <div style={{ fontSize: 12, color: "var(--text-muted)", lineHeight: 1.6, padding: "12px 14px", background: "var(--bg-tertiary)", border: "1px solid var(--section-separator)", borderRadius: 8, marginBottom: 12 }}>
+            {q.explanation}
           </div>
-          <button onClick={next} style={{ width: "100%", padding: "10px 0", borderRadius: 8, border: "1px solid #d0d0d0", background: "#000000", color: "#ffffff", cursor: "pointer", fontSize: 13, fontWeight: 500, fontFamily: "var(--body)" }}>
+          <button onClick={next} style={{ width: "100%", padding: "10px 0", borderRadius: 8, border: "1px solid var(--border-hover)", background: "var(--text-primary)", color: "var(--bg-primary)", cursor: "pointer", fontSize: 13, fontWeight: 500, fontFamily: "var(--body)" }}>
             {current < questions.length - 1 ? "Next Question →" : "See Results"}
           </button>
         </div>
@@ -674,32 +699,26 @@ function Quiz({ questions, color }) {
 // ─── RESOURCE BADGE ──────────────────────────────────────────────────────────
 
 const typeStyles = {
-  video: { bg: "#E0313118", color: "#E03131", label: "▶ Video" },
-  course: { bg: "#1C7ED618", color: "#1C7ED6", label: "📚 Course" },
-  tool: { bg: "#2F9E4418", color: "#2F9E44", label: "🔧 Tool" },
-  docs: { bg: "#F59F0018", color: "#F59F00", label: "📄 Docs" },
-  paper: { bg: "#AE3EC918", color: "#AE3EC9", label: "📑 Paper" },
-  article: { bg: "#F7670718", color: "#F76707", label: "✏️ Article" },
-  code: { bg: "#36895918", color: "#368959", label: "💻 Code" },
-  podcast: { bg: "#C2255C18", color: "#C2255C", label: "🎙️ Podcast" },
+  video: { bg: "#E0313118", color: "#E03131", label: "Video" },
+  course: { bg: "#1C7ED618", color: "#1C7ED6", label: "Course" },
+  tool: { bg: "#2F9E4418", color: "#2F9E44", label: "Tool" },
+  docs: { bg: "#F59F0018", color: "#F59F00", label: "Docs" },
+  paper: { bg: "#AE3EC918", color: "#AE3EC9", label: "Paper" },
+  article: { bg: "#F7670718", color: "#F76707", label: "Article" },
+  code: { bg: "#36895918", color: "#368959", label: "Code" },
+  podcast: { bg: "#C2255C18", color: "#C2255C", label: "Podcast" },
 };
 
 // ─── SECTION COMPONENT ───────────────────────────────────────────────────────
 
 function Section({ section, weekColor }) {
-  const expandedSections = useRoadmapStore((state) => state.expandedSections);
-  const selectedDepthLevels = useRoadmapStore((state) => state.selectedDepthLevels);
-  const toggleExpandSection = useRoadmapStore((state) => state.toggleExpandSection);
-  const setDepthLevel = useRoadmapStore((state) => state.setDepthLevel);
-
-  const expanded = expandedSections.includes(section.id);
-  const depth = selectedDepthLevels[section.id] || "eli5";
   const depths = ["eli5", "normal", "technical", "pm"];
-  const depthLabels = { eli5: "ELI5 🧒", normal: "Normal 📖", technical: "Technical ⚙️", pm: "PM Lens 🎯" };
+  const depthLabels = { eli5: "ELI5", normal: "Normal", technical: "Technical", pm: "PM" };
+  const [selectedDepth, setSelectedDepth] = useState("normal");
 
   const renderText = (text) => {
     return text.split(/(\*\*[^*]+\*\*)/g).map((part, i) => {
-      if (part.startsWith("**") && part.endsWith("**")) return <strong key={i} style={{ color: "#000000", fontWeight: 600 }}>{part.slice(2, -2)}</strong>;
+      if (part.startsWith("**") && part.endsWith("**")) return <strong key={i} style={{ color: "var(--text-primary)", fontWeight: 600 }}>{part.slice(2, -2)}</strong>;
       return <span key={i}>{part}</span>;
     });
   };
@@ -707,77 +726,207 @@ function Section({ section, weekColor }) {
   const Interactive = section.interactive ? interactiveMap[section.interactive] : null;
 
   return (
-    <div style={{ background: "#ffffff", border: "1px solid #e0e0e0", borderRadius: 12, marginBottom: 20, overflow: "hidden", transition: "all 0.2s" }}
-      onMouseEnter={e => { e.currentTarget.style.borderColor = "#d0d0d0"; e.currentTarget.style.boxShadow = "0 1px 3px rgba(0,0,0,0.08)"; }}
-      onMouseLeave={e => { e.currentTarget.style.borderColor = "#e0e0e0"; e.currentTarget.style.boxShadow = "none"; }}>
-      <button onClick={() => toggleExpandSection(section.id)} style={{
-        width: "100%", padding: "16px 20px", background: "none", border: "none",
-        display: "flex", alignItems: "center", gap: 14, cursor: "pointer", textAlign: "left"
-      }}>
-        <div style={{ width: 36, height: 36, borderRadius: 8, background: "#f0f0f0", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 16, flexShrink: 0 }}>
-          {expanded ? "▾" : "▸"}
+    <div
+      data-section-id={section.id}
+      style={{ background: "var(--bg-primary)", border: "1px solid var(--border-color)", borderRadius: 12, marginBottom: 20, overflow: "hidden", transition: "all 0.2s", padding: "20px" }}
+      onMouseEnter={e => { e.currentTarget.style.borderColor = "var(--border-hover)"; e.currentTarget.style.boxShadow = "0 1px 3px var(--shadow-md)"; }}
+      onMouseLeave={e => { e.currentTarget.style.borderColor = "var(--border-color)"; e.currentTarget.style.boxShadow = "none"; }}>
+
+      {/* Section Title */}
+      <div style={{ marginBottom: 20 }}>
+        <div style={{ color: "var(--text-primary)", fontSize: 17, fontWeight: 600, fontFamily: "var(--display)" }}>{section.title}</div>
+        <div style={{ display: "flex", gap: 8, marginTop: 10 }}>
+          {section.interactive && <span style={{ fontSize: 9, padding: "4px 10px", background: "var(--badge-bg-interactive)", color: "var(--badge-color-interactive)", borderRadius: 4, fontWeight: 600, fontFamily: "var(--mono)" }}>Interactive</span>}
+          {section.quiz && <span style={{ fontSize: 9, padding: "4px 10px", background: "var(--badge-bg-quiz)", color: "var(--badge-color-quiz)", borderRadius: 4, fontWeight: 600, fontFamily: "var(--mono)" }}>Quiz</span>}
         </div>
-        <div style={{ flex: 1 }}>
-          <div style={{ color: "#000000", fontSize: 15, fontWeight: 600, fontFamily: "var(--display)" }}>{section.title}</div>
-          <div style={{ color: "#999", fontSize: 12, fontFamily: "var(--body)", marginTop: 3 }}>{section.subtitle}</div>
+      </div>
+
+      {/* Depth Tabs */}
+      <div style={{ display: "flex", gap: 8, marginBottom: 20, borderBottom: "1px solid var(--border-light)", paddingBottom: 0 }}>
+        {depths.map((depth) => (
+          <button
+            key={depth}
+            onClick={() => setSelectedDepth(depth)}
+            style={{
+              padding: "10px 16px",
+              background: "none",
+              border: "none",
+              borderBottom: selectedDepth === depth ? "2px solid var(--text-primary)" : "2px solid transparent",
+              color: selectedDepth === depth ? "var(--text-primary)" : "var(--text-light)",
+              fontSize: 13,
+              fontWeight: selectedDepth === depth ? 600 : 500,
+              fontFamily: "var(--body)",
+              cursor: "pointer",
+              transition: "all 0.15s",
+              marginBottom: "-1px"
+            }}
+            onMouseEnter={e => { if (selectedDepth !== depth) e.currentTarget.style.color = "var(--text-muted)"; }}
+            onMouseLeave={e => { if (selectedDepth !== depth) e.currentTarget.style.color = "var(--text-light)"; }}
+          >
+            {depthLabels[depth]}
+          </button>
+        ))}
+      </div>
+
+      {/* Selected Lens Content */}
+      <div key={selectedDepth} data-lens={selectedDepth} style={{ minHeight: 100 }}>
+        <div style={{ color: "var(--text-secondary)", fontSize: 14, lineHeight: 1.8, fontFamily: "var(--body)", whiteSpace: "pre-line" }}>
+          {renderText(section.depths[selectedDepth])}
         </div>
-        <div style={{ display: "flex", gap: 6 }}>
-          {section.interactive && <span style={{ fontSize: 9, padding: "4px 10px", background: "#e8f5e9", color: "#2e7d32", borderRadius: 4, fontWeight: 600, fontFamily: "var(--mono)" }}>Interactive</span>}
-          {section.quiz && <span style={{ fontSize: 9, padding: "4px 10px", background: "#fff3e0", color: "#e65100", borderRadius: 4, fontWeight: 600, fontFamily: "var(--mono)" }}>Quiz</span>}
-        </div>
-      </button>
+      </div>
 
-      {expanded && (
-        <div style={{ padding: "0 20px 20px", borderTop: "1px solid #f0f0f0" }}>
-          {/* Depth Tabs */}
-          <div style={{ display: "flex", gap: 6, marginTop: 16, marginBottom: 20 }}>
-            {depths.map(d => (
-              <button key={d} onClick={() => setDepthLevel(section.id, d)} style={{
-                flex: 1, padding: "8px 12px", borderRadius: 6, border: depth === d ? "1.5px solid #000" : "1px solid #e0e0e0",
-                background: depth === d ? "#000000" : "#ffffff",
-                color: depth === d ? "#ffffff" : "#666", fontSize: 12, fontWeight: 500,
-                cursor: "pointer", fontFamily: "var(--body)"
-              }}>{depthLabels[d]}</button>
-            ))}
-          </div>
+      {/* Interactive Widget */}
+      {Interactive && <div style={{ marginBottom: 20, marginTop: 20, paddingTop: 20, borderTop: "1px solid var(--section-separator)" }}><Interactive /></div>}
 
-          {/* Content */}
-          <div style={{ color: "#333333", fontSize: 14, lineHeight: 1.8, fontFamily: "var(--body)", whiteSpace: "pre-line", marginBottom: 20 }}>
-            {renderText(section.depths[depth])}
-          </div>
-
-          {/* Interactive */}
-          {Interactive && <div style={{ marginBottom: 16 }}><Interactive /></div>}
-
-          {/* Quiz */}
-          {section.quiz && <div style={{ marginBottom: 16 }}><Quiz questions={section.quiz} color={weekColor} /></div>}
-
-          {/* Resources */}
-          {section.resources && (
-            <div>
-              <div style={{ fontSize: 11, fontWeight: 600, color: "#666", fontFamily: "var(--mono)", letterSpacing: 1, marginBottom: 12 }}>📚 RESOURCES</div>
-              <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-                {section.resources.map((r, i) => {
-                  const style = typeStyles[r.type] || typeStyles.article;
-                  return (
-                    <a key={i} href={r.url} target="_blank" rel="noopener noreferrer" style={{
-                      display: "flex", alignItems: "center", gap: 10, padding: "10px 12px",
-                      background: "#ffffff", borderRadius: 8, textDecoration: "none",
-                      border: "1px solid #e0e0e0", transition: "all 0.15s"
-                    }}
-                    onMouseEnter={e => { e.currentTarget.style.borderColor = "#d0d0d0"; e.currentTarget.style.boxShadow = "0 1px 2px rgba(0,0,0,0.05)"; }}
-                    onMouseLeave={e => { e.currentTarget.style.borderColor = "#e0e0e0"; e.currentTarget.style.boxShadow = "none"; }}>
-                      <span style={{ fontSize: 9, padding: "3px 8px", background: style.bg, color: style.color, borderRadius: 4, fontWeight: 600, fontFamily: "var(--mono)", flexShrink: 0 }}>{style.label}</span>
-                      <span style={{ fontSize: 13, color: "#333", fontFamily: "var(--body)" }}>{r.title}</span>
-                      <span style={{ marginLeft: "auto", fontSize: 11, color: "#999" }}>↗</span>
-                    </a>
-                  );
-                })}
-              </div>
-            </div>
-          )}
+      {/* Quiz */}
+      {section.quiz && section.quiz.length > 0 && (
+        <div style={{ marginTop: 24, paddingTop: 20, borderTop: "1px solid var(--section-separator)" }}>
+          <div style={{ fontSize: 12, fontWeight: 600, color: "var(--text-muted)", letterSpacing: 1, fontFamily: "var(--mono)", marginBottom: 16, textTransform: "uppercase" }}>Knowledge Check</div>
+          <Quiz questions={section.quiz} color={weekColor} />
         </div>
       )}
+    </div>
+  );
+}
+
+// ─── WEEK TABS COMPONENT ─────────────────────────────────────────────────────
+
+function WeekTabs({ activeWeekId, onWeekChange }) {
+  return (
+    <div style={{ display: "flex", gap: 8, padding: "12px 32px", borderBottom: "1px solid var(--border-light)", background: "var(--bg-primary)", overflowX: "auto", position: "sticky", top: 64, zIndex: 50, minHeight: 60 }}>
+      {WEEKS.map((week) => (
+        <button
+          key={week.id}
+          onClick={() => onWeekChange(week.id)}
+          style={{
+            padding: "8px 16px",
+            borderRadius: 6,
+            border: activeWeekId === week.id ? "1.5px solid var(--text-primary)" : "1px solid var(--border-color)",
+            background: activeWeekId === week.id ? "var(--text-primary)" : "var(--bg-primary)",
+            color: activeWeekId === week.id ? "var(--bg-primary)" : "var(--text-primary)",
+            fontSize: 13,
+            fontWeight: 500,
+            fontFamily: "var(--body)",
+            cursor: "pointer",
+            transition: "all 0.15s",
+            whiteSpace: "nowrap"
+          }}
+          onMouseEnter={e => {
+            if (activeWeekId !== week.id) {
+              e.currentTarget.style.borderColor = "var(--border-hover)";
+              e.currentTarget.style.background = "var(--bg-secondary)";
+            }
+          }}
+          onMouseLeave={e => {
+            if (activeWeekId !== week.id) {
+              e.currentTarget.style.borderColor = "var(--border-color)";
+              e.currentTarget.style.background = "var(--bg-primary)";
+            }
+          }}
+        >
+          Week {week.id}
+        </button>
+      ))}
+    </div>
+  );
+}
+
+// ─── LENS SIDEBAR COMPONENT ──────────────────────────────────────────────────
+
+function LensSidebar() {
+  const lenses = [
+    { id: "eli5", label: "ELI5" },
+    { id: "normal", label: "Normal" },
+    { id: "technical", label: "Technical" },
+    { id: "pm", label: "PM Lens" }
+  ];
+
+  const handleLensClick = (lensId) => {
+    // Find first section with this lens content and scroll to it
+    const sectionElement = document.querySelector(`[data-lens="${lensId}"]`);
+    if (sectionElement) {
+      sectionElement.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+  };
+
+  return (
+    <div className="sidebar" style={{ width: 200, flexShrink: 0, padding: "20px", borderRight: "1px solid var(--border-light)", position: "sticky", top: 130, maxHeight: "calc(100vh - 130px)", overflowY: "auto", background: "var(--bg-tertiary)" }}>
+      <div style={{ fontSize: 10, fontWeight: 600, color: "var(--text-muted)", letterSpacing: 1.2, fontFamily: "var(--mono)", marginBottom: 16, textTransform: "uppercase" }}>
+        Learning Lenses
+      </div>
+      <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+        {lenses.map((lens) => (
+          <button
+            key={lens.id}
+            onClick={() => handleLensClick(lens.id)}
+            style={{
+              padding: "10px 12px",
+              borderRadius: 6,
+              border: "1px solid var(--border-color)",
+              background: "var(--bg-primary)",
+              color: "var(--text-primary)",
+              fontSize: 13,
+              fontWeight: 500,
+              fontFamily: "var(--body)",
+              cursor: "pointer",
+              textAlign: "left",
+              transition: "all 0.15s"
+            }}
+            onMouseEnter={e => {
+              e.currentTarget.style.borderColor = "var(--border-hover)";
+              e.currentTarget.style.background = "var(--bg-secondary)";
+            }}
+            onMouseLeave={e => {
+              e.currentTarget.style.borderColor = "var(--border-color)";
+              e.currentTarget.style.background = "var(--bg-primary)";
+            }}
+          >
+            {lens.label}
+          </button>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+// ─── RIGHT SIDEBAR COMPONENT ────────────────────────────────────────────────
+
+function RightSidebar({ currentSection }) {
+  if (!currentSection) return null;
+
+  const hasResources = currentSection.resources && currentSection.resources.length > 0;
+
+  if (!hasResources) return null;
+
+  return (
+    <div className="right-sidebar" style={{ width: 280, flexShrink: 0, padding: "20px", borderLeft: "1px solid var(--border-light)", position: "sticky", top: 130, maxHeight: "calc(100vh - 130px)", overflowY: "auto", background: "var(--bg-tertiary)" }}>
+      {/* Current Section Title */}
+      <div style={{ fontSize: 11, fontWeight: 600, color: "var(--text-muted)", letterSpacing: 1, fontFamily: "var(--mono)", marginBottom: 16, textTransform: "uppercase" }}>
+        {currentSection.title}
+      </div>
+
+      {/* Resources Section */}
+      <div>
+        <div style={{ fontSize: 10, fontWeight: 600, color: "var(--text-muted)", fontFamily: "var(--mono)", letterSpacing: 1, marginBottom: 12 }}>RESOURCES</div>
+        <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+          {currentSection.resources.map((r, i) => {
+            const style = typeStyles[r.type] || typeStyles.article;
+            return (
+              <a key={i} href={r.url} target="_blank" rel="noopener noreferrer" style={{
+                display: "flex", alignItems: "center", gap: 8, padding: "10px 12px",
+                background: "var(--bg-secondary)", borderRadius: 8, textDecoration: "none",
+                border: "1px solid var(--border-color)", transition: "all 0.15s", fontSize: 12
+              }}
+              onMouseEnter={e => { e.currentTarget.style.borderColor = "var(--border-hover)"; e.currentTarget.style.boxShadow = "0 1px 2px var(--shadow-sm)"; }}
+              onMouseLeave={e => { e.currentTarget.style.borderColor = "var(--border-color)"; e.currentTarget.style.boxShadow = "none"; }}>
+                <span style={{ fontSize: 8, padding: "2px 6px", background: style.bg, color: style.color, borderRadius: 3, fontWeight: 600, fontFamily: "var(--mono)", flexShrink: 0, whiteSpace: "nowrap" }}>{style.label}</span>
+                <span style={{ fontSize: 12, color: "var(--text-secondary)", fontFamily: "var(--body)", flex: 1, minWidth: 0, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{r.title}</span>
+                <span style={{ marginLeft: "auto", fontSize: 10, color: "var(--text-light)", flexShrink: 0 }}>↗</span>
+              </a>
+            );
+          })}
+        </div>
+      </div>
     </div>
   );
 }
@@ -788,111 +937,195 @@ export default function AIRoadmap() {
   const currentWeekId = useRoadmapStore((state) => state.currentWeekId);
   const setCurrentWeek = useRoadmapStore((state) => state.setCurrentWeek);
   const contentRef = useRef(null);
+  const [currentSection, setCurrentSection] = useState(null);
 
   const activeWeek = WEEKS.findIndex((w) => w.id === currentWeekId);
   const week = WEEKS[activeWeek];
 
   useEffect(() => {
     if (contentRef.current) contentRef.current.scrollTop = 0;
-  }, [activeWeek]);
+    setCurrentSection(week.sections[0] || null);
+  }, [activeWeek, week.sections]);
+
+  // Track which section is in view
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const visibleEntry = entries.find((entry) => entry.isIntersecting);
+        if (visibleEntry) {
+          const sectionId = visibleEntry.target.getAttribute("data-section-id");
+          const section = week.sections.find((s) => s.id === sectionId);
+          if (section) setCurrentSection(section);
+        }
+      },
+      { threshold: 0.3, root: contentRef.current }
+    );
+
+    if (contentRef.current) {
+      const sections = contentRef.current.querySelectorAll("[data-section-id]");
+      sections.forEach((section) => observer.observe(section));
+      return () => sections.forEach((section) => observer.unobserve(section));
+    }
+  }, [week.sections]);
+
+  const darkMode = useRoadmapStore((state) => state.darkMode);
+  const setDarkMode = useRoadmapStore((state) => state.setDarkMode);
+
+  // Apply dark mode class to document root
+  useEffect(() => {
+    if (darkMode) {
+      document.documentElement.classList.add("dark-mode");
+    } else {
+      document.documentElement.classList.remove("dark-mode");
+    }
+  }, [darkMode]);
 
   return (
-    <div style={{ minHeight: "100vh", background: "#ffffff", color: "#000000" }}>
+    <div style={{ minHeight: "100vh", background: "var(--bg-primary)", color: "var(--text-primary)" }}>
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Source+Sans+3:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600;700&display=swap');
-        :root { --display: 'Outfit', sans-serif; --body: 'Source Sans 3', sans-serif; --mono: 'IBM Plex Mono', monospace; }
+
+        :root {
+          --display: 'Outfit', sans-serif;
+          --body: 'Source Sans 3', sans-serif;
+          --mono: 'IBM Plex Mono', monospace;
+
+          /* Light mode colors (default) */
+          --bg-primary: #ffffff;
+          --bg-secondary: #f9f9f9;
+          --bg-tertiary: #fafafa;
+          --bg-input: #ffffff;
+          --text-primary: #000000;
+          --text-secondary: #333333;
+          --text-muted: #666666;
+          --text-light: #999999;
+          --border-color: #e0e0e0;
+          --border-light: #efefef;
+          --border-hover: #d0d0d0;
+          --badge-bg-interactive: #e8f5e9;
+          --badge-color-interactive: #2e7d32;
+          --badge-bg-quiz: #fff3e0;
+          --badge-color-quiz: #e65100;
+          --section-separator: #f0f0f0;
+          --shadow-sm: rgba(0,0,0,0.05);
+          --shadow-md: rgba(0,0,0,0.08);
+          --label-color: #666;
+        }
+
+        :root.dark-mode {
+          /* Dark mode colors */
+          --bg-primary: #0f0f0f;
+          --bg-secondary: #1a1a1a;
+          --bg-tertiary: #151515;
+          --bg-input: #1a1a1a;
+          --text-primary: #ffffff;
+          --text-secondary: #e0e0e0;
+          --text-muted: #999999;
+          --text-light: #666666;
+          --border-color: #2a2a2a;
+          --border-light: #1f1f1f;
+          --border-hover: #3a3a3a;
+          --badge-bg-interactive: #1b3a1b;
+          --badge-color-interactive: #90EE90;
+          --badge-bg-quiz: #3a2a1a;
+          --badge-color-quiz: #FFB366;
+          --section-separator: #1f1f1f;
+          --shadow-sm: rgba(0,0,0,0.3);
+          --shadow-md: rgba(0,0,0,0.5);
+          --label-color: #999;
+        }
+
         * { box-sizing: border-box; }
-        input[type=range] { -webkit-appearance: none; appearance: none; background: #222240; border-radius: 99px; cursor: pointer; }
-        input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; width: 16px; height: 16px; border-radius: 50%; background: #555555; border: 2px solid #080818; }
-        textarea:focus { border-color: #555555 !important; }
-        button { transition: all 0.15s cubic-bezier(0.4, 0, 0.2, 1); }
+
+        input[type=range] {
+          -webkit-appearance: none;
+          appearance: none;
+          background: var(--bg-secondary);
+          border-radius: 99px;
+          cursor: pointer;
+        }
+
+        input[type=range]::-webkit-slider-thumb {
+          -webkit-appearance: none;
+          width: 16px;
+          height: 16px;
+          border-radius: 50%;
+          background: var(--text-muted);
+          border: 2px solid var(--bg-primary);
+        }
+
+        textarea:focus {
+          border-color: var(--text-muted) !important;
+        }
+
+        button {
+          transition: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        @media (max-width: 1200px) {
+          .layout { margin-left: 0 !important; margin-right: 0 !important; }
+          .sidebar { width: 160px !important; padding: 16px !important; }
+          .content { padding: 32px 24px !important; }
+          .right-sidebar { width: 240px !important; }
+        }
+
+        @media (max-width: 1024px) {
+          .sidebar { display: none !important; border-right: none !important; }
+          .content { padding: 32px 24px !important; }
+        }
+
         @media (max-width: 768px) {
           .layout { flex-direction: column !important; }
-          .sidebar { width: 100% !important; max-height: none !important; position: static !important; border-right: none !important; border-bottom: 1px solid #1a1a35 !important; }
-          .content { max-height: none !important; padding: 20px 16px !important; }
+          .content { padding: 20px 16px !important; }
+          .right-sidebar { display: none !important; width: 100% !important; position: static !important; border-left: none !important; max-height: none !important; top: auto !important; }
         }
       `}</style>
 
       {/* Header */}
-      <div style={{ padding: "40px 32px 32px", borderBottom: "1px solid #efefef", background: "#ffffff" }}>
+      <div style={{ position: "sticky", top: 0, zIndex: 100, padding: "16px 32px", borderBottom: "1px solid var(--border-light)", background: "var(--bg-primary)" }}>
         <div style={{ maxWidth: 1200, margin: "0 auto" }}>
-          <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 12 }}>
-            <span style={{ padding: "6px 12px", background: "#f5f5f5", borderRadius: 6, fontSize: 10, fontWeight: 600, letterSpacing: 1.2, fontFamily: "var(--mono)" }}>ROADMAP</span>
+          <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 10 }}>
+            <div>
+              <h1 style={{ fontSize: 20, fontWeight: 600, fontFamily: "var(--display)", margin: 0, color: "var(--text-primary)", letterSpacing: "-0.02em" }}>
+                AI PM Roadmap
+              </h1>
+              <p style={{ color: "var(--text-muted)", fontSize: 12, fontFamily: "var(--body)", margin: "4px 0 0" }}>
+                4 depth levels · Interactive tools · Quizzes · Resources
+              </p>
+            </div>
+            <DarkModeToggle isDarkMode={darkMode} onToggle={() => setDarkMode(!darkMode)} />
           </div>
-          <h1 style={{ fontSize: "clamp(26px, 4vw, 36px)", fontWeight: 600, fontFamily: "var(--display)", margin: "0 0 12px", color: "#000000", letterSpacing: "-0.02em" }}>
-            Master AI: Engineer × Product Manager
-          </h1>
-          <p style={{ color: "#666666", fontSize: 14, fontFamily: "var(--body)", lineHeight: 1.6, margin: 0 }}>
-            4 depth levels per topic · Interactive tools · Quizzes · 150+ free resources · No login required
-          </p>
         </div>
       </div>
 
+      {/* Week Tabs */}
+      <WeekTabs activeWeekId={currentWeekId} onWeekChange={setCurrentWeek} />
+
       {/* Layout */}
-      <div className="layout" style={{ display: "flex", maxWidth: 1200, margin: "0 auto" }}>
-        {/* Sidebar */}
-        <div className="sidebar" style={{ width: 300, flexShrink: 0, padding: 20, borderRight: "1px solid #efefef", position: "sticky", top: 0, maxHeight: "calc(100vh - 120px)", overflowY: "auto", background: "#fafafa" }}>
-          {WEEKS.map((w, i) => (
-            <button key={w.id} onClick={() => setCurrentWeek(w.id)} style={{
-              width: "100%", padding: "14px 12px", marginBottom: 8, borderRadius: 8, border: i === activeWeek ? "1px solid #d0d0d0" : "1px solid transparent",
-              background: i === activeWeek ? "#f5f5f5" : "transparent", cursor: "pointer", textAlign: "left"
-            }}
-            onMouseEnter={e => { e.currentTarget.style.background = i === activeWeek ? "#f5f5f5" : "#f9f9f9"; e.currentTarget.style.transform = "scale(1.01)"; }}
-            onMouseLeave={e => { e.currentTarget.style.background = i === activeWeek ? "#f5f5f5" : "transparent"; e.currentTarget.style.transform = "scale(1)"; }}>
-              <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-                <span style={{ fontSize: 24 }}>{w.icon}</span>
-                <div>
-                  <div style={{ fontSize: 9, fontWeight: 600, color: i === activeWeek ? w.color : "#999", letterSpacing: 1.2, fontFamily: "var(--mono)", marginBottom: 2 }}>{w.tag}</div>
-                  <div style={{ fontSize: 13, fontWeight: 600, color: "#000000", fontFamily: "var(--display)" }}>Week {w.id}</div>
-                </div>
-              </div>
-              <div style={{ fontSize: 11, color: "#999", fontFamily: "var(--body)", marginTop: 6, paddingLeft: 34 }}>
-                {w.sections.length} topics
-              </div>
-            </button>
-          ))}
-          <div style={{ margin: "20px 0 0 0", padding: "14px", background: "#f5f5f5", border: "1px solid #efefef", borderRadius: 8 }}>
-            <div style={{ fontSize: 9, fontWeight: 600, color: "#666", letterSpacing: 1.2, fontFamily: "var(--mono)", marginBottom: 8 }}>DEPTH LEVELS</div>
-            <div style={{ fontSize: 11, color: "#555", lineHeight: 1.7 }}>
-              🧒 <strong style={{ color: "#000" }}>ELI5</strong> — Simple<br/>
-              📖 <strong style={{ color: "#000" }}>Normal</strong> — Clear<br/>
-              ⚙️ <strong style={{ color: "#000" }}>Technical</strong> — Deep<br/>
-              🎯 <strong style={{ color: "#000" }}>PM</strong> — Strategy
-            </div>
-          </div>
-        </div>
+      <div className="layout" style={{ display: "flex", maxWidth: 1600, margin: "0 auto", minHeight: "calc(100vh - 190px)" }}>
+        {/* Lens Sidebar */}
+        <LensSidebar />
 
         {/* Content */}
-        <div className="content" ref={contentRef} style={{ flex: 1, padding: "40px 48px", overflowY: "auto", maxHeight: "calc(100vh - 120px)", background: "#ffffff" }}>
+        <div className="content" ref={contentRef} style={{ flex: 1, padding: "40px 48px", overflowY: "auto", background: "var(--bg-primary)" }}>
           <div style={{ marginBottom: 40 }}>
-            <div style={{ display: "flex", alignItems: "center", gap: 14, marginBottom: 16 }}>
-              <span style={{ fontSize: 40 }}>{week.icon}</span>
-              <div>
-                <div style={{ fontSize: 10, fontWeight: 600, color: "#999", letterSpacing: 1.2, fontFamily: "var(--mono)", marginBottom: 4 }}>WEEK {week.id}</div>
-                <h2 style={{ fontSize: 28, fontWeight: 600, fontFamily: "var(--display)", margin: 0, color: "#000000", letterSpacing: "-0.01em" }}>{week.title}</h2>
-              </div>
+            <div style={{ marginBottom: 16 }}>
+              <div style={{ fontSize: 10, fontWeight: 600, color: "var(--text-muted)", letterSpacing: 1.2, fontFamily: "var(--mono)", marginBottom: 4 }}>WEEK {week.id}</div>
+              <h2 style={{ fontSize: 28, fontWeight: 600, fontFamily: "var(--display)", margin: 0, color: "var(--text-primary)", letterSpacing: "-0.01em" }}>{week.title}</h2>
             </div>
-            <div style={{ padding: "16px 20px", background: "#f9f9f9", border: "1px solid #efefef", borderRadius: 8, display: "flex", alignItems: "flex-start", gap: 12 }}>
-              <span style={{ fontSize: 18, flexShrink: 0 }}>💡</span>
-              <div>
-                <div style={{ fontSize: 10, fontWeight: 600, color: "#666", letterSpacing: 1, fontFamily: "var(--mono)", marginBottom: 4 }}>WHY THIS MATTERS</div>
-                <div style={{ fontSize: 13, color: "#333333", lineHeight: 1.6, fontFamily: "var(--body)" }}>{week.pmAngle}</div>
-              </div>
+            <div style={{ padding: "16px 20px", background: "var(--bg-secondary)", border: "1px solid var(--border-light)", borderRadius: 8 }}>
+              <div style={{ fontSize: 10, fontWeight: 600, color: "var(--text-muted)", letterSpacing: 1, fontFamily: "var(--mono)", marginBottom: 4 }}>WHY THIS MATTERS</div>
+              <div style={{ fontSize: 13, color: "var(--text-secondary)", lineHeight: 1.6, fontFamily: "var(--body)" }}>{week.pmAngle}</div>
             </div>
           </div>
 
           {week.sections.map(section => (
             <Section key={section.id} section={section} weekColor={week.color} />
           ))}
-
-          {/* Week nav */}
-          <div style={{ display: "flex", gap: 16, marginTop: 40, paddingTop: 32, paddingBottom: 40, borderTop: "1px solid #efefef" }}>
-            <button onClick={() => setCurrentWeek(WEEKS[Math.max(0, activeWeek - 1)].id)} disabled={activeWeek === 0}
-              style={{ flex: 1, padding: "12px 16px", borderRadius: 8, border: "1px solid #d0d0d0", background: activeWeek === 0 ? "#f5f5f5" : "#ffffff", color: activeWeek === 0 ? "#ccc" : "#000000", cursor: activeWeek === 0 ? "default" : "pointer", fontSize: 13, fontWeight: 500, fontFamily: "var(--body)" }}>← Previous</button>
-            <button onClick={() => setCurrentWeek(WEEKS[Math.min(WEEKS.length - 1, activeWeek + 1)].id)} disabled={activeWeek === WEEKS.length - 1}
-              style={{ flex: 1, padding: "12px 16px", borderRadius: 8, border: "1px solid #d0d0d0", background: activeWeek === WEEKS.length - 1 ? "#f5f5f5" : "#ffffff", color: activeWeek === WEEKS.length - 1 ? "#ccc" : "#000000", cursor: activeWeek === WEEKS.length - 1 ? "default" : "pointer", fontSize: 13, fontWeight: 500, fontFamily: "var(--body)" }}>Next →</button>
-          </div>
         </div>
+
+        {/* Right Sidebar - Resources Only */}
+        <RightSidebar currentSection={currentSection} />
       </div>
     </div>
   );
