@@ -57,10 +57,11 @@ const WEEKS = [
           { q: "Why might a PM choose a simple ML classifier over an LLM for a product feature?", options: ["LLMs can't classify text", "ML classifiers are always more accurate", "ML classifiers cost pennies vs $0.003+ per LLM query at scale", "There's no reason — always use LLMs"], correct: 2, explanation: "At 1M queries/day, an LLM costs $3K-60K/day vs pennies for a classifier. Cost matters at scale." }
         ],
         resources: [
-          { title: "Karpathy: Intro to LLMs (1hr)", url: "https://www.youtube.com/watch?v=zjkBMFhNj_g", type: "video" },
-          { title: "3Blue1Brown: Neural Networks", url: "https://www.youtube.com/playlist?list=PLZHQObOWTQDNU6R1_67000Dx_ZCJB-3pi", type: "video" },
+          { title: "Karpathy: Intro to LLMs (1hr, non-technical)", url: "https://www.youtube.com/watch?v=zjkBMFhNj_g", type: "video" },
+          { title: "3Blue1Brown: Neural Networks (playlist)", url: "https://www.youtube.com/playlist?list=PLZHQObOWTQDNU6R1_67000Dx_ZCJB-3pi", type: "video" },
           { title: "Google ML Crash Course", url: "https://developers.google.com/machine-learning/crash-course", type: "course" },
-          { title: "fast.ai Practical Deep Learning", url: "https://course.fast.ai/", type: "course" }
+          { title: "fast.ai Practical Deep Learning", url: "https://course.fast.ai/", type: "course" },
+          { title: "Andrew Ng: AI For Everyone (Coursera)", url: "https://www.coursera.org/learn/ai-for-everyone", type: "course" }
         ]
       },
       {
@@ -80,10 +81,16 @@ const WEEKS = [
         ],
         resources: [
           { title: "Karpathy: Let's Build the GPT Tokenizer (2hr)", url: "https://www.youtube.com/watch?v=zduSFxRajkE", type: "video" },
+          { title: "Karpathy minbpe repo (code)", url: "https://github.com/karpathy/minbpe", type: "code" },
+          { title: "fast.ai: Karpathy Tokenizers (written companion)", url: "https://www.fast.ai/posts/2025-10-16-karpathy-tokenizers", type: "article" },
           { title: "OpenAI Tokenizer Tool", url: "https://platform.openai.com/tokenizer", type: "tool" },
           { title: "Tiktokenizer (multi-model)", url: "https://tiktokenizer.vercel.app/", type: "tool" },
           { title: "HF Tokenizer Playground", url: "https://huggingface.co/spaces/Xenova/the-tokenizer-playground", type: "tool" },
-          { title: "Hugging Face: Tokenizer Summary", url: "https://huggingface.co/docs/transformers/en/tokenizer_summary", type: "docs" }
+          { title: "GPT-Tokenizer", url: "https://gpt-tokenizer.dev/", type: "tool" },
+          { title: "Hugging Face: Tokenizer Summary", url: "https://huggingface.co/docs/transformers/en/tokenizer_summary", type: "docs" },
+          { title: "OpenAI: What Are Tokens", url: "https://help.openai.com/en/articles/4936856-what-are-tokens-and-how-to-count-them", type: "article" },
+          { title: "tiktoken (OpenAI's tokenizer library)", url: "https://github.com/openai/tiktoken", type: "code" },
+          { title: "BPE for NLP Paper (Sennrich et al., 2016)", url: "https://arxiv.org/abs/1508.07909", type: "paper" }
         ]
       },
       {
@@ -104,8 +111,14 @@ const WEEKS = [
         resources: [
           { title: "LLM Sampling Parameters Explained", url: "https://www.letsdatascience.com/blog/llm-sampling-temperature-top-k-top-p-and-min-p-explained", type: "article" },
           { title: "DAIR.AI: LLM Settings", url: "https://www.promptingguide.ai/introduction/settings", type: "docs" },
-          { title: "OpenAI Playground (test live)", url: "https://platform.openai.com/playground", type: "tool" },
-          { title: "Google AI Studio (free, no card)", url: "https://aistudio.google.com/", type: "tool" }
+          { title: "Peter Chng: Token Selection Strategies", url: "https://peterchng.com/blog/2023/05/02/token-selection-strategies-top-k-top-p-and-temperature/", type: "article" },
+          { title: "Learn Prompting: Configuration Hyperparameters", url: "https://learnprompting.org/docs/intermediate/configuration_hyperparameters", type: "docs" },
+          { title: "Microsoft Azure: Prompt Engineering", url: "https://learn.microsoft.com/en-us/azure/ai-foundry/openai/concepts/prompt-engineering", type: "docs" },
+          { title: "OpenAI Playground", url: "https://platform.openai.com/playground", type: "tool" },
+          { title: "Anthropic Console Workbench", url: "https://console.anthropic.com/workbench", type: "tool" },
+          { title: "Google AI Studio", url: "https://aistudio.google.com/", type: "tool" },
+          { title: "Hugging Face Playground", url: "https://huggingface.co/playground", type: "tool" },
+          { title: "Poe", url: "https://poe.com", type: "tool" }
         ]
       },
       {
@@ -124,14 +137,18 @@ const WEEKS = [
           { q: "Chain-of-Thought prompting improved math accuracy on GSM8K by approximately:", options: ["5% → 10%", "18% → 79%", "50% → 55%", "79% → 95%"], correct: 1, explanation: "Adding 'let's think step by step' improved accuracy from ~17.7% to ~78.7% — a 4.4x improvement." }
         ],
         resources: [
-          { title: "DeepLearning.AI: Prompt Engineering for Devs", url: "https://www.deeplearning.ai/short-courses/chatgpt-prompt-engineering-for-developers/", type: "course" },
+          { title: "DeepLearning.AI: Prompt Engineering for Devs (Andrew Ng)", url: "https://www.deeplearning.ai/short-courses/chatgpt-prompt-engineering-for-developers/", type: "course" },
           { title: "Anthropic Prompt Engineering Tutorial (9 chapters)", url: "https://github.com/anthropics/prompt-eng-interactive-tutorial", type: "course" },
           { title: "Anthropic Prompt Engineering Docs", url: "https://docs.anthropic.com/en/docs/build-with-claude/prompt-engineering/overview", type: "docs" },
+          { title: "Anthropic Prompt Library", url: "https://docs.anthropic.com/en/resources/prompt-library/library", type: "docs" },
+          { title: "Anthropic Prompt Generator", url: "https://docs.anthropic.com/en/docs/build-with-claude/prompt-engineering/prompt-generator", type: "tool" },
           { title: "OpenAI Prompt Engineering Guide", url: "https://platform.openai.com/docs/guides/prompt-engineering", type: "docs" },
           { title: "DAIR.AI Prompt Engineering Guide", url: "https://www.promptingguide.ai/", type: "docs" },
           { title: "Learn Prompting (60+ free modules)", url: "https://learnprompting.org/docs/introduction", type: "course" },
-          { title: "Chain-of-Thought Paper (Wei et al.)", url: "https://arxiv.org/abs/2201.11903", type: "paper" },
-          { title: "ReAct Paper (Yao et al.)", url: "https://arxiv.org/abs/2210.03629", type: "paper" }
+          { title: "GPT-4.1 Prompting Guide (OpenAI Cookbook)", url: "https://developers.openai.com/cookbook/examples/gpt4-1_prompting_guide/", type: "docs" },
+          { title: "Vanderbilt: Prompt Engineering for ChatGPT (Coursera)", url: "https://www.coursera.org/learn/prompt-engineering", type: "course" },
+          { title: "Chain-of-Thought Prompting Paper (Wei et al., 2022)", url: "https://arxiv.org/abs/2201.11903", type: "paper" },
+          { title: "ReAct Paper (Yao et al., 2022)", url: "https://arxiv.org/abs/2210.03629", type: "paper" }
         ]
       }
     ]
@@ -164,8 +181,11 @@ const WEEKS = [
           { title: "Jay Alammar: Illustrated Word2Vec", url: "https://jalammar.github.io/illustrated-word2vec/", type: "article" },
           { title: "TensorFlow Embedding Projector", url: "https://projector.tensorflow.org/", type: "tool" },
           { title: "OpenAI Embeddings Guide", url: "https://platform.openai.com/docs/guides/embeddings", type: "docs" },
-          { title: "Original Word2Vec Paper", url: "https://arxiv.org/abs/1301.3781", type: "paper" },
-          { title: "Sentence Transformers Library", url: "https://github.com/huggingface/sentence-transformers", type: "code" }
+          { title: "Original Word2Vec Paper (Mikolov et al., 2013)", url: "https://arxiv.org/abs/1301.3781", type: "paper" },
+          { title: "word2vec Parameter Learning Explained (Rong, 2014)", url: "https://arxiv.org/abs/1411.2738", type: "paper" },
+          { title: "Sentence Transformers Library", url: "https://github.com/huggingface/sentence-transformers", type: "code" },
+          { title: "all-MiniLM-L6-v2 Model", url: "https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2", type: "code" },
+          { title: "Hugging Face: Semantic Search with FAISS", url: "https://huggingface.co/learn/llm-course/en/chapter5/6", type: "course" }
         ]
       },
       {
@@ -183,9 +203,14 @@ const WEEKS = [
         ],
         resources: [
           { title: "Pinecone Learning Center", url: "https://www.pinecone.io/learn/vector-database/", type: "docs" },
+          { title: "Pinecone Docs", url: "https://docs.pinecone.io/guides/get-started/overview", type: "docs" },
           { title: "Chroma Getting Started", url: "https://www.trychroma.com/", type: "docs" },
-          { title: "FAISS Tutorial (Pinecone)", url: "https://www.pinecone.io/learn/series/faiss/faiss-tutorial/", type: "course" },
-          { title: "FAISS Library (Meta)", url: "https://github.com/facebookresearch/faiss", type: "code" }
+          { title: "Chroma Cookbook", url: "https://cookbook.chromadb.dev/", type: "docs" },
+          { title: "Weaviate Docs", url: "https://docs.weaviate.io/weaviate", type: "docs" },
+          { title: "FAISS Tutorial (Pinecone series)", url: "https://www.pinecone.io/learn/series/faiss/faiss-tutorial/", type: "course" },
+          { title: "FAISS Library — GitHub (Meta)", url: "https://github.com/facebookresearch/faiss", type: "code" },
+          { title: "Meta: FAISS Engineering Blog", url: "https://engineering.fb.com/2017/03/29/data-infrastructure/faiss-a-library-for-efficient-similarity-search/", type: "article" },
+          { title: "Google: Embedding Projector Blog", url: "https://research.google/blog/open-sourcing-the-embedding-projector-a-tool-for-visualizing-high-dimensional-data/", type: "article" }
         ]
       },
       {
@@ -204,12 +229,21 @@ const WEEKS = [
           { q: "Chunk overlap of 50-100 tokens helps with:", options: ["Making the database bigger", "Preventing sentences from being cut mid-thought at chunk boundaries", "Saving money", "Faster retrieval"], correct: 1, explanation: "Without overlap, important context at chunk boundaries gets lost — overlap ensures continuity between adjacent chunks." }
         ],
         resources: [
-          { title: "Original RAG Paper (Lewis et al.)", url: "https://arxiv.org/abs/2005.11401", type: "paper" },
+          { title: "Original RAG Paper (Lewis et al., 2020)", url: "https://arxiv.org/abs/2005.11401", type: "paper" },
           { title: "LlamaIndex: RAG Introduction", url: "https://developers.llamaindex.ai/python/framework/understanding/rag/", type: "docs" },
+          { title: "LlamaIndex: Building RAG from Scratch", url: "https://developers.llamaindex.ai/python/examples/low_level/oss_ingestion_retrieval/", type: "docs" },
           { title: "LangChain: Build a RAG Agent", url: "https://docs.langchain.com/oss/python/langchain/rag", type: "docs" },
-          { title: "DeepLearning.AI: Advanced RAG", url: "https://www.deeplearning.ai/short-courses/building-evaluating-advanced-rag/", type: "course" },
-          { title: "Weaviate: Chunking Strategies", url: "https://weaviate.io/blog/chunking-strategies-for-rag", type: "article" },
-          { title: "NVIDIA: Best Chunking Strategies", url: "https://developer.nvidia.com/blog/finding-the-best-chunking-strategy-for-accurate-ai-responses/", type: "article" }
+          { title: "Weaviate: Chunking Strategies for RAG", url: "https://weaviate.io/blog/chunking-strategies-for-rag", type: "article" },
+          { title: "NVIDIA: Best Chunking Strategies", url: "https://developer.nvidia.com/blog/finding-the-best-chunking-strategy-for-accurate-ai-responses/", type: "article" },
+          { title: "Firecrawl: Best Chunking Strategies for RAG 2025", url: "https://www.firecrawl.dev/blog/best-chunking-strategies-rag-2025", type: "article" },
+          { title: "Stack Overflow: Chunking in RAG Applications", url: "https://stackoverflow.blog/2024/12/27/breaking-up-is-hard-to-do-chunking-in-rag-applications/", type: "article" },
+          { title: "Databricks: Ultimate Guide to Chunking", url: "https://community.databricks.com/t5/technical-blog/the-ultimate-guide-to-chunking-strategies-for-rag-applications/ba-p/113089", type: "article" },
+          { title: "Cohere: Reranking Documentation", url: "https://docs.cohere.com/docs/reranking-with-cohere", type: "docs" },
+          { title: "Cohere: Full RAG Tutorial with Reranking", url: "https://docs.cohere.com/docs/rag-with-cohere", type: "docs" },
+          { title: "DeepLearning.AI: Building & Evaluating Advanced RAG", url: "https://www.deeplearning.ai/short-courses/building-evaluating-advanced-rag/", type: "course" },
+          { title: "DeepLearning.AI: LangChain — Chat with Your Data", url: "https://www.deeplearning.ai/short-courses/langchain-chat-with-your-data/", type: "course" },
+          { title: "DeepLearning.AI: Retrieval Augmented Generation", url: "https://learn.deeplearning.ai/courses/retrieval-augmented-generation/information", type: "course" },
+          { title: "Activeloop: RAG Course (certified, 15+ lessons)", url: "https://learn.activeloop.ai/courses/rag", type: "course" }
         ]
       }
     ]
@@ -238,10 +272,12 @@ const WEEKS = [
         ],
         resources: [
           { title: "OpenAI API Quickstart", url: "https://platform.openai.com/docs/quickstart", type: "docs" },
-          { title: "Anthropic Claude Docs", url: "https://docs.anthropic.com/en/docs/intro-to-claude", type: "docs" },
-          { title: "Google Gemini API", url: "https://ai.google.dev/gemini-api/docs", type: "docs" },
           { title: "OpenAI Cookbook (71K+ stars)", url: "https://cookbook.openai.com", type: "code" },
-          { title: "Anthropic Cookbook", url: "https://github.com/anthropics/anthropic-cookbook", type: "code" }
+          { title: "Anthropic Claude Docs", url: "https://docs.anthropic.com/en/docs/intro-to-claude", type: "docs" },
+          { title: "Anthropic Cookbook — GitHub", url: "https://github.com/anthropics/anthropic-cookbook", type: "code" },
+          { title: "Google Gemini API Docs", url: "https://ai.google.dev/gemini-api/docs", type: "docs" },
+          { title: "Google Gemini Cookbook — GitHub", url: "https://github.com/google-gemini/cookbook", type: "code" },
+          { title: "DataCamp: Google AI Studio Tutorial", url: "https://www.datacamp.com/tutorial/google-ai-studio-tutorial", type: "course" }
         ]
       },
       {
@@ -258,10 +294,15 @@ const WEEKS = [
           { q: "Who actually executes the function when an LLM makes a function call?", options: ["The LLM runs the code directly", "OpenAI/Anthropic's servers run it", "YOUR backend code executes it — the LLM only generates a structured request", "The user's browser"], correct: 2, explanation: "The LLM generates a structured JSON request. Your system executes the function and returns results. This keeps you in control of security and access." }
         ],
         resources: [
-          { title: "Anthropic: Tool Use Docs", url: "https://docs.anthropic.com/en/docs/agents-and-tools/tool-use/overview", type: "docs" },
+          { title: "Anthropic: Tool Use Overview", url: "https://docs.anthropic.com/en/docs/agents-and-tools/tool-use/overview", type: "docs" },
+          { title: "Anthropic: Implement Tool Use", url: "https://platform.claude.com/docs/en/agents-and-tools/tool-use/implement-tool-use", type: "docs" },
           { title: "OpenAI: Function Calling Guide", url: "https://platform.openai.com/docs/guides/function-calling", type: "docs" },
+          { title: "OpenAI: Assistants Function Calling", url: "https://platform.openai.com/docs/assistants/tools/function-calling", type: "docs" },
+          { title: "Google Gemini: Function Calling Docs", url: "https://ai.google.dev/gemini-api/docs/function-calling", type: "docs" },
+          { title: "Google: Function Calling Codelab", url: "https://codelabs.developers.google.com/codelabs/gemini-function-calling", type: "course" },
           { title: "Anthropic: Writing Tools for Agents", url: "https://www.anthropic.com/engineering/writing-tools-for-agents", type: "article" },
-          { title: "Google: Function Calling Codelab", url: "https://codelabs.developers.google.com/codelabs/gemini-function-calling", type: "course" }
+          { title: "Anthropic: Advanced Tool Use", url: "https://www.anthropic.com/engineering/advanced-tool-use", type: "article" },
+          { title: "DataCamp: OpenAI Function Calling Tutorial", url: "https://www.datacamp.com/tutorial/open-ai-function-calling-tutorial", type: "course" }
         ]
       },
       {
@@ -278,12 +319,19 @@ const WEEKS = [
           { q: "If an agent has 95% success rate per step and needs 10 steps, what's the overall success rate?", options: ["95%", "85%", "~60%", "~50%"], correct: 2, explanation: "0.95^10 ≈ 0.599 or ~60%. This is why simple chains often beat complex agents — fewer steps = higher reliability." }
         ],
         resources: [
-          { title: "Anthropic: Building Effective Agents (essential read)", url: "https://www.anthropic.com/research/building-effective-agents", type: "article" },
+          { title: "Anthropic: Building Effective Agents", url: "https://www.anthropic.com/research/building-effective-agents", type: "article" },
+          { title: "Anthropic: Building Effective Agents Cookbook", url: "https://github.com/anthropics/anthropic-cookbook/tree/main/patterns/agents", type: "code" },
           { title: "Hugging Face AI Agents Course", url: "https://huggingface.co/learn/agents-course/en/unit0/introduction", type: "course" },
           { title: "LangGraph Essentials (free)", url: "https://academy.langchain.com/courses/langgraph-essentials-python", type: "course" },
-          { title: "LangChain Academy (all free courses)", url: "https://academy.langchain.com/collections", type: "course" },
-          { title: "DeepLearning.AI: Agentic AI", url: "https://www.deeplearning.ai/courses/agentic-ai/", type: "course" },
-          { title: "CrewAI Quickstart", url: "https://docs.crewai.com/en/quickstart", type: "docs" }
+          { title: "LangChain Academy: Intro to LangGraph", url: "https://academy.langchain.com/courses/intro-to-langgraph", type: "course" },
+          { title: "LangChain Academy: Ambient Agents", url: "https://academy.langchain.com/courses/ambient-agents", type: "course" },
+          { title: "LangChain Academy: All Free Courses", url: "https://academy.langchain.com/collections", type: "course" },
+          { title: "LangGraph — GitHub", url: "https://github.com/langchain-ai/langgraph", type: "code" },
+          { title: "LangChain Agents Docs", url: "https://docs.langchain.com/oss/python/langchain/agents", type: "docs" },
+          { title: "CrewAI Quickstart", url: "https://docs.crewai.com/en/quickstart", type: "docs" },
+          { title: "AutoGen (Microsoft) — GitHub", url: "https://github.com/microsoft/autogen", type: "code" },
+          { title: "AutoGen Docs", url: "https://microsoft.github.io/autogen/stable//index.html", type: "docs" },
+          { title: "DeepLearning.AI: Agentic AI (Andrew Ng)", url: "https://www.deeplearning.ai/courses/agentic-ai/", type: "course" }
         ]
       }
     ]
@@ -311,12 +359,19 @@ const WEEKS = [
           { q: "LoRA reduces trainable parameters by approximately:", options: ["2x", "100x", "10,000x", "It doesn't reduce them"], correct: 2, explanation: "LoRA injects low-rank matrices that decompose weight updates — reducing trainable parameters from millions to thousands (10,000x reduction)." }
         ],
         resources: [
-          { title: "LoRA Paper (Hu et al.)", url: "https://arxiv.org/abs/2106.09685", type: "paper" },
-          { title: "QLoRA Paper (Dettmers et al.)", url: "https://arxiv.org/abs/2305.14314", type: "paper" },
+          { title: "LoRA Paper (Hu et al., 2021)", url: "https://arxiv.org/abs/2106.09685", type: "paper" },
+          { title: "QLoRA Paper (Dettmers et al., 2023)", url: "https://arxiv.org/abs/2305.14314", type: "paper" },
+          { title: "InstructGPT / RLHF Paper (Ouyang et al., 2022)", url: "https://arxiv.org/abs/2203.02155", type: "paper" },
           { title: "Phil Schmid: Fine-Tune LLMs in 2025", url: "https://www.philschmid.de/fine-tune-llms-in-2025", type: "article" },
+          { title: "Phil Schmid: Fine-Tune LLMs in 2024 with TRL", url: "https://www.philschmid.de/fine-tune-llms-in-2024-with-trl", type: "article" },
           { title: "Sebastian Raschka: Practical LoRA Tips", url: "https://magazine.sebastianraschka.com/p/practical-tips-for-finetuning-llms", type: "article" },
+          { title: "Hugging Face: Illustrated RLHF", url: "https://huggingface.co/blog/rlhf", type: "article" },
+          { title: "Chip Huyen: RLHF Breakdown", url: "https://huyenchip.com/2023/05/02/rlhf.html", type: "article" },
+          { title: "Hugging Face: Fine-Tuning Your First LLM", url: "https://huggingface.co/blog/dvgodoy/fine-tuning-llm-hugging-face", type: "course" },
+          { title: "Hugging Face LLM Course: LoRA Chapter", url: "https://huggingface.co/learn/llm-course/chapter11/4", type: "course" },
           { title: "Hugging Face PEFT Library", url: "https://github.com/huggingface/peft", type: "code" },
-          { title: "Hugging Face: Illustrated RLHF", url: "https://huggingface.co/blog/rlhf", type: "article" }
+          { title: "Microsoft LoRA — GitHub", url: "https://github.com/microsoft/LoRA", type: "code" },
+          { title: "QLoRA — GitHub", url: "https://github.com/artidoro/qlora", type: "code" }
         ]
       },
       {
@@ -334,11 +389,16 @@ const WEEKS = [
         ],
         resources: [
           { title: "vLLM Quickstart", url: "https://docs.vllm.ai/en/latest/getting_started/quickstart/", type: "docs" },
+          { title: "vLLM — GitHub", url: "https://github.com/vllm-project/vllm", type: "code" },
           { title: "Ollama", url: "https://ollama.com/", type: "tool" },
+          { title: "Ollama Docs", url: "https://docs.ollama.com/quickstart", type: "docs" },
+          { title: "LM Studio", url: "https://lmstudio.ai/", type: "tool" },
           { title: "Langfuse (open-source observability)", url: "https://langfuse.com/", type: "tool" },
-          { title: "Made With ML (free MLOps course)", url: "https://madewithml.com/", type: "course" },
+          { title: "Langfuse — GitHub", url: "https://github.com/langfuse/langfuse", type: "code" },
+          { title: "FastAPI", url: "https://fastapi.tiangolo.com/", type: "docs" },
           { title: "Streamlit Docs", url: "https://docs.streamlit.io/", type: "docs" },
-          { title: "FastAPI", url: "https://fastapi.tiangolo.com/", type: "docs" }
+          { title: "Hugging Face Inference Endpoints", url: "https://huggingface.co/docs/inference-endpoints/", type: "docs" },
+          { title: "Made With ML (free MLOps course)", url: "https://madewithml.com/", type: "course" }
         ]
       },
       {
@@ -355,16 +415,44 @@ const WEEKS = [
           { q: "What makes AI product unit economics different from traditional SaaS?", options: ["They're identical", "AI products have no marginal cost", "AI COGS is 40-70% vs ~20% for traditional SaaS due to inference costs", "AI products are always cheaper to run"], correct: 2, explanation: "Every AI interaction costs real money (model inference). This means higher prices needed or dramatically better retention vs traditional SaaS." },
           { q: "The data flywheel means:", options: ["Data spins around in circles", "Usage → data → model improvement → more usage → more data", "You need to buy more data", "AI models get worse over time"], correct: 1, explanation: "The flywheel is a self-reinforcing loop: more users generate more data, which improves the model, which attracts more users." }
         ],
-        resources: [
-          { title: "Lenny's Podcast (AI PM episodes)", url: "https://www.lennysnewsletter.com/podcast", type: "podcast" },
-          { title: "Marily Nika: AI & PM (Lenny's)", url: "https://podcasts.apple.com/us/podcast/ai-and-product-management-marily-nika-meta-google/id1627920305?i=1000598054115", type: "podcast" },
-          { title: "Shreyas Doshi Frameworks", url: "https://shreyasdoshi.com/", type: "article" },
-          { title: "a16z AI Playbook", url: "https://a16z.com/artificial-intelligence-the-promise-and-the-playbook/", type: "article" },
-          { title: "Evidently AI: 30 LLM Benchmarks", url: "https://www.evidentlyai.com/llm-guide/llm-benchmarks", type: "docs" },
-          { title: "LMSYS Chatbot Arena", url: "https://lmarena.ai/", type: "tool" },
-          { title: "Karpathy: Zero to Hero (full series)", url: "https://karpathy.ai/zero-to-hero.html", type: "course" },
-          { title: "Hugging Face LLM Course", url: "https://huggingface.co/learn/llm-course/en/chapter1/1", type: "course" }
-        ]
+        resources: {
+          eli5: [
+            { title: "Lenny's Podcast (AI PM episodes)", url: "https://www.lennysnewsletter.com/podcast", type: "podcast" },
+            { title: "LMSYS Chatbot Arena", url: "https://lmarena.ai/", type: "tool" },
+            { title: "Shreyas Doshi Frameworks", url: "https://shreyasdoshi.com/", type: "article" }
+          ],
+          normal: [
+            { title: "Lenny's Podcast (AI PM episodes)", url: "https://www.lennysnewsletter.com/podcast", type: "podcast" },
+            { title: "Shreyas Doshi Frameworks", url: "https://shreyasdoshi.com/", type: "article" },
+            { title: "Shreyas Doshi Mega-Thread", url: "https://x.com/shreyas/status/1303150374124048386", type: "article" },
+            { title: "a16z AI Playbook", url: "https://a16z.com/artificial-intelligence-the-promise-and-the-playbook/", type: "article" },
+            { title: "LMSYS Chatbot Arena", url: "https://lmarena.ai/", type: "tool" },
+            { title: "NVIDIA: Data Flywheel Concept", url: "https://www.nvidia.com/en-us/glossary/data-flywheel/", type: "docs" }
+          ],
+          technical: [
+            { title: "Evidently AI: 30 LLM Benchmarks Explained", url: "https://www.evidentlyai.com/llm-guide/llm-benchmarks", type: "docs" },
+            { title: "Evidently AI: 250 LLM Benchmark Database", url: "https://www.evidentlyai.com/llm-evaluation-benchmarks-datasets", type: "docs" },
+            { title: "Scale AI SEAL Leaderboard", url: "https://scale.com/leaderboard", type: "tool" },
+            { title: "Stanford HELM", url: "https://crfm.stanford.edu/helm/", type: "tool" },
+            { title: "OpenAI Evals — GitHub", url: "https://github.com/openai/evals", type: "code" },
+            { title: "Judging LLM-as-a-Judge Paper (Zheng et al.)", url: "https://arxiv.org/html/2403.04132v1", type: "paper" },
+            { title: "Karpathy: Zero to Hero (full series)", url: "https://karpathy.ai/zero-to-hero.html", type: "course" },
+            { title: "Hugging Face LLM Course", url: "https://huggingface.co/learn/llm-course/en/chapter1/1", type: "course" }
+          ],
+          pm: [
+            { title: "Lenny's Podcast (AI PM episodes)", url: "https://www.lennysnewsletter.com/podcast", type: "podcast" },
+            { title: "Marily Nika: AI & PM (Lenny's)", url: "https://podcasts.apple.com/us/podcast/ai-and-product-management-marily-nika-meta-google/id1627920305?i=1000598054115", type: "podcast" },
+            { title: "Marc Andreessen: The Real AI Boom (Lenny's)", url: "https://www.lennysnewsletter.com/p/marc-andreessen-the-real-ai-boom", type: "article" },
+            { title: "Shreyas Doshi Frameworks", url: "https://shreyasdoshi.com/", type: "article" },
+            { title: "a16z AI Playbook", url: "https://a16z.com/artificial-intelligence-the-promise-and-the-playbook/", type: "article" },
+            { title: "a16z AI Content Hub", url: "https://a16z.com/ai/", type: "article" },
+            { title: "Sequoia: AI in 2026", url: "https://sequoiacap.com/article/ai-in-2026-the-tale-of-two-ais/", type: "article" },
+            { title: "Sequoia: Generative AI's Act o1", url: "https://sequoiacap.com/article/generative-ais-act-o1/", type: "article" },
+            { title: "Elad Gil: AI Market Clarity", url: "https://blog.eladgil.com/p/ai-market-clarity", type: "article" },
+            { title: "Elad Gil: High Growth Handbook (free)", url: "https://growth.eladgil.com/", type: "course" },
+            { title: "Jason Liu: Data Flywheel in Practice", url: "https://jxnl.co/writing/2024/03/28/data-flywheel/", type: "article" }
+          ]
+        }
       }
     ]
   }
@@ -714,7 +802,8 @@ const typeStyles = {
 function Section({ section, weekColor }) {
   const depths = ["eli5", "normal", "technical", "pm"];
   const depthLabels = { eli5: "ELI5", normal: "Normal", technical: "Technical", pm: "PM" };
-  const [selectedDepth, setSelectedDepth] = useState("normal");
+  const selectedDepth = useRoadmapStore((state) => state.selectedDepthLevel);
+  const setSelectedDepth = useRoadmapStore((state) => state.setSelectedDepthLevel);
 
   const renderText = (text) => {
     return text.split(/(\*\*[^*]+\*\*)/g).map((part, i) => {
@@ -791,13 +880,16 @@ function Section({ section, weekColor }) {
 
 // ─── WEEK TABS COMPONENT ─────────────────────────────────────────────────────
 
-function WeekTabs({ activeWeekId, onWeekChange }) {
+function WeekTabs({ activeWeekId, onWeekChange, isMobile, onMobileClose }) {
   return (
     <div style={{ display: "flex", gap: 8, padding: "12px 32px", borderBottom: "1px solid var(--border-light)", background: "var(--bg-primary)", overflowX: "auto", position: "sticky", top: 64, zIndex: 50, minHeight: 60 }}>
       {WEEKS.map((week) => (
         <button
           key={week.id}
-          onClick={() => onWeekChange(week.id)}
+          onClick={() => {
+            onWeekChange(week.id);
+            if (isMobile) onMobileClose();
+          }}
           style={{
             padding: "8px 16px",
             borderRadius: 6,
@@ -833,57 +925,110 @@ function WeekTabs({ activeWeekId, onWeekChange }) {
 
 // ─── LENS SIDEBAR COMPONENT ──────────────────────────────────────────────────
 
-function LensSidebar() {
+function LensSidebar({ week, currentSection, isMobile, onMobileClose }) {
+  const selectedDepth = useRoadmapStore((state) => state.selectedDepthLevel);
+  const setSelectedDepthLevel = useRoadmapStore((state) => state.setSelectedDepthLevel);
+  const [expandedSections, setExpandedSections] = useState({});
+
   const lenses = [
     { id: "eli5", label: "ELI5" },
     { id: "normal", label: "Normal" },
     { id: "technical", label: "Technical" },
-    { id: "pm", label: "PM Lens" }
+    { id: "pm", label: "PM" }
   ];
 
-  const handleLensClick = (lensId) => {
-    // Find first section with this lens content and scroll to it
-    const sectionElement = document.querySelector(`[data-lens="${lensId}"]`);
+  const toggleSection = (sectionId) => {
+    setExpandedSections(prev => ({
+      ...prev,
+      [sectionId]: !prev[sectionId]
+    }));
+  };
+
+  const handleSectionLensClick = (sectionId, lensId) => {
+    // Set the depth level
+    setSelectedDepthLevel(lensId);
+    // Scroll to the section
+    const sectionElement = document.querySelector(`[data-section-id="${sectionId}"]`);
     if (sectionElement) {
       sectionElement.scrollIntoView({ behavior: "smooth", block: "start" });
     }
+    // Close sidebar on mobile
+    if (isMobile) onMobileClose();
   };
 
+  if (!week || !week.sections) return null;
+
   return (
-    <div className="sidebar" style={{ width: 200, flexShrink: 0, padding: "20px", borderRight: "1px solid var(--border-light)", position: "sticky", top: 130, maxHeight: "calc(100vh - 130px)", overflowY: "auto", background: "var(--bg-tertiary)" }}>
+    <div className="sidebar" style={{ width: 220, flexShrink: 0, padding: "20px", borderRight: "1px solid var(--border-light)", position: "sticky", top: 130, maxHeight: "calc(100vh - 130px)", overflowY: "auto", background: "var(--bg-tertiary)" }}>
       <div style={{ fontSize: 10, fontWeight: 600, color: "var(--text-muted)", letterSpacing: 1.2, fontFamily: "var(--mono)", marginBottom: 16, textTransform: "uppercase" }}>
-        Learning Lenses
+        Contents
       </div>
       <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-        {lenses.map((lens) => (
-          <button
-            key={lens.id}
-            onClick={() => handleLensClick(lens.id)}
-            style={{
-              padding: "10px 12px",
-              borderRadius: 6,
-              border: "1px solid var(--border-color)",
-              background: "var(--bg-primary)",
-              color: "var(--text-primary)",
-              fontSize: 13,
-              fontWeight: 500,
-              fontFamily: "var(--body)",
-              cursor: "pointer",
-              textAlign: "left",
-              transition: "all 0.15s"
-            }}
-            onMouseEnter={e => {
-              e.currentTarget.style.borderColor = "var(--border-hover)";
-              e.currentTarget.style.background = "var(--bg-secondary)";
-            }}
-            onMouseLeave={e => {
-              e.currentTarget.style.borderColor = "var(--border-color)";
-              e.currentTarget.style.background = "var(--bg-primary)";
-            }}
-          >
-            {lens.label}
-          </button>
-        ))}
+        {week.sections.map((section) => {
+          const isActive = currentSection?.id === section.id;
+          const isExpanded = expandedSections[section.id] || false;
+          return (
+            <div key={section.id}>
+              {/* Section Title with Expand/Collapse Toggle */}
+              <div style={{
+                display: "flex",
+                alignItems: "center",
+                gap: 6,
+                fontSize: 12,
+                fontWeight: 600,
+                color: isActive ? "var(--text-primary)" : "var(--text-secondary)",
+                fontFamily: "var(--body)",
+                padding: "8px 0",
+                borderLeft: isActive ? "3px solid var(--accent-color)" : "3px solid transparent",
+                paddingLeft: 10,
+                transition: "all 0.15s",
+                cursor: "pointer"
+              }}
+              onClick={() => toggleSection(section.id)}>
+                <span style={{ transition: "transform 0.2s", transform: isExpanded ? "rotate(90deg)" : "rotate(0deg)", display: "inline-block", width: 14, fontSize: 10 }}>▶</span>
+                <span>{section.title}</span>
+              </div>
+              {/* Lens Sub-items - Only show when expanded */}
+              {isExpanded && (
+                <div style={{ display: "flex", flexDirection: "column", gap: 4, marginLeft: 10, marginTop: 6 }}>
+                  {lenses.map((lens) => (
+                    <button
+                      key={`${section.id}-${lens.id}`}
+                      onClick={() => handleSectionLensClick(section.id, lens.id)}
+                      style={{
+                        padding: "6px 8px",
+                        borderRadius: 4,
+                        border: "none",
+                        background: selectedDepth === lens.id ? "var(--accent-primary)" : "transparent",
+                        color: selectedDepth === lens.id ? "var(--accent-text)" : "var(--text-primary)",
+                        fontSize: 11,
+                        fontWeight: selectedDepth === lens.id ? 600 : 500,
+                        fontFamily: "var(--body)",
+                        cursor: "pointer",
+                        textAlign: "left",
+                        transition: "all 0.2s ease"
+                      }}
+                      onMouseEnter={e => {
+                        if (!(selectedDepth === lens.id)) {
+                          e.currentTarget.style.background = "var(--accent-hover)";
+                          e.currentTarget.style.color = "var(--text-primary)";
+                        }
+                      }}
+                      onMouseLeave={e => {
+                        if (!(selectedDepth === lens.id)) {
+                          e.currentTarget.style.background = "transparent";
+                          e.currentTarget.style.color = "var(--text-primary)";
+                        }
+                      }}
+                    >
+                      {lens.label}
+                    </button>
+                  ))}
+                </div>
+              )}
+            </div>
+          );
+        })}
       </div>
     </div>
   );
@@ -894,7 +1039,8 @@ function LensSidebar() {
 function RightSidebar({ currentSection }) {
   if (!currentSection) return null;
 
-  const hasResources = currentSection.resources && currentSection.resources.length > 0;
+  const resourcesList = (currentSection.resources && Array.isArray(currentSection.resources)) ? currentSection.resources : [];
+  const hasResources = resourcesList && resourcesList.length > 0;
 
   if (!hasResources) return null;
 
@@ -909,7 +1055,7 @@ function RightSidebar({ currentSection }) {
       <div>
         <div style={{ fontSize: 10, fontWeight: 600, color: "var(--text-muted)", fontFamily: "var(--mono)", letterSpacing: 1, marginBottom: 12 }}>RESOURCES</div>
         <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-          {currentSection.resources.map((r, i) => {
+          {resourcesList.map((r, i) => {
             const style = typeStyles[r.type] || typeStyles.article;
             return (
               <a key={i} href={r.url} target="_blank" rel="noopener noreferrer" style={{
@@ -938,6 +1084,19 @@ export default function AIRoadmap() {
   const setCurrentWeek = useRoadmapStore((state) => state.setCurrentWeek);
   const contentRef = useRef(null);
   const [currentSection, setCurrentSection] = useState(null);
+  const [sidebarOpen, setSidebarOpen] = useState(true);
+  const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth < 768);
+      if (window.innerWidth < 768) {
+        setSidebarOpen(false); // Close sidebar on mobile by default
+      }
+    };
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
 
   const activeWeek = WEEKS.findIndex((w) => w.id === currentWeekId);
   const week = WEEKS[activeWeek];
@@ -970,6 +1129,7 @@ export default function AIRoadmap() {
 
   const darkMode = useRoadmapStore((state) => state.darkMode);
   const setDarkMode = useRoadmapStore((state) => state.setDarkMode);
+  const selectedDepthLevel = useRoadmapStore((state) => state.selectedDepthLevel);
 
   // Apply dark mode class to document root
   useEffect(() => {
@@ -1010,6 +1170,9 @@ export default function AIRoadmap() {
           --shadow-sm: rgba(0,0,0,0.05);
           --shadow-md: rgba(0,0,0,0.08);
           --label-color: #666;
+          --accent-primary: #007AFF;
+          --accent-text: #ffffff;
+          --accent-hover: rgba(0, 122, 255, 0.1);
         }
 
         :root.dark-mode {
@@ -1033,6 +1196,9 @@ export default function AIRoadmap() {
           --shadow-sm: rgba(0,0,0,0.3);
           --shadow-md: rgba(0,0,0,0.5);
           --label-color: #999;
+          --accent-primary: #0A84FF;
+          --accent-text: #ffffff;
+          --accent-hover: rgba(10, 132, 255, 0.2);
         }
 
         * { box-sizing: border-box; }
@@ -1064,18 +1230,31 @@ export default function AIRoadmap() {
 
         @media (max-width: 1200px) {
           .layout { margin-left: 0 !important; margin-right: 0 !important; }
-          .sidebar { width: 160px !important; padding: 16px !important; }
+          .sidebar { width: 180px !important; padding: 16px !important; }
           .content { padding: 32px 24px !important; }
-          .right-sidebar { width: 240px !important; }
+          .right-sidebar { width: 220px !important; }
         }
 
         @media (max-width: 1024px) {
-          .sidebar { display: none !important; border-right: none !important; }
-          .content { padding: 32px 24px !important; }
+          .sidebar { width: 160px !important; padding: 14px !important; }
+          .content { padding: 28px 20px !important; }
+          .right-sidebar { width: 200px !important; }
         }
 
         @media (max-width: 768px) {
           .layout { flex-direction: column !important; }
+          .sidebar {
+            position: fixed !important;
+            left: 0 !important;
+            top: 64px !important;
+            width: 100% !important;
+            max-height: calc(100vh - 130px) !important;
+            z-index: 99 !important;
+            border-right: none !important;
+            border-bottom: 1px solid var(--border-light) !important;
+            background: var(--bg-primary) !important;
+            padding: 16px !important;
+          }
           .content { padding: 20px 16px !important; }
           .right-sidebar { display: none !important; width: 100% !important; position: static !important; border-left: none !important; max-height: none !important; top: auto !important; }
         }
@@ -1085,13 +1264,46 @@ export default function AIRoadmap() {
       <div style={{ position: "sticky", top: 0, zIndex: 100, padding: "16px 32px", borderBottom: "1px solid var(--border-light)", background: "var(--bg-primary)" }}>
         <div style={{ maxWidth: 1200, margin: "0 auto" }}>
           <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 10 }}>
-            <div>
-              <h1 style={{ fontSize: 20, fontWeight: 600, fontFamily: "var(--display)", margin: 0, color: "var(--text-primary)", letterSpacing: "-0.02em" }}>
-                AI PM Roadmap
-              </h1>
-              <p style={{ color: "var(--text-muted)", fontSize: 12, fontFamily: "var(--body)", margin: "4px 0 0" }}>
-                4 depth levels · Interactive tools · Quizzes · Resources
-              </p>
+            <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+              <button
+                onClick={() => setSidebarOpen(!sidebarOpen)}
+                style={{
+                  background: "var(--bg-secondary)",
+                  border: "1px solid var(--border-light)",
+                  borderRadius: 6,
+                  padding: "8px 10px",
+                  cursor: "pointer",
+                  color: "var(--text-secondary)",
+                  fontSize: isMobile ? 18 : 16,
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  transition: "all 0.15s",
+                  width: 36,
+                  height: 36
+                }}
+                onMouseEnter={e => {
+                  e.currentTarget.style.background = "var(--border-light)";
+                  e.currentTarget.style.borderColor = "var(--border-hover)";
+                }}
+                onMouseLeave={e => {
+                  e.currentTarget.style.background = "var(--bg-secondary)";
+                  e.currentTarget.style.borderColor = "var(--border-light)";
+                }}
+                title={isMobile ? (sidebarOpen ? "Close menu" : "Open menu") : (sidebarOpen ? "Collapse sidebar" : "Expand sidebar")}
+              >
+                {isMobile ? (sidebarOpen ? "✕" : "≡") : (sidebarOpen ? "←" : "→")}
+              </button>
+              <div style={{ display: isMobile ? (window.innerWidth < 640 ? "none" : "block") : "block" }}>
+                <h1 style={{ fontSize: isMobile ? 16 : 20, fontWeight: 600, fontFamily: "var(--display)", margin: 0, color: "var(--text-primary)", letterSpacing: "-0.02em" }}>
+                  AI PM Roadmap
+                </h1>
+                {!isMobile && (
+                  <p style={{ color: "var(--text-muted)", fontSize: 12, fontFamily: "var(--body)", margin: "4px 0 0" }}>
+                    4 depth levels · Interactive tools · Quizzes · Resources
+                  </p>
+                )}
+              </div>
             </div>
             <DarkModeToggle isDarkMode={darkMode} onToggle={() => setDarkMode(!darkMode)} />
           </div>
@@ -1099,12 +1311,29 @@ export default function AIRoadmap() {
       </div>
 
       {/* Week Tabs */}
-      <WeekTabs activeWeekId={currentWeekId} onWeekChange={setCurrentWeek} />
+      <WeekTabs activeWeekId={currentWeekId} onWeekChange={setCurrentWeek} isMobile={isMobile} onMobileClose={() => setSidebarOpen(false)} />
+
+      {/* Mobile Backdrop Overlay */}
+      {isMobile && sidebarOpen && (
+        <div
+          onClick={() => setSidebarOpen(false)}
+          style={{
+            position: "fixed",
+            top: 130,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            background: "rgba(0, 0, 0, 0.3)",
+            zIndex: 98,
+            backdropFilter: "blur(1px)"
+          }}
+        />
+      )}
 
       {/* Layout */}
       <div className="layout" style={{ display: "flex", maxWidth: 1600, margin: "0 auto", minHeight: "calc(100vh - 190px)" }}>
         {/* Lens Sidebar */}
-        <LensSidebar />
+        {sidebarOpen && <LensSidebar week={week} currentSection={currentSection} isMobile={isMobile} onMobileClose={() => setSidebarOpen(false)} />}
 
         {/* Content */}
         <div className="content" ref={contentRef} style={{ flex: 1, padding: "40px 48px", overflowY: "auto", background: "var(--bg-primary)" }}>
@@ -1125,7 +1354,7 @@ export default function AIRoadmap() {
         </div>
 
         {/* Right Sidebar - Resources Only */}
-        <RightSidebar currentSection={currentSection} />
+        <RightSidebar key={currentSection?.id} currentSection={currentSection} />
       </div>
     </div>
   );

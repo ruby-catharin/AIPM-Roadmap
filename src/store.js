@@ -11,10 +11,16 @@ export const useRoadmapStore = create(
       // UI state - using arrays instead of Sets for localStorage compatibility
       expandedSections: [],
       selectedDepthLevels: {}, // { sectionId: 'eli5' | 'normal' | 'technical' | 'pm' }
+      selectedDepthLevel: 'normal', // Global depth level for resources sidebar
 
       // Progress tracking
       completedSections: [],
       quizAnswers: {}, // { sectionId: [{ questionIndex, selectedIndex, isCorrect }] }
+
+      // Theme state
+      darkMode: typeof window !== 'undefined'
+        ? window.matchMedia('(prefers-color-scheme: dark)').matches
+        : false,
 
       // Actions
       setCurrentWeek: (weekId) => set({ currentWeekId: weekId }),
@@ -35,6 +41,10 @@ export const useRoadmapStore = create(
             [sectionId]: level,
           },
         })),
+
+      setDarkMode: (isDark) => set({ darkMode: isDark }),
+
+      setSelectedDepthLevel: (level) => set({ selectedDepthLevel: level }),
 
       toggleSectionComplete: (sectionId) =>
         set((state) => {
@@ -64,6 +74,9 @@ export const useRoadmapStore = create(
           selectedDepthLevels: {},
           completedSections: [],
           quizAnswers: {},
+          darkMode: typeof window !== 'undefined'
+            ? window.matchMedia('(prefers-color-scheme: dark)').matches
+            : false,
         }),
 
       // Getters for computed values
