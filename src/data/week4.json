@@ -1,0 +1,138 @@
+{
+  "id": 4,
+  "title": "Ship — Fine-Tuning, Deploy & AI PM",
+  "tag": "PRODUCTION",
+  "color": "#AE3EC9",
+  "accent": "#F8F0FC",
+  "dark": "#1a0525",
+  "pmAngle": "Ship, scale, and sustain AI products in production. 20% model, 80% infrastructure and strategy.",
+  "sections": [
+    {
+      "id": "4-1",
+      "title": "Fine-Tuning",
+      "subtitle": "When prompting + RAG aren't enough",
+      "tldr": [
+        "Fine-tune only after exhausting prompt engineering + RAG — it's a significant investment with ongoing maintenance",
+        "LoRA reduces trainable parameters by 10,000x, enabling fine-tuning on consumer hardware",
+        "Budget 20% of initial effort for quarterly maintenance — base model updates may require re-fine-tuning"
+      ],
+      "keyInsight": "Fine-tuning is a last resort, not a first move. Document 10+ prompt iterations with metrics before justifying the investment. 'The model isn't smart enough' is not fine-tunable — 'it doesn't sound like our brand' is.",
+      "depths": {
+        "eli5": "Fine-tuning is like sending a general-purpose employee to a specialized training course. The AI already knows language (that's pre-training, like school). Fine-tuning teaches it YOUR specific way of doing things. Maybe your company writes emails in a particular tone, or labels support tickets in a unique way. You show it 100-1000 examples of \"here's the input, here's the perfect output\" and it learns your patterns. It's more expensive than just giving instructions (prompting) but produces more consistent results.",
+        "normal": "Fine-tuning trains a pre-trained model further on your specific data. When to fine-tune (only after exhausting prompting + RAG): consistent style/voice that prompting can't capture, domain-specific patterns too complex for context, latency optimization (shorter prompts with fine-tuned behavior), cost optimization (smaller fine-tuned model matching larger base model). Techniques: Full fine-tuning (all weights, expensive), LoRA (Low-Rank Adaptation — trains small adapter layers, 10,000x fewer parameters), QLoRA (quantized LoRA — fits on consumer GPUs). Training data: JSONL format, min 50 examples, ideally 200-1000+. Always hold out a test set.",
+        "technical": "LoRA (Hu et al., 2021) decomposes weight updates as W + ΔW where ΔW = BA, with B∈R^(d×r) and A∈R^(r×k), rank r << min(d,k). This reduces trainable params from millions to thousands. Key hyperparameters: rank r (8-64 typical — higher = more capacity but overfitting risk), alpha (scaling factor, typically 2× rank), learning rate (1e-5 to 1e-4), epochs (2-3 for most tasks). QLoRA adds 4-bit NormalFloat quantization, enabling 65B model fine-tuning on a single 48GB GPU. RLHF pipeline: (1) supervised fine-tuning on demonstrations, (2) train reward model on human preference data, (3) optimize policy with PPO against reward model. DPO (Direct Preference Optimization) simplifies by eliminating the reward model. Evaluation: perplexity on held-out test set, task-specific metrics, human evaluation for style/quality.",
+        "pm": "Fine-tuning is a significant investment with ongoing maintenance costs. Decision framework: (1) Have you maxed out prompt engineering? Document 10+ prompt iterations and their metrics. (2) Have you tried RAG? Compare RAG quality vs your target. (3) Is the gap specific and measurable? \"The model doesn't sound like our brand\" is fine-tunable. \"The model isn't smart enough\" isn't. (4) Do you have enough quality training data? 200+ examples minimum. (5) Can you maintain it? When base models update, you may need to re-fine-tune. Budget 20% of initial effort for quarterly maintenance. Track: fine-tuned vs base model quality delta, training data freshness, inference cost savings."
+      },
+      "quiz": [
+        { "q": "LoRA reduces trainable parameters by approximately:", "options": ["2x", "100x", "10,000x", "It doesn't reduce them"], "correct": 2, "explanation": "LoRA injects low-rank matrices that decompose weight updates — reducing trainable parameters from millions to thousands (10,000x reduction)." }
+      ],
+      "resources": [
+        { "title": "LoRA Paper (Hu et al., 2021)", "url": "https://arxiv.org/abs/2106.09685", "type": "paper" },
+        { "title": "QLoRA Paper (Dettmers et al., 2023)", "url": "https://arxiv.org/abs/2305.14314", "type": "paper" },
+        { "title": "InstructGPT / RLHF Paper (Ouyang et al., 2022)", "url": "https://arxiv.org/abs/2203.02155", "type": "paper" },
+        { "title": "Phil Schmid: Fine-Tune LLMs in 2025", "url": "https://www.philschmid.de/fine-tune-llms-in-2025", "type": "article" },
+        { "title": "Phil Schmid: Fine-Tune LLMs in 2024 with TRL", "url": "https://www.philschmid.de/fine-tune-llms-in-2024-with-trl", "type": "article" },
+        { "title": "Sebastian Raschka: Practical LoRA Tips", "url": "https://magazine.sebastianraschka.com/p/practical-tips-for-finetuning-llms", "type": "article" },
+        { "title": "Hugging Face: Illustrated RLHF", "url": "https://huggingface.co/blog/rlhf", "type": "article" },
+        { "title": "Chip Huyen: RLHF Breakdown", "url": "https://huyenchip.com/2023/05/02/rlhf.html", "type": "article" },
+        { "title": "Hugging Face: Fine-Tuning Your First LLM", "url": "https://huggingface.co/blog/dvgodoy/fine-tuning-llm-hugging-face", "type": "course" },
+        { "title": "Hugging Face LLM Course: LoRA Chapter", "url": "https://huggingface.co/learn/llm-course/chapter11/4", "type": "course" },
+        { "title": "Hugging Face PEFT Library", "url": "https://github.com/huggingface/peft", "type": "code" },
+        { "title": "Microsoft LoRA — GitHub", "url": "https://github.com/microsoft/LoRA", "type": "code" },
+        { "title": "QLoRA — GitHub", "url": "https://github.com/artidoro/qlora", "type": "code" }
+      ]
+    },
+    {
+      "id": "4-2",
+      "title": "Deployment & MLOps",
+      "subtitle": "Production is a different game",
+      "tldr": [
+        "Production AI is 20% model, 80% infrastructure — observability, guardrails, caching, fallbacks",
+        "Set per-user and per-day cost caps before launch — a viral moment can bankrupt you without them",
+        "Semantic caching can reduce inference costs 40-60% for common query patterns"
+      ],
+      "keyInsight": "Shipping an AI model is a weekend project. Shipping a production AI product takes months of infrastructure work. The gap between 'demo mode' and 'production ready' is almost entirely observability, guardrails, and cost controls.",
+      "depths": {
+        "eli5": "Building an AI app is like cooking at home. **Deploying** it is like opening a restaurant. Suddenly you need: a kitchen that handles 100 orders at once (model serving), health inspections (guardrails), customer feedback cards (observability), a backup chef if the main one gets sick (fallbacks), and a way to track costs so you don't go bankrupt (monitoring). 80% of the work in AI products is this restaurant management — not the recipe itself.",
+        "normal": "Production AI infrastructure: **Model serving** — API providers (simplest), managed platforms (AWS Bedrock, GCP Vertex), self-hosted (vLLM, Ollama). **Prompt management** — version control prompts like code (Promptfoo, LangSmith). **Observability** — log every request/response, track latency, errors, costs, quality (Langfuse, Helicone). **Guardrails** — input/output filtering for harmful content, PII, off-topic responses. **Caching** — exact match (easy) or semantic (similar questions get cached answers). **Fallbacks** — when primary model is down, route to backup. The production stack: Input → Guardrails → Cache check → Model call → Output guardrails → Logging → Monitoring → Alerting.",
+        "technical": "vLLM uses PagedAttention (inspired by OS virtual memory) for memory-efficient serving — achieving 2-4x throughput vs HuggingFace's default generate(). Key vLLM features: continuous batching, tensor parallelism, speculative decoding. For local/edge: Ollama wraps llama.cpp with a REST API; LM Studio adds a GUI. Guardrails implementations: input classifiers (NeMo Guardrails, Guardrails AI) using small fine-tuned models for toxicity/PII/injection detection; output validators for JSON schema conformance, citation grounding checks, and regex-based PII redaction. Semantic caching uses embedding similarity with a threshold (cosine > 0.95) — stores query embedding + response, serves cached response for semantically similar new queries. Observability stack: OpenTelemetry for traces, Langfuse/LangSmith for LLM-specific logging, Grafana/Prometheus for infrastructure metrics.",
+        "pm": "Production AI is 20% model, 80% infrastructure. Allocate engineering time accordingly — most PMs under-invest in observability and over-invest in model performance. Your launch checklist: (1) Observability — can you see every LLM call, its cost, latency, and quality? (2) Guardrails — what happens with adversarial inputs? PII in responses? (3) Fallbacks — if Claude is down, does the product gracefully degrade? (4) Cost alerts — will a viral moment bankrupt you? Set per-user and per-day spend caps. (5) Data retention — how long do you store user conversations? GDPR compliance? (6) Evaluation — are you running automated evals on production traffic? Build a \"Production Readiness Review\" process your team runs before every AI feature launch."
+      },
+      "quiz": [
+        { "q": "What percentage of AI product effort is typically infrastructure vs model work?", "options": ["50/50", "80% model, 20% infrastructure", "20% model, 80% infrastructure", "100% model"], "correct": 2, "explanation": "Observability, guardrails, caching, fallbacks, monitoring, deployment — the infrastructure around the model is the bulk of production work." }
+      ],
+      "resources": [
+        { "title": "vLLM Quickstart", "url": "https://docs.vllm.ai/en/latest/getting_started/quickstart/", "type": "docs" },
+        { "title": "vLLM — GitHub", "url": "https://github.com/vllm-project/vllm", "type": "code" },
+        { "title": "Ollama", "url": "https://ollama.com/", "type": "tool" },
+        { "title": "Ollama Docs", "url": "https://docs.ollama.com/quickstart", "type": "docs" },
+        { "title": "LM Studio", "url": "https://lmstudio.ai/", "type": "tool" },
+        { "title": "Langfuse (open-source observability)", "url": "https://langfuse.com/", "type": "tool" },
+        { "title": "Langfuse — GitHub", "url": "https://github.com/langfuse/langfuse", "type": "code" },
+        { "title": "FastAPI", "url": "https://fastapi.tiangolo.com/", "type": "docs" },
+        { "title": "Streamlit Docs", "url": "https://docs.streamlit.io/", "type": "docs" },
+        { "title": "Hugging Face Inference Endpoints", "url": "https://huggingface.co/docs/inference-endpoints/", "type": "docs" },
+        { "title": "Made With ML (free MLOps course)", "url": "https://madewithml.com/", "type": "course" }
+      ]
+    },
+    {
+      "id": "4-3",
+      "title": "AI Product Management",
+      "subtitle": "Strategy, metrics, and the PM skill stack",
+      "tldr": [
+        "AI PMs own the eval framework — define 'what good looks like' before any prompt is written",
+        "AI COGS is 40-70% of revenue vs ~20% for traditional SaaS — unit economics require rethinking pricing",
+        "The data flywheel is your strategic moat: usage → data → better model → more usage"
+      ],
+      "keyInsight": "The best AI PMs don't just manage products — they manage uncertainty. Probabilistic systems require a different mindset: ship confidence levels, not guarantees. The PM who builds the eval framework before sprint 1 ships better products than the one who adds it after users complain.",
+      "depths": {
+        "eli5": "Being an **AI Product Manager** is like being a movie director who also understands cameras. You don't operate the camera yourself, but you need to know what's possible, what's expensive, and what makes a great shot. You decide: What should the AI do? How do we know it's working well? How much can we afford to spend? When should a human take over? Your superpower is translating between \"what users need\" and \"what the technology can deliver.\"",
+        "normal": "The AI PM skill stack: (1) Technical fluency — understand models, tokens, embeddings, RAG, fine-tuning. (2) Probabilistic thinking — AI outputs are non-deterministic; you ship confidence levels, not guarantees. (3) Eval-driven development — define evals BEFORE building, measure against them continuously. (4) Cost modeling — every feature has per-use AI costs; unit economics differ fundamentally from traditional SaaS. (5) Trust design — transparency (show citations), graceful failure (admit uncertainty), human-in-the-loop (escalation paths). Strategy frameworks: build vs buy vs combine; data flywheel design; human-AI interaction spectrum.",
+        "technical": "Technical PM responsibilities: Own the eval framework — automated evals (exact match, LLM-as-judge, BLEU/ROUGE), human evals (domain expert grading), A/B testing (model/prompt variants against user metrics), red teaming (adversarial testing). Manage model selection using benchmarks: MMLU (knowledge), HumanEval (code), MT-Bench (conversation), plus your own task-specific evals. Define the fallback hierarchy and reliability targets (99.5%+ uptime). Partner with ML engineers on training data strategy and quality pipelines. Drive prompt iteration cycles with measured quality improvements. Understand infrastructure tradeoffs: embedding model quality vs latency vs cost, chunk size vs retrieval precision, cache hit rate vs freshness requirements.",
+        "pm": "The data flywheel is your most important strategic asset: usage generates data → data improves model → better model attracts usage → more data. Design for this from day 1.\n\n**Metrics stack — four tiers every AI PM must track:**\n- **Input quality:** prompt compliance rate (does the model follow instructions?), context injection accuracy (for RAG: are the right docs reaching the model?)\n- **Output quality:** task completion rate, hallucination rate, LLM-judge score trend\n- **User trust:** correction rate (how often do users edit AI output?), escalation rate (how often do they ask for a human?), re-query rate (did the answer satisfy, or did they immediately rephrase?)\n- **Economics:** cost per successful interaction, COGS as % of revenue (target <30% at scale)\n\n**Data flywheel — instrument from day 1:** Log which outputs users accept vs correct vs discard. Define which signals feed retraining before you need retraining. Structure the logging pipeline (user_id, session_id, query, retrieved_chunks, response, action_taken) so the data is clean when the model team asks for it. Retrofitting logging is 3x harder than building it upfront.\n\n**Unit economics:** Traditional SaaS COGS is ~20% of revenue (hosting). AI SaaS COGS is 40-70% (model inference + infrastructure). You need higher prices or dramatically better retention to make the math work. Human-in-the-loop strategy: start with AI-suggests-human-decides, track agreement rate, gradually increase AI autonomy as agreement rate exceeds 95%.\n\n**Interview prep:** Interviewers at AI-first companies probe three things specifically: (1) Eval-driven development — \"How did you know your prompt change was an improvement?\" Have a concrete answer involving golden test sets and measured regression rates. (2) Cost modeling fluency — \"Walk me through the unit economics of this feature at 1M DAU.\" Be able to do the token math live. (3) Human-in-the-loop threshold decisions — \"Tell me about a trade-off between model accuracy and latency you managed\" or \"When did you decide to remove human review from a flow?\" The best AI PMs don't just manage products — they manage the uncertainty inherent in probabilistic systems."
+      },
+      "quiz": [
+        { "q": "What makes AI product unit economics different from traditional SaaS?", "options": ["They're identical", "AI products have no marginal cost", "AI COGS is 40-70% vs ~20% for traditional SaaS due to inference costs", "AI products are always cheaper to run"], "correct": 2, "explanation": "Every AI interaction costs real money (model inference). This means higher prices needed or dramatically better retention vs traditional SaaS." },
+        { "q": "The data flywheel means:", "options": ["Data spins around in circles", "Usage → data → model improvement → more usage → more data", "You need to buy more data", "AI models get worse over time"], "correct": 1, "explanation": "The flywheel is a self-reinforcing loop: more users generate more data, which improves the model, which attracts more users." }
+      ],
+      "resources": {
+        "eli5": [
+          { "title": "Lenny's Podcast (AI PM episodes)", "url": "https://www.lennysnewsletter.com/podcast", "type": "podcast" },
+          { "title": "LMSYS Chatbot Arena", "url": "https://lmarena.ai/", "type": "tool" },
+          { "title": "Shreyas Doshi Frameworks", "url": "https://shreyasdoshi.com/", "type": "article" }
+        ],
+        "normal": [
+          { "title": "Lenny's Podcast (AI PM episodes)", "url": "https://www.lennysnewsletter.com/podcast", "type": "podcast" },
+          { "title": "Shreyas Doshi Frameworks", "url": "https://shreyasdoshi.com/", "type": "article" },
+          { "title": "Shreyas Doshi Mega-Thread", "url": "https://x.com/shreyas/status/1303150374124048386", "type": "article" },
+          { "title": "a16z AI Playbook", "url": "https://a16z.com/artificial-intelligence-the-promise-and-the-playbook/", "type": "article" },
+          { "title": "LMSYS Chatbot Arena", "url": "https://lmarena.ai/", "type": "tool" },
+          { "title": "NVIDIA: Data Flywheel Concept", "url": "https://www.nvidia.com/en-us/glossary/data-flywheel/", "type": "docs" }
+        ],
+        "technical": [
+          { "title": "Evidently AI: 30 LLM Benchmarks Explained", "url": "https://www.evidentlyai.com/llm-guide/llm-benchmarks", "type": "docs" },
+          { "title": "Evidently AI: 250 LLM Benchmark Database", "url": "https://www.evidentlyai.com/llm-evaluation-benchmarks-datasets", "type": "docs" },
+          { "title": "Scale AI SEAL Leaderboard", "url": "https://scale.com/leaderboard", "type": "tool" },
+          { "title": "Stanford HELM", "url": "https://crfm.stanford.edu/helm/", "type": "tool" },
+          { "title": "OpenAI Evals — GitHub", "url": "https://github.com/openai/evals", "type": "code" },
+          { "title": "Judging LLM-as-a-Judge Paper (Zheng et al.)", "url": "https://arxiv.org/html/2403.04132v1", "type": "paper" },
+          { "title": "Karpathy: Zero to Hero (full series)", "url": "https://karpathy.ai/zero-to-hero.html", "type": "course" },
+          { "title": "Hugging Face LLM Course", "url": "https://huggingface.co/learn/llm-course/en/chapter1/1", "type": "course" }
+        ],
+        "pm": [
+          { "title": "Lenny's Podcast (AI PM episodes)", "url": "https://www.lennysnewsletter.com/podcast", "type": "podcast" },
+          { "title": "Marily Nika: AI & PM (Lenny's)", "url": "https://podcasts.apple.com/us/podcast/ai-and-product-management-marily-nika-meta-google/id1627920305?i=1000598054115", "type": "podcast" },
+          { "title": "Marc Andreessen: The Real AI Boom (Lenny's)", "url": "https://www.lennysnewsletter.com/p/marc-andreessen-the-real-ai-boom", "type": "article" },
+          { "title": "Shreyas Doshi Frameworks", "url": "https://shreyasdoshi.com/", "type": "article" },
+          { "title": "a16z AI Playbook", "url": "https://a16z.com/artificial-intelligence-the-promise-and-the-playbook/", "type": "article" },
+          { "title": "a16z AI Content Hub", "url": "https://a16z.com/ai/", "type": "article" },
+          { "title": "Sequoia: AI in 2026", "url": "https://sequoiacap.com/article/ai-in-2026-the-tale-of-two-ais/", "type": "article" },
+          { "title": "Sequoia: Generative AI's Act o1", "url": "https://sequoiacap.com/article/generative-ais-act-o1/", "type": "article" },
+          { "title": "Elad Gil: AI Market Clarity", "url": "https://blog.eladgil.com/p/ai-market-clarity", "type": "article" },
+          { "title": "Elad Gil: High Growth Handbook (free)", "url": "https://growth.eladgil.com/", "type": "course" },
+          { "title": "Jason Liu: Data Flywheel in Practice", "url": "https://jxnl.co/writing/2024/03/28/data-flywheel/", "type": "article" }
+        ]
+      }
+    }
+  ]
+}

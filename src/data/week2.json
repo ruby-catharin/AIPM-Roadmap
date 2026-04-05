@@ -1,0 +1,113 @@
+{
+  "id": 2,
+  "title": "Data — Embeddings, Vectors & RAG",
+  "tag": "RETRIEVAL",
+  "color": "#1C7ED6",
+  "accent": "#E7F5FF",
+  "dark": "#051525",
+  "pmAngle": "Build products that use YOUR proprietary data — not just the model's training knowledge. Data is your moat.",
+  "sections": [
+    {
+      "id": "2-1",
+      "title": "Embeddings",
+      "subtitle": "How AI understands meaning as numbers",
+      "tldr": [
+        "Embeddings convert text into vectors where semantic similarity = geometric proximity",
+        "They power smart search — finding 'breach of contract' when the user types 'broken agreement'",
+        "Embedding quality directly determines search relevance, which determines user trust"
+      ],
+      "keyInsight": "Embeddings are the engine behind the features users actually pay for. Better embeddings → better search → more usage → more data → even better search. Design for this flywheel from day one.",
+      "depths": {
+        "eli5": "Imagine every word has a secret address in a huge city. Words that mean similar things live near each other. \"Happy\" and \"joyful\" are neighbors. \"Sad\" is across town. An **embedding** is that address — a list of numbers like [0.23, -0.45, 0.67]. The cool part: you can do math with these addresses! \"King\" minus \"Man\" plus \"Woman\" = somewhere very close to \"Queen.\" This is how AI understands that words relate to each other — not by reading a dictionary, but by learning neighborhoods.",
+        "normal": "Embeddings are dense vector representations of text (or images, audio) in a continuous vector space. Models like OpenAI's text-embedding-3-large or sentence-transformers convert text into 384-3072 dimensional vectors where semantic similarity corresponds to geometric proximity (measured by cosine similarity). Created by extracting intermediate layer outputs from transformer models trained on billions of sentences, embeddings capture statistical relationships: synonyms cluster together, analogies form parallelograms. This enables semantic search (finding documents by meaning, not keywords), clustering, recommendations, and anomaly detection.",
+        "technical": "Embedding models use the encoder portion of transformers, outputting the [CLS] token representation or mean-pooled token embeddings. Training uses contrastive loss: positive pairs (semantically similar) are pulled together while negative pairs are pushed apart (InfoNCE loss). Matryoshka Representation Learning (MRL) trains embeddings that work at multiple dimensionalities — OpenAI's text-embedding-3 models support dimension truncation without retraining. Cosine similarity = (A·B)/(||A||×||B||), range [-1,1]. For retrieval, Maximum Inner Product Search (MIPS) is preferred with normalized vectors. Evaluation uses MTEB (Massive Text Embedding Benchmark) across retrieval, clustering, classification, and semantic similarity tasks.",
+        "pm": "Embeddings power the features users actually pay for: \"smart search\" that understands intent, not just keywords. A legal search finding \"breach of contract\" when the user types \"broken agreement.\" Product implications: embedding model choice affects quality (OpenAI vs Cohere vs open-source sentence-transformers) and cost ($0.02-0.13/1M tokens). Embedding quality directly determines search relevance — which determines user trust. Build an internal \"search quality scorecard\" that samples 50 queries weekly and grades result relevance. The flywheel: better search → more usage → more click data → fine-tuned embeddings → even better search."
+      },
+      "interactive": "embeddingSimilarity",
+      "quiz": [
+        { "q": "Cosine similarity between two identical embeddings equals:", "options": ["-1", "0", "0.5", "1"], "correct": 3, "explanation": "Identical vectors point in the same direction → cosine of 0° = 1. Opposite vectors = -1. Perpendicular = 0." },
+        { "q": "Why are embeddings more useful for search than keyword matching?", "options": ["They're faster", "They find semantically similar content even with different words", "They're cheaper", "They return more results"], "correct": 1, "explanation": "Embeddings capture meaning — so 'broken agreement' matches 'breach of contract' even without shared keywords." }
+      ],
+      "resources": [
+        { "title": "Jay Alammar: Illustrated Word2Vec", "url": "https://jalammar.github.io/illustrated-word2vec/", "type": "article" },
+        { "title": "TensorFlow Embedding Projector", "url": "https://projector.tensorflow.org/", "type": "tool" },
+        { "title": "OpenAI Embeddings Guide", "url": "https://platform.openai.com/docs/guides/embeddings", "type": "docs" },
+        { "title": "Original Word2Vec Paper (Mikolov et al., 2013)", "url": "https://arxiv.org/abs/1301.3781", "type": "paper" },
+        { "title": "word2vec Parameter Learning Explained (Rong, 2014)", "url": "https://arxiv.org/abs/1411.2738", "type": "paper" },
+        { "title": "Sentence Transformers Library", "url": "https://github.com/huggingface/sentence-transformers", "type": "code" },
+        { "title": "all-MiniLM-L6-v2 Model", "url": "https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2", "type": "code" },
+        { "title": "Hugging Face: Semantic Search with FAISS", "url": "https://huggingface.co/learn/llm-course/en/chapter5/6", "type": "course" }
+      ]
+    },
+    {
+      "id": "2-2",
+      "title": "Vector Databases",
+      "subtitle": "Where embeddings live and are searched",
+      "tldr": [
+        "Vector DBs find similar content by proximity in embedding space — not exact keyword matches",
+        "ANN algorithms (HNSW) trade ~5% recall for 100-1000x speedup over exact search",
+        "Chroma for prototyping; evaluate Pinecone vs self-hosted only once you've proven the concept"
+      ],
+      "keyInsight": "Vector DB selection is a classic PM build-vs-buy call. Pre-PMF: use Chroma (free, fast iteration). Post-PMF at scale: make the managed vs self-hosted decision based on team maturity, not hype.",
+      "depths": {
+        "eli5": "Normal databases are like filing cabinets — you find things by exact labels. A **vector database** is like a smart librarian who finds books by meaning. You say \"I want something about space adventure with a sad ending\" and the librarian finds the closest matches, even if none are labeled that exact way. It does this by comparing the \"address\" (embedding) of your question with the \"addresses\" of everything in the library, and finding the nearest neighbors.",
+        "normal": "Vector databases store embeddings and enable fast similarity search. Traditional databases search with exact matches (SQL WHERE). Vector DBs search by proximity — \"find the 10 most similar vectors to this query.\" Key players: Pinecone (managed, easiest), Chroma (open-source, lightweight, great for prototyping), Weaviate (feature-rich open-source), pgvector (Postgres extension). The workflow: embed documents → store vectors + metadata → embed user query → find nearest vectors → return corresponding documents. At scale, Approximate Nearest Neighbor (ANN) algorithms trade tiny accuracy losses for massive speed gains.",
+        "technical": "Exact k-NN search is O(n) — prohibitive at millions of vectors. ANN algorithms provide sub-linear search: HNSW (Hierarchical Navigable Small World graphs) achieves ~95%+ recall at 100-1000x speedup by building a multi-layer graph where higher layers connect distant nodes and lower layers are dense local connections. IVF (Inverted File Index) partitions the space into Voronoi cells, searching only nearby cells. Product Quantization compresses vectors by splitting dimensions into subspaces and quantizing each — reducing memory 4-64x with ~5% recall loss. FAISS (Meta) is the gold-standard library, supporting GPU-accelerated IVF-PQ at billion scale. Distance metrics: cosine similarity (angle), L2/Euclidean (magnitude-sensitive), dot product (unnormalized cosine).",
+        "pm": "Vector DB choice is a classic build-vs-buy PM decision. Pinecone: fastest time-to-market, $0.096/hr for serverless, but vendor lock-in. pgvector: free, your team already knows Postgres, but limited scale. Chroma: perfect for MVP validation. Weaviate: best for teams wanting control + features. Decision framework: if pre-PMF, use Chroma (free, fast). If scaling to 1M+ vectors, evaluate Pinecone vs self-hosted based on team ML ops maturity. Key product metrics from your vector DB: query latency (p50/p95), recall@K, index build time, and cost per million queries."
+      },
+      "quiz": [
+        { "q": "Why do vector databases use ANN algorithms instead of exact nearest-neighbor search?", "options": ["ANN is more accurate", "Exact search is O(n) — too slow at millions of vectors", "ANN uses less storage", "Exact search doesn't work with embeddings"], "correct": 1, "explanation": "Searching every vector is linear time. With 100M vectors, that's 100M comparisons per query. ANN trades ~5% recall for 100-1000x speedup." }
+      ],
+      "resources": [
+        { "title": "Pinecone Learning Center", "url": "https://www.pinecone.io/learn/vector-database/", "type": "docs" },
+        { "title": "Pinecone Docs", "url": "https://docs.pinecone.io/guides/get-started/overview", "type": "docs" },
+        { "title": "Chroma Getting Started", "url": "https://www.trychroma.com/", "type": "docs" },
+        { "title": "Chroma Cookbook", "url": "https://cookbook.chromadb.dev/", "type": "docs" },
+        { "title": "Weaviate Docs", "url": "https://docs.weaviate.io/weaviate", "type": "docs" },
+        { "title": "FAISS Tutorial (Pinecone series)", "url": "https://www.pinecone.io/learn/series/faiss/faiss-tutorial/", "type": "course" },
+        { "title": "FAISS Library — GitHub (Meta)", "url": "https://github.com/facebookresearch/faiss", "type": "code" },
+        { "title": "Meta: FAISS Engineering Blog", "url": "https://engineering.fb.com/2017/03/29/data-infrastructure/faiss-a-library-for-efficient-similarity-search/", "type": "article" },
+        { "title": "Google: Embedding Projector Blog", "url": "https://research.google/blog/open-sourcing-the-embedding-projector-a-tool-for-visualizing-high-dimensional-data/", "type": "article" }
+      ]
+    },
+    {
+      "id": "2-3",
+      "title": "RAG — Retrieval-Augmented Generation",
+      "subtitle": "The #1 architecture pattern in production AI",
+      "tldr": [
+        "RAG grounds AI answers in YOUR documents — cheaper, fresher, and auditable vs fine-tuning",
+        "The pipeline: chunk → embed → store → retrieve top-K → inject into prompt → generate",
+        "Chunk size, overlap, retrieval count K, and reranking are your four quality levers"
+      ],
+      "keyInsight": "RAG is why your AI product is worth using instead of ChatGPT — it's the architecture that turns your proprietary data into your moat. Build the eval loop (retrieval precision + groundedness) before you optimize anything else.",
+      "depths": {
+        "eli5": "Imagine you're taking an open-book exam. Instead of memorizing everything (which is expensive and you'd forget stuff), you bring your textbooks. When you get a question, you quickly flip to the right page, read the relevant part, then write your answer based on what you just read. **RAG** works the same way for AI: instead of training the model on your data (expensive open-brain surgery), you let it search your documents in real-time and answer based on what it finds. Cheaper, fresher, and you can see which \"pages\" it used.",
+        "normal": "RAG solves the biggest LLM problems: hallucination and stale knowledge. The pipeline: (1) **Index phase** — split documents into chunks (500-1000 tokens), embed each chunk, store in vector DB. (2) **Query phase** — user asks question → embed query → retrieve top-K relevant chunks → inject as context into LLM prompt → LLM generates answer grounded in YOUR data. Why RAG wins over fine-tuning for most use cases: cheaper (no GPU training), fresher (update docs anytime), auditable (cite sources), safer (less hallucination). Quality levers: chunk size (512 typical), overlap (50-100 tokens), retrieval count K (3-5), and reranking for precision.",
+        "technical": "The original RAG paper (Lewis et al., 2020) combined a DPR bi-encoder retriever with a BART seq2seq generator, trained end-to-end. Modern RAG uses frozen retriever + frozen generator with prompt engineering. Advanced patterns: Hybrid search combines dense (semantic) + sparse (BM25/keyword) retrieval for better recall. HyDE (Hypothetical Document Embeddings) generates a hypothetical answer, embeds it, and uses that for retrieval — improving retrieval quality by 20-30%. Query decomposition breaks complex questions into sub-queries. Reranking with cross-encoders (Cohere Rerank, ms-marco-MiniLM) re-scores retrieved chunks with full query-document attention — more accurate but slower than bi-encoder retrieval. Evaluation: Retrieval (Precision@K, Recall@K, MRR), Generation (faithfulness, relevance, answer correctness). The RAG Triad: context relevance, groundedness, answer relevance.",
+        "pm": "RAG is your product's knowledge engine. Its quality directly determines whether users trust your product. Build these metrics from day 1: retrieval precision (are the right docs being found?), answer groundedness (is the answer actually based on retrieved docs?), hallucination rate (are there unsupported claims?), latency p50/p95 (is it fast enough?), cost per query (is it sustainable?). RAG vs fine-tuning decision framework: use RAG when data changes frequently, you need citations, or you have <10K documents. Fine-tune when you need consistent style/voice, domain-specific behavior that prompting can't capture, or latency-sensitive applications where shorter prompts help. Most products should start with RAG and only fine-tune after proving RAG limitations with data."
+      },
+      "interactive": "ragPipeline",
+      "quiz": [
+        { "q": "What does the 'Retrieval' in RAG refer to?", "options": ["Retrieving the model from storage", "Searching a vector DB for relevant document chunks before generating", "Downloading new training data", "Caching previous responses"], "correct": 1, "explanation": "RAG retrieves relevant chunks from your knowledge base, then feeds them to the LLM as context for generating grounded answers." },
+        { "q": "Chunk overlap of 50-100 tokens helps with:", "options": ["Making the database bigger", "Preventing sentences from being cut mid-thought at chunk boundaries", "Saving money", "Faster retrieval"], "correct": 1, "explanation": "Without overlap, important context at chunk boundaries gets lost — overlap ensures continuity between adjacent chunks." }
+      ],
+      "resources": [
+        { "title": "Original RAG Paper (Lewis et al., 2020)", "url": "https://arxiv.org/abs/2005.11401", "type": "paper" },
+        { "title": "LlamaIndex: RAG Introduction", "url": "https://developers.llamaindex.ai/python/framework/understanding/rag/", "type": "docs" },
+        { "title": "LlamaIndex: Building RAG from Scratch", "url": "https://developers.llamaindex.ai/python/examples/low_level/oss_ingestion_retrieval/", "type": "docs" },
+        { "title": "LangChain: Build a RAG Agent", "url": "https://docs.langchain.com/oss/python/langchain/rag", "type": "docs" },
+        { "title": "Weaviate: Chunking Strategies for RAG", "url": "https://weaviate.io/blog/chunking-strategies-for-rag", "type": "article" },
+        { "title": "NVIDIA: Best Chunking Strategies", "url": "https://developer.nvidia.com/blog/finding-the-best-chunking-strategy-for-accurate-ai-responses/", "type": "article" },
+        { "title": "Firecrawl: Best Chunking Strategies for RAG 2025", "url": "https://www.firecrawl.dev/blog/best-chunking-strategies-rag-2025", "type": "article" },
+        { "title": "Stack Overflow: Chunking in RAG Applications", "url": "https://stackoverflow.blog/2024/12/27/breaking-up-is-hard-to-do-chunking-in-rag-applications/", "type": "article" },
+        { "title": "Databricks: Ultimate Guide to Chunking", "url": "https://community.databricks.com/t5/technical-blog/the-ultimate-guide-to-chunking-strategies-for-rag-applications/ba-p/113089", "type": "article" },
+        { "title": "Cohere: Reranking Documentation", "url": "https://docs.cohere.com/docs/reranking-with-cohere", "type": "docs" },
+        { "title": "Cohere: Full RAG Tutorial with Reranking", "url": "https://docs.cohere.com/docs/rag-with-cohere", "type": "docs" },
+        { "title": "DeepLearning.AI: Building & Evaluating Advanced RAG", "url": "https://www.deeplearning.ai/short-courses/building-evaluating-advanced-rag/", "type": "course" },
+        { "title": "DeepLearning.AI: LangChain — Chat with Your Data", "url": "https://www.deeplearning.ai/short-courses/langchain-chat-with-your-data/", "type": "course" },
+        { "title": "DeepLearning.AI: Retrieval Augmented Generation", "url": "https://learn.deeplearning.ai/courses/retrieval-augmented-generation/information", "type": "course" },
+        { "title": "Activeloop: RAG Course (certified, 15+ lessons)", "url": "https://learn.activeloop.ai/courses/rag", "type": "course" }
+      ]
+    }
+  ]
+}

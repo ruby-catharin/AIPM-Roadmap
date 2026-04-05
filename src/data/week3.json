@@ -1,0 +1,137 @@
+{
+  "id": 3,
+  "title": "Build — APIs, Agents & Tools",
+  "tag": "APPLICATIONS",
+  "color": "#2F9E44",
+  "accent": "#EBFBEE",
+  "dark": "#051a0a",
+  "pmAngle": "Go from prototype to product — shipping real AI applications with reliability, observability, and user trust.",
+  "sections": [
+    {
+      "id": "3-1",
+      "title": "LLM APIs",
+      "subtitle": "Building blocks of every AI product",
+      "tldr": [
+        "Every AI product is an API call — choose providers based on cost, reliability, and roadmap alignment",
+        "Streaming drops perceived latency 60-80% — essential for chat, optional for background tasks",
+        "Model inference is variable COGS — build a cost-per-user dashboard before you hit 1K MAU"
+      ],
+      "keyInsight": "API provider selection is a strategic vendor decision, not a technical one. Optimize for iteration speed pre-PMF. Diversify for reliability post-PMF. Never let a single provider's downtime take your product offline.",
+      "depths": {
+        "eli5": "LLM APIs are like ordering food from a restaurant. You send your order (a message), the kitchen (the AI model) prepares it, and you get your meal (a response) back. You pay per dish (per token). Different restaurants (OpenAI, Anthropic, Google) have different specialties and prices. **Streaming** is like getting your food course by course instead of waiting for everything at once — it feels faster even if total time is similar.",
+        "normal": "Every major AI product is built on LLM APIs. Key providers: OpenAI (GPT-4o, o1 — ecosystem leader), Anthropic (Claude — best for long docs, safety), Google (Gemini — strong multimodal), open-source via Together AI/Fireworks. Core concepts: the messages array structures conversations as system/user/assistant turns; streaming delivers tokens incrementally for better UX; function calling lets the model invoke tools you define. Cost optimization strategies: use cheaper models for simple tasks (Haiku for classification, Sonnet for generation), cache frequent requests, batch non-urgent requests, and compress prompts.",
+        "technical": "API calls follow the OpenAI-compatible format: POST /v1/messages with model, messages[], tools[], temperature, max_tokens. Response contains content[] blocks (text, tool_use). Streaming uses Server-Sent Events (SSE): each chunk contains a delta with partial text. Key metrics: TTFT (Time-to-First-Token, 200-800ms typical) determines perceived speed; TPS (Tokens-per-Second, 30-100 for output) determines throughput. Rate limiting varies: OpenAI uses TPM (tokens-per-minute) and RPM (requests-per-minute) quotas. Retry strategies: exponential backoff with jitter for 429/529 errors. Multi-model architectures use routers that classify query complexity and dispatch to appropriate models — Martian, Unify, and custom routers using small classifiers.",
+        "pm": "API provider selection is a strategic vendor decision. Evaluate: pricing trajectory (are costs declining?), reliability SLAs (99.9%+ for production), feature roadmap alignment, lock-in risk, data privacy terms (where is data processed? retained?). Multi-model strategies reduce single-vendor risk but increase integration complexity. Key product decision: streaming vs batch. Streaming is essential for chat interfaces (perceived latency drops 60-80%). Batch is fine for background processing (email summarization, document analysis). Build a model cost dashboard from day one — track cost per user, per feature, per model. Set alerts for cost anomalies."
+      },
+      "quiz": [
+        { "q": "Why is streaming important for chat-based AI products?", "options": ["It's cheaper", "It reduces perceived latency by 60-80% as users see tokens appear immediately", "It's more accurate", "It uses fewer tokens"], "correct": 1, "explanation": "Users perceive the response as faster because text starts appearing in 200-800ms vs waiting 2-5 seconds for the full response." }
+      ],
+      "resources": [
+        { "title": "OpenAI API Quickstart", "url": "https://platform.openai.com/docs/quickstart", "type": "docs" },
+        { "title": "OpenAI Cookbook (71K+ stars)", "url": "https://cookbook.openai.com", "type": "code" },
+        { "title": "Anthropic Claude Docs", "url": "https://docs.anthropic.com/en/docs/intro-to-claude", "type": "docs" },
+        { "title": "Anthropic Cookbook — GitHub", "url": "https://github.com/anthropics/anthropic-cookbook", "type": "code" },
+        { "title": "Google Gemini API Docs", "url": "https://ai.google.dev/gemini-api/docs", "type": "docs" },
+        { "title": "Google Gemini Cookbook — GitHub", "url": "https://github.com/google-gemini/cookbook", "type": "code" },
+        { "title": "DataCamp: Google AI Studio Tutorial", "url": "https://www.datacamp.com/tutorial/google-ai-studio-tutorial", "type": "course" }
+      ]
+    },
+    {
+      "id": "3-2",
+      "title": "Function Calling & Tool Use",
+      "subtitle": "Connecting AI to the real world",
+      "tldr": [
+        "Function calling gives AI hands — it can act on the world, not just describe it",
+        "The LLM generates a structured request; YOUR code executes it — you stay in control",
+        "Read-only tools are safe to give AI; write tools need confirmation flows and permission models"
+      ],
+      "keyInsight": "The gap between a cool AI demo and a useful product is often a single tool call. Function calling is how AI stops describing actions and starts taking them — and how you maintain safety and control in the process.",
+      "depths": {
+        "eli5": "Right now, AI can only talk. **Function calling** lets it DO things. It's like giving a smart assistant not just a brain, but hands. You tell the AI: \"Here are buttons you can press — one checks the weather, one searches a database, one sends an email.\" When someone asks about weather, the AI presses the weather button, reads the result, and gives a natural answer. The AI doesn't actually run the code — it just says \"I'd like to press this button\" and YOUR system presses it. You stay in control.",
+        "normal": "Function calling is how LLMs interact with external systems. You define available tools (name, description, parameters as JSON Schema). When appropriate, the model responds with a structured tool call instead of text. YOUR code executes the function and returns results. The model then generates a natural language response incorporating the results. This enables: database queries, API calls, calculations, web searches, file operations. The critical insight: the model doesn't execute code — it generates a structured request. You execute it. This maintains security and control.",
+        "technical": "Tool definitions follow JSON Schema: {name, description, input_schema: {type: \"object\", properties: {...}, required: [...]}}. The model may return multiple tool calls in parallel (parallel function calling). Handle the flow: user message → model returns tool_use block → execute function → return tool_result → model generates final response. MCP (Model Context Protocol) by Anthropic standardizes tool connectivity — a universal plugin system for AI. Error handling patterns: timeout wrappers, retry logic, graceful degradation messages. For multi-step tool use, implement a loop: model calls tool → result → model decides if more tools needed → repeat until done.",
+        "pm": "Function calling is the bridge between \"cool demo\" and \"useful product.\" A travel AI that can actually book flights (via tool use) is infinitely more valuable than one that just describes flights. Map your product's core value proposition to the functions the AI needs access to. Critical PM decisions: which tools should the AI have? What's the risk of each tool? (Read-only tools are safe; write tools need confirmation flows). Build a tool permission system: customer support AI can read orders but needs human approval to issue refunds. Monitor tool call success rates, latency, and error rates as product health metrics."
+      },
+      "quiz": [
+        { "q": "Who actually executes the function when an LLM makes a function call?", "options": ["The LLM runs the code directly", "OpenAI/Anthropic's servers run it", "YOUR backend code executes it — the LLM only generates a structured request", "The user's browser"], "correct": 2, "explanation": "The LLM generates a structured JSON request. Your system executes the function and returns results. This keeps you in control of security and access." }
+      ],
+      "resources": [
+        { "title": "Anthropic: Tool Use Overview", "url": "https://docs.anthropic.com/en/docs/agents-and-tools/tool-use/overview", "type": "docs" },
+        { "title": "Anthropic: Implement Tool Use", "url": "https://platform.claude.com/docs/en/agents-and-tools/tool-use/implement-tool-use", "type": "docs" },
+        { "title": "OpenAI: Function Calling Guide", "url": "https://platform.openai.com/docs/guides/function-calling", "type": "docs" },
+        { "title": "OpenAI: Assistants Function Calling", "url": "https://platform.openai.com/docs/assistants/tools/function-calling", "type": "docs" },
+        { "title": "Google Gemini: Function Calling Docs", "url": "https://ai.google.dev/gemini-api/docs/function-calling", "type": "docs" },
+        { "title": "Google: Function Calling Codelab", "url": "https://codelabs.developers.google.com/codelabs/gemini-function-calling", "type": "course" },
+        { "title": "Anthropic: Writing Tools for Agents", "url": "https://www.anthropic.com/engineering/writing-tools-for-agents", "type": "article" },
+        { "title": "Anthropic: Advanced Tool Use", "url": "https://www.anthropic.com/engineering/advanced-tool-use", "type": "article" },
+        { "title": "DataCamp: OpenAI Function Calling Tutorial", "url": "https://www.datacamp.com/tutorial/open-ai-function-calling-tutorial", "type": "course" }
+      ]
+    },
+    {
+      "id": "3-3",
+      "title": "AI Agents",
+      "subtitle": "Autonomous multi-step AI systems",
+      "tldr": [
+        "Agents autonomously plan and execute multi-step tasks using an observe → think → act loop",
+        "Reliability compounds: 95% per-step success × 10 steps = only 60% overall success rate",
+        "Start with human-in-the-loop and narrow scope — remove oversight only after 85%+ task completion"
+      ],
+      "keyInsight": "Simple 2-3 step chains often outperform complex agents in production. Ship the boring architecture that works reliably, not the impressive one that fails 40% of the time. Complexity is a liability until you've proven the simpler version.",
+      "depths": {
+        "eli5": "A regular AI answers one question at a time. An **agent** is an AI that can plan and do a whole project. Imagine asking: \"Research the top 5 coffee shops near me, check their reviews, and make a table comparing them.\" A regular AI might make something up. An agent actually searches the web, reads reviews, organizes the info, and creates the table — step by step, checking its own work. It's like upgrading from a calculator to a personal assistant.",
+        "normal": "An agent is an AI system that autonomously plans and executes multi-step tasks using an observe→think→act loop. Agent architectures include: ReAct (reason about what to do, act, observe result, repeat), Plan-and-Execute (create full plan, then execute), and Multi-Agent (specialized agents collaborate). Key frameworks: LangGraph (graph-based orchestration), CrewAI (multi-agent teams), AutoGen (Microsoft). The hard problems: reliability (95% per step = 60% over 10 steps), cost control (agents can loop infinitely — always set max iterations), and observability (without logging every step, debugging is impossible).",
+        "technical": "Agent architectures as defined by Anthropic's seminal guide: (1) Prompt chaining — sequential LLM calls with gates. (2) Routing — classifying input and dispatching. (3) Parallelization — multiple LLM calls simultaneously. (4) Orchestrator-worker — central LLM delegates to sub-agents. (5) Evaluator-optimizer — one agent generates, another evaluates, loop until quality threshold met. LangGraph models agents as state machines with typed state, conditional edges, and human-in-the-loop interrupts. State management is critical: agents need memory across steps (short-term in state, long-term in vector stores). Tracing with LangSmith or Langfuse is non-negotiable — log every LLM call, tool call, state transition, and decision.",
+        "pm": "Agents are the future of AI products but are hard to ship reliably. Start narrow: well-defined tasks with clear success criteria (\"research and summarize 5 competitor pricing pages\" not \"do market research\"). Ship with human-in-the-loop: the agent proposes actions, the user approves. This builds trust and gives you training data for when to remove the human. Key metrics: task completion rate (aim for 85%+ before removing human oversight), average steps to completion, cost per completed task, failure mode distribution. The reliability math is brutal: P(success) = p^n where p is per-step success rate and n is steps. At 95% per step, 10 steps = 60% overall success. This is why simple workflows with 2-3 chained calls often outperform complex agents."
+      },
+      "quiz": [
+        { "q": "If an agent has 95% success rate per step and needs 10 steps, what's the overall success rate?", "options": ["95%", "85%", "~60%", "~50%"], "correct": 2, "explanation": "0.95^10 ≈ 0.599 or ~60%. This is why simple chains often beat complex agents — fewer steps = higher reliability." }
+      ],
+      "resources": [
+        { "title": "Anthropic: Building Effective Agents", "url": "https://www.anthropic.com/research/building-effective-agents", "type": "article" },
+        { "title": "Anthropic: Building Effective Agents Cookbook", "url": "https://github.com/anthropics/anthropic-cookbook/tree/main/patterns/agents", "type": "code" },
+        { "title": "Hugging Face AI Agents Course", "url": "https://huggingface.co/learn/agents-course/en/unit0/introduction", "type": "course" },
+        { "title": "LangGraph Essentials (free)", "url": "https://academy.langchain.com/courses/langgraph-essentials-python", "type": "course" },
+        { "title": "LangChain Academy: Intro to LangGraph", "url": "https://academy.langchain.com/courses/intro-to-langgraph", "type": "course" },
+        { "title": "LangChain Academy: Ambient Agents", "url": "https://academy.langchain.com/courses/ambient-agents", "type": "course" },
+        { "title": "LangChain Academy: All Free Courses", "url": "https://academy.langchain.com/collections", "type": "course" },
+        { "title": "LangGraph — GitHub", "url": "https://github.com/langchain-ai/langgraph", "type": "code" },
+        { "title": "LangChain Agents Docs", "url": "https://docs.langchain.com/oss/python/langchain/agents", "type": "docs" },
+        { "title": "CrewAI Quickstart", "url": "https://docs.crewai.com/en/quickstart", "type": "docs" },
+        { "title": "AutoGen (Microsoft) — GitHub", "url": "https://github.com/microsoft/autogen", "type": "code" },
+        { "title": "AutoGen Docs", "url": "https://microsoft.github.io/autogen/stable//index.html", "type": "docs" },
+        { "title": "DeepLearning.AI: Agentic AI (Andrew Ng)", "url": "https://www.deeplearning.ai/courses/agentic-ai/", "type": "course" }
+      ]
+    },
+    {
+      "id": "3-4",
+      "title": "Evaluation & Evals",
+      "subtitle": "How to measure LLM output quality — the feedback loop for AI products",
+      "tldr": [
+        "You cannot improve what you don't measure — evals are the quality gate for AI",
+        "LLM-as-a-judge scales human intuition into automated signals across thousands of examples",
+        "Define your eval framework before sprint 1, not after users complain"
+      ],
+      "keyInsight": "The PM who defines the eval framework before building ships better AI products than the engineer who adds it after launch.",
+      "depths": {
+        "eli5": "Imagine you're a teacher grading homework. An eval is like your grading rubric — it tells you if the AI is getting smarter or dumber when you make changes. **LLM-as-a-judge** is like having a teacher-AI grade the student-AI's answers at scale — way faster than doing it yourself. The **RAG Triad** is a 3-part report card for RAG systems: did it find the right info? Did it stick to what it found? Did it actually answer the question?",
+        "normal": "Evaluation is how you know if your AI product is working. Three types: **(1) Automated metrics** — exact match, BLEU/ROUGE for factual tasks; fast and cheap but miss nuance. **(2) LLM-as-a-judge** — use a separate LLM to score outputs on a rubric; scales to thousands of examples per run. **(3) Human evals** — domain experts grading samples; the gold standard but slow and expensive. For RAG specifically, the **RAGAS framework** measures three dimensions: context relevance (right docs retrieved?), faithfulness (answer grounded in docs?), and answer relevance (actually answered the question?).",
+        "technical": "LLM-as-a-judge (Zheng et al., 2023) introduced systematic biases: **positional bias** (judges prefer position A), **verbosity bias** (longer = better), and **self-enhancement bias** (GPT-4 prefers GPT-4). Mitigate with randomized ordering and multi-judge averaging. RAGAS metrics: `context_precision` (fraction of retrieved chunks relevant to the query), `context_recall` (fraction of ground-truth facts covered by retrieved chunks), `answer_faithfulness` (claims in answer attributable to context), `answer_relevancy` (answer addresses the actual question). Evaluation pipeline: hold-out test sets (200–500 manually labeled examples), regression testing on every prompt change (gate deploys if score drops >2%), production traffic sampling (random 1% evaluated nightly). For model selection: MMLU (knowledge breadth), HumanEval (coding), MT-Bench (instruction following). For product quality: task-specific evals you define.",
+        "pm": "Evaluation is a PM responsibility, not just an engineering one. Your job: define 'what good looks like' before any prompt is written. **Framework:** (1) Write 50 golden examples (input + ideal output) before sprint 1. (2) Use LLM-as-judge to score every prompt change against the golden set — gate deploys on score regression. (3) Sample 1% of production traffic nightly for human review — this is your canary. (4) Add eval metrics to every sprint review: task completion rate, hallucination rate, judge score trend. Key PM lever: the strictness of your eval rubric determines your quality bar. Teams that skip this ship fast and regress silently. Teams that build this from day 1 can iterate with confidence. LMSYS Arena for model selection; build your own task-specific evals for product quality — no benchmark tells you if your specific use case is working."
+      },
+      "quiz": [
+        { "q": "What is the main advantage of LLM-as-a-judge over human evaluation?", "options": ["It's always more accurate", "It scales to thousands of examples automatically — human evals are slow and expensive", "It eliminates the need for test sets", "It works without any setup"], "correct": 1, "explanation": "LLM-as-judge lets you run eval on every prompt change in seconds. Human evals are the gold standard but take days — too slow for fast iteration cycles." },
+        { "q": "The RAG Triad measures:", "options": ["Speed, accuracy, and cost", "Context relevance + faithfulness + answer relevance", "Chunk size, overlap, and retrieval count", "Recall, precision, and F1"], "correct": 1, "explanation": "Context relevance: right docs retrieved? Faithfulness: answer grounded in those docs? Answer relevance: question actually answered? All three must be high for a trustworthy RAG system." }
+      ],
+      "resources": [
+        { "title": "LMSYS Chatbot Arena", "url": "https://lmarena.ai/", "type": "tool" },
+        { "title": "OpenAI Evals — GitHub", "url": "https://github.com/openai/evals", "type": "code" },
+        { "title": "RAGAS: RAG Evaluation Framework", "url": "https://docs.ragas.io/", "type": "docs" },
+        { "title": "Evidently AI: 30 LLM Benchmarks Explained", "url": "https://www.evidentlyai.com/llm-guide/llm-benchmarks", "type": "docs" },
+        { "title": "Judging LLM-as-a-Judge Paper (Zheng et al.)", "url": "https://arxiv.org/html/2403.04132v1", "type": "paper" },
+        { "title": "DeepLearning.AI: Building & Evaluating Advanced RAG", "url": "https://www.deeplearning.ai/short-courses/building-evaluating-advanced-rag/", "type": "course" },
+        { "title": "Scale AI SEAL Leaderboard", "url": "https://scale.com/leaderboard", "type": "tool" },
+        { "title": "Stanford HELM", "url": "https://crfm.stanford.edu/helm/", "type": "tool" }
+      ]
+    }
+  ]
+}
