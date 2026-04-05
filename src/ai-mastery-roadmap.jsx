@@ -801,9 +801,7 @@ const typeStyles = {
 
 function Section({ section, weekColor }) {
   const depths = ["eli5", "normal", "technical", "pm"];
-  const depthLabels = { eli5: "ELI5", normal: "Normal", technical: "Technical", pm: "PM" };
-  const selectedDepth = useRoadmapStore((state) => state.selectedDepthLevel);
-  const setSelectedDepth = useRoadmapStore((state) => state.setSelectedDepthLevel);
+  const depthLabels = { eli5: "ELI5", normal: "Normal", technical: "Technical", pm: "PM Lens" };
 
   const renderText = (text) => {
     return text.split(/(\*\*[^*]+\*\*)/g).map((part, i) => {
@@ -814,6 +812,15 @@ function Section({ section, weekColor }) {
 
   const Interactive = section.interactive ? interactiveMap[section.interactive] : null;
 
+  const resourcesList = Array.isArray(section.resources)
+    ? section.resources
+    : section.resources
+      ? Object.values(section.resources).reduce((acc, list) => {
+          if (Array.isArray(list)) list.forEach(r => { if (!acc.some(x => x.url === r.url)) acc.push(r); });
+          return acc;
+        }, [])
+      : [];
+
   return (
     <div
       data-section-id={section.id}
@@ -822,56 +829,56 @@ function Section({ section, weekColor }) {
       onMouseLeave={e => { e.currentTarget.style.borderColor = "var(--border-color)"; e.currentTarget.style.boxShadow = "none"; }}>
 
       {/* Section Title */}
-      <div style={{ marginBottom: 20 }}>
+      <div style={{ marginBottom: 24 }}>
         <div style={{ color: "var(--text-primary)", fontSize: 17, fontWeight: 600, fontFamily: "var(--display)" }}>{section.title}</div>
-        <div style={{ display: "flex", gap: 8, marginTop: 10 }}>
-          {section.interactive && <span style={{ fontSize: 9, padding: "4px 10px", background: "var(--badge-bg-interactive)", color: "var(--badge-color-interactive)", borderRadius: 4, fontWeight: 600, fontFamily: "var(--mono)" }}>Interactive</span>}
-          {section.quiz && <span style={{ fontSize: 9, padding: "4px 10px", background: "var(--badge-bg-quiz)", color: "var(--badge-color-quiz)", borderRadius: 4, fontWeight: 600, fontFamily: "var(--mono)" }}>Quiz</span>}
-        </div>
+        {section.subtitle && <div style={{ color: "var(--text-muted)", fontSize: 13, marginTop: 4, fontFamily: "var(--body)" }}>{section.subtitle}</div>}
       </div>
 
-      {/* Depth Tabs */}
-      <div style={{ display: "flex", gap: 8, marginBottom: 20, borderBottom: "1px solid var(--border-light)", paddingBottom: 0 }}>
-        {depths.map((depth) => (
-          <button
-            key={depth}
-            onClick={() => setSelectedDepth(depth)}
-            style={{
-              padding: "10px 16px",
-              background: "none",
-              border: "none",
-              borderBottom: selectedDepth === depth ? "2px solid var(--text-primary)" : "2px solid transparent",
-              color: selectedDepth === depth ? "var(--text-primary)" : "var(--text-light)",
-              fontSize: 13,
-              fontWeight: selectedDepth === depth ? 600 : 500,
-              fontFamily: "var(--body)",
-              cursor: "pointer",
-              transition: "all 0.15s",
-              marginBottom: "-1px"
-            }}
-            onMouseEnter={e => { if (selectedDepth !== depth) e.currentTarget.style.color = "var(--text-muted)"; }}
-            onMouseLeave={e => { if (selectedDepth !== depth) e.currentTarget.style.color = "var(--text-light)"; }}
-          >
+      {/* All Depth Levels Stacked */}
+      {depths.map((depth, idx) => (
+        <div key={depth} style={{ marginBottom: idx < depths.length - 1 ? 28 : 0 }}>
+          <div style={{ fontSize: 9, fontWeight: 700, color: "var(--text-muted)", letterSpacing: 1.5, fontFamily: "var(--mono)", marginBottom: 10, textTransform: "uppercase", paddingBottom: 8, borderBottom: "1px solid var(--border-light)" }}>
             {depthLabels[depth]}
-          </button>
-        ))}
-      </div>
-
-      {/* Selected Lens Content */}
-      <div key={selectedDepth} data-lens={selectedDepth} style={{ minHeight: 100 }}>
-        <div style={{ color: "var(--text-secondary)", fontSize: 14, lineHeight: 1.8, fontFamily: "var(--body)", whiteSpace: "pre-line" }}>
-          {renderText(section.depths[selectedDepth])}
+          </div>
+          <div style={{ color: "var(--text-secondary)", fontSize: 14, lineHeight: 1.8, fontFamily: "var(--body)", whiteSpace: "pre-line" }}>
+            {renderText(section.depths[depth])}
+          </div>
         </div>
-      </div>
+      ))}
 
       {/* Interactive Widget */}
-      {Interactive && <div style={{ marginBottom: 20, marginTop: 20, paddingTop: 20, borderTop: "1px solid var(--section-separator)" }}><Interactive /></div>}
+      {Interactive && <div style={{ marginBottom: 20, marginTop: 28, paddingTop: 20, borderTop: "1px solid var(--section-separator)" }}><Interactive /></div>}
 
       {/* Quiz */}
       {section.quiz && section.quiz.length > 0 && (
-        <div style={{ marginTop: 24, paddingTop: 20, borderTop: "1px solid var(--section-separator)" }}>
-          <div style={{ fontSize: 12, fontWeight: 600, color: "var(--text-muted)", letterSpacing: 1, fontFamily: "var(--mono)", marginBottom: 16, textTransform: "uppercase" }}>Knowledge Check</div>
+        <div style={{ marginTop: 28, paddingTop: 20, borderTop: "1px solid var(--section-separator)" }}>
+          <div style={{ fontSize: 11, fontWeight: 700, color: "var(--text-muted)", letterSpacing: 1.2, fontFamily: "var(--mono)", marginBottom: 16, textTransform: "uppercase" }}>Knowledge Check</div>
           <Quiz questions={section.quiz} color={weekColor} />
+        </div>
+      )}
+
+      {/* Resources — after quiz */}
+      {resourcesList.length > 0 && (
+        <div style={{ marginTop: 28, paddingTop: 20, borderTop: "1px solid var(--section-separator)" }}>
+          <div style={{ fontSize: 11, fontWeight: 700, color: "var(--text-muted)", letterSpacing: 1.2, fontFamily: "var(--mono)", marginBottom: 16, textTransform: "uppercase" }}>Resources</div>
+          <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+            {resourcesList.map((r, i) => {
+              const style = typeStyles[r.type] || typeStyles.article;
+              return (
+                <a key={i} href={r.url} target="_blank" rel="noopener noreferrer" style={{
+                  display: "flex", alignItems: "center", gap: 8, padding: "10px 12px",
+                  background: "var(--bg-secondary)", borderRadius: 8, textDecoration: "none",
+                  border: "1px solid var(--border-color)", transition: "all 0.15s"
+                }}
+                onMouseEnter={e => { e.currentTarget.style.borderColor = "var(--border-hover)"; e.currentTarget.style.boxShadow = "0 1px 2px var(--shadow-sm)"; }}
+                onMouseLeave={e => { e.currentTarget.style.borderColor = "var(--border-color)"; e.currentTarget.style.boxShadow = "none"; }}>
+                  <span style={{ fontSize: 8, padding: "2px 6px", background: style.bg, color: style.color, borderRadius: 3, fontWeight: 600, fontFamily: "var(--mono)", flexShrink: 0, whiteSpace: "nowrap" }}>{style.label}</span>
+                  <span style={{ fontSize: 13, color: "var(--text-secondary)", fontFamily: "var(--body)", flex: 1, minWidth: 0 }}>{r.title}</span>
+                  <span style={{ fontSize: 10, color: "var(--text-light)", flexShrink: 0 }}>↗</span>
+                </a>
+              );
+            })}
+          </div>
         </div>
       )}
     </div>
@@ -923,37 +930,22 @@ function WeekTabs({ activeWeekId, onWeekChange, isMobile, onMobileClose }) {
   );
 }
 
-// ─── LENS SIDEBAR COMPONENT ──────────────────────────────────────────────────
+// ─── TABLE OF CONTENTS SIDEBAR ───────────────────────────────────────────────
 
-function LensSidebar({ week, currentSection, isMobile, onMobileClose }) {
-  const selectedDepth = useRoadmapStore((state) => state.selectedDepthLevel);
+function TableOfContents({ week, currentSection }) {
+  const selectedDepthLevel = useRoadmapStore((state) => state.selectedDepthLevel);
   const setSelectedDepthLevel = useRoadmapStore((state) => state.setSelectedDepthLevel);
-  const [expandedSections, setExpandedSections] = useState({});
 
-  const lenses = [
-    { id: "eli5", label: "ELI5" },
-    { id: "normal", label: "Normal" },
-    { id: "technical", label: "Technical" },
-    { id: "pm", label: "PM" }
-  ];
-
-  const toggleSection = (sectionId) => {
-    setExpandedSections(prev => ({
-      ...prev,
-      [sectionId]: !prev[sectionId]
-    }));
+  const scrollToSection = (sectionId) => {
+    const el = document.querySelector(`[data-section-id="${sectionId}"]`);
+    if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
   };
 
-  const handleSectionLensClick = (sectionId, lensId) => {
-    // Set the depth level
-    setSelectedDepthLevel(lensId);
-    // Scroll to the section
-    const sectionElement = document.querySelector(`[data-section-id="${sectionId}"]`);
-    if (sectionElement) {
-      sectionElement.scrollIntoView({ behavior: "smooth", block: "start" });
-    }
-    // Close sidebar on mobile
-    if (isMobile) onMobileClose();
+  const depthLevelLabels = {
+    eli5: "ELI5",
+    normal: "Normal",
+    technical: "Technical",
+    pm: "PM"
   };
 
   if (!week || !week.sections) return null;
@@ -963,67 +955,84 @@ function LensSidebar({ week, currentSection, isMobile, onMobileClose }) {
       <div style={{ fontSize: 10, fontWeight: 600, color: "var(--text-muted)", letterSpacing: 1.2, fontFamily: "var(--mono)", marginBottom: 16, textTransform: "uppercase" }}>
         Contents
       </div>
-      <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+      <div style={{ display: "flex", flexDirection: "column", gap: 4 }}>
         {week.sections.map((section) => {
           const isActive = currentSection?.id === section.id;
-          const isExpanded = expandedSections[section.id] || false;
           return (
             <div key={section.id}>
-              {/* Section Title with Expand/Collapse Toggle */}
-              <div style={{
-                display: "flex",
-                alignItems: "center",
-                gap: 6,
-                fontSize: 12,
-                fontWeight: 600,
-                color: isActive ? "var(--text-primary)" : "var(--text-secondary)",
-                fontFamily: "var(--body)",
-                padding: "8px 0",
-                borderLeft: isActive ? "3px solid var(--accent-color)" : "3px solid transparent",
-                paddingLeft: 10,
-                transition: "all 0.15s",
-                cursor: "pointer"
-              }}
-              onClick={() => toggleSection(section.id)}>
-                <span style={{ transition: "transform 0.2s", transform: isExpanded ? "rotate(90deg)" : "rotate(0deg)", display: "inline-block", width: 14, fontSize: 10 }}>▶</span>
-                <span>{section.title}</span>
-              </div>
-              {/* Lens Sub-items - Only show when expanded */}
-              {isExpanded && (
-                <div style={{ display: "flex", flexDirection: "column", gap: 4, marginLeft: 10, marginTop: 6 }}>
-                  {lenses.map((lens) => (
-                    <button
-                      key={`${section.id}-${lens.id}`}
-                      onClick={() => handleSectionLensClick(section.id, lens.id)}
-                      style={{
-                        padding: "6px 8px",
-                        borderRadius: 4,
-                        border: "none",
-                        background: selectedDepth === lens.id ? "var(--accent-primary)" : "transparent",
-                        color: selectedDepth === lens.id ? "var(--accent-text)" : "var(--text-primary)",
-                        fontSize: 11,
-                        fontWeight: selectedDepth === lens.id ? 600 : 500,
-                        fontFamily: "var(--body)",
-                        cursor: "pointer",
-                        textAlign: "left",
-                        transition: "all 0.2s ease"
-                      }}
-                      onMouseEnter={e => {
-                        if (!(selectedDepth === lens.id)) {
-                          e.currentTarget.style.background = "var(--accent-hover)";
-                          e.currentTarget.style.color = "var(--text-primary)";
-                        }
-                      }}
-                      onMouseLeave={e => {
-                        if (!(selectedDepth === lens.id)) {
-                          e.currentTarget.style.background = "transparent";
-                          e.currentTarget.style.color = "var(--text-primary)";
-                        }
-                      }}
-                    >
-                      {lens.label}
-                    </button>
-                  ))}
+              <button
+                onClick={() => scrollToSection(section.id)}
+                style={{
+                  padding: "8px 10px",
+                  borderRadius: 4,
+                  border: "none",
+                  background: "transparent",
+                  color: isActive ? "var(--text-primary)" : "var(--text-secondary)",
+                  fontSize: 12,
+                  fontWeight: isActive ? 600 : 400,
+                  fontFamily: "var(--body)",
+                  cursor: "pointer",
+                  textAlign: "left",
+                  borderLeft: isActive ? "2px solid var(--text-primary)" : "2px solid transparent",
+                  transition: "all 0.15s",
+                  lineHeight: 1.4,
+                  width: "100%"
+                }}
+                onMouseEnter={e => {
+                  if (!isActive) {
+                    e.currentTarget.style.color = "var(--text-primary)";
+                    e.currentTarget.style.background = "var(--bg-secondary)";
+                  }
+                }}
+                onMouseLeave={e => {
+                  if (!isActive) {
+                    e.currentTarget.style.color = "var(--text-secondary)";
+                    e.currentTarget.style.background = "transparent";
+                  }
+                }}
+              >
+                {section.title}
+              </button>
+
+              {/* Depth Levels - Show only for active section */}
+              {isActive && (
+                <div style={{ display: "flex", flexDirection: "column", gap: 2, marginTop: 6, marginLeft: 12, paddingLeft: 8, borderLeft: "1px solid var(--border-light)" }}>
+                  {["eli5", "normal", "technical", "pm"].map((depth) => {
+                    const isSelected = selectedDepthLevel === depth;
+                    return (
+                      <button
+                        key={depth}
+                        onClick={() => setSelectedDepthLevel(depth)}
+                        style={{
+                          padding: "6px 8px",
+                          borderRadius: 3,
+                          border: "none",
+                          background: isSelected ? "var(--text-primary)" : "transparent",
+                          color: isSelected ? "var(--bg-primary)" : "var(--text-light)",
+                          fontSize: 11,
+                          fontWeight: isSelected ? 600 : 400,
+                          fontFamily: "var(--body)",
+                          cursor: "pointer",
+                          textAlign: "left",
+                          transition: "all 0.15s"
+                        }}
+                        onMouseEnter={e => {
+                          if (!isSelected) {
+                            e.currentTarget.style.background = "var(--bg-secondary)";
+                            e.currentTarget.style.color = "var(--text-primary)";
+                          }
+                        }}
+                        onMouseLeave={e => {
+                          if (!isSelected) {
+                            e.currentTarget.style.background = "transparent";
+                            e.currentTarget.style.color = "var(--text-light)";
+                          }
+                        }}
+                      >
+                        {depthLevelLabels[depth]}
+                      </button>
+                    );
+                  })}
                 </div>
               )}
             </div>
@@ -1034,44 +1043,46 @@ function LensSidebar({ week, currentSection, isMobile, onMobileClose }) {
   );
 }
 
-// ─── RIGHT SIDEBAR COMPONENT ────────────────────────────────────────────────
+// ─── MOBILE TABLE OF CONTENTS ────────────────────────────────────────────────
 
-function RightSidebar({ currentSection }) {
-  if (!currentSection) return null;
+function MobileTOC({ week }) {
+  const scrollToSection = (sectionId) => {
+    const el = document.querySelector(`[data-section-id="${sectionId}"]`);
+    if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
+  };
 
-  const resourcesList = (currentSection.resources && Array.isArray(currentSection.resources)) ? currentSection.resources : [];
-  const hasResources = resourcesList && resourcesList.length > 0;
-
-  if (!hasResources) return null;
+  if (!week || !week.sections) return null;
 
   return (
-    <div className="right-sidebar" style={{ width: 280, flexShrink: 0, padding: "20px", borderLeft: "1px solid var(--border-light)", position: "sticky", top: 130, maxHeight: "calc(100vh - 130px)", overflowY: "auto", background: "var(--bg-tertiary)" }}>
-      {/* Current Section Title */}
-      <div style={{ fontSize: 11, fontWeight: 600, color: "var(--text-muted)", letterSpacing: 1, fontFamily: "var(--mono)", marginBottom: 16, textTransform: "uppercase" }}>
-        {currentSection.title}
+    <div style={{ marginBottom: 28, padding: "14px 16px", background: "var(--bg-secondary)", borderRadius: 10, border: "1px solid var(--border-light)" }}>
+      <div style={{ fontSize: 10, fontWeight: 600, color: "var(--text-muted)", letterSpacing: 1.2, fontFamily: "var(--mono)", marginBottom: 12, textTransform: "uppercase" }}>
+        Contents
       </div>
-
-      {/* Resources Section */}
-      <div>
-        <div style={{ fontSize: 10, fontWeight: 600, color: "var(--text-muted)", fontFamily: "var(--mono)", letterSpacing: 1, marginBottom: 12 }}>RESOURCES</div>
-        <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-          {resourcesList.map((r, i) => {
-            const style = typeStyles[r.type] || typeStyles.article;
-            return (
-              <a key={i} href={r.url} target="_blank" rel="noopener noreferrer" style={{
-                display: "flex", alignItems: "center", gap: 8, padding: "10px 12px",
-                background: "var(--bg-secondary)", borderRadius: 8, textDecoration: "none",
-                border: "1px solid var(--border-color)", transition: "all 0.15s", fontSize: 12
-              }}
-              onMouseEnter={e => { e.currentTarget.style.borderColor = "var(--border-hover)"; e.currentTarget.style.boxShadow = "0 1px 2px var(--shadow-sm)"; }}
-              onMouseLeave={e => { e.currentTarget.style.borderColor = "var(--border-color)"; e.currentTarget.style.boxShadow = "none"; }}>
-                <span style={{ fontSize: 8, padding: "2px 6px", background: style.bg, color: style.color, borderRadius: 3, fontWeight: 600, fontFamily: "var(--mono)", flexShrink: 0, whiteSpace: "nowrap" }}>{style.label}</span>
-                <span style={{ fontSize: 12, color: "var(--text-secondary)", fontFamily: "var(--body)", flex: 1, minWidth: 0, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{r.title}</span>
-                <span style={{ marginLeft: "auto", fontSize: 10, color: "var(--text-light)", flexShrink: 0 }}>↗</span>
-              </a>
-            );
-          })}
-        </div>
+      <div style={{ display: "flex", flexDirection: "column", gap: 2 }}>
+        {week.sections.map((section) => (
+          <button
+            key={section.id}
+            onClick={() => scrollToSection(section.id)}
+            style={{
+              padding: "8px 4px",
+              border: "none",
+              background: "transparent",
+              color: "var(--text-secondary)",
+              fontSize: 13,
+              fontFamily: "var(--body)",
+              cursor: "pointer",
+              textAlign: "left",
+              display: "flex",
+              alignItems: "center",
+              gap: 8
+            }}
+            onMouseEnter={e => { e.currentTarget.style.color = "var(--text-primary)"; }}
+            onMouseLeave={e => { e.currentTarget.style.color = "var(--text-secondary)"; }}
+          >
+            <span style={{ color: "var(--text-muted)", fontSize: 11 }}>→</span>
+            {section.title}
+          </button>
+        ))}
       </div>
     </div>
   );
@@ -1090,9 +1101,6 @@ export default function AIRoadmap() {
   useEffect(() => {
     const handleResize = () => {
       setIsMobile(window.innerWidth < 768);
-      if (window.innerWidth < 768) {
-        setSidebarOpen(false); // Close sidebar on mobile by default
-      }
     };
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
@@ -1129,7 +1137,6 @@ export default function AIRoadmap() {
 
   const darkMode = useRoadmapStore((state) => state.darkMode);
   const setDarkMode = useRoadmapStore((state) => state.setDarkMode);
-  const selectedDepthLevel = useRoadmapStore((state) => state.selectedDepthLevel);
 
   // Apply dark mode class to document root
   useEffect(() => {
@@ -1265,36 +1272,38 @@ export default function AIRoadmap() {
         <div style={{ maxWidth: 1200, margin: "0 auto" }}>
           <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 10 }}>
             <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
-              <button
-                onClick={() => setSidebarOpen(!sidebarOpen)}
-                style={{
-                  background: "var(--bg-secondary)",
-                  border: "1px solid var(--border-light)",
-                  borderRadius: 6,
-                  padding: "8px 10px",
-                  cursor: "pointer",
-                  color: "var(--text-secondary)",
-                  fontSize: isMobile ? 18 : 16,
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  transition: "all 0.15s",
-                  width: 36,
-                  height: 36
-                }}
-                onMouseEnter={e => {
-                  e.currentTarget.style.background = "var(--border-light)";
-                  e.currentTarget.style.borderColor = "var(--border-hover)";
-                }}
-                onMouseLeave={e => {
-                  e.currentTarget.style.background = "var(--bg-secondary)";
-                  e.currentTarget.style.borderColor = "var(--border-light)";
-                }}
-                title={isMobile ? (sidebarOpen ? "Close menu" : "Open menu") : (sidebarOpen ? "Collapse sidebar" : "Expand sidebar")}
-              >
-                {isMobile ? (sidebarOpen ? "✕" : "≡") : (sidebarOpen ? "←" : "→")}
-              </button>
-              <div style={{ display: isMobile ? (window.innerWidth < 640 ? "none" : "block") : "block" }}>
+              {!isMobile && (
+                <button
+                  onClick={() => setSidebarOpen(!sidebarOpen)}
+                  style={{
+                    background: "var(--bg-secondary)",
+                    border: "1px solid var(--border-light)",
+                    borderRadius: 6,
+                    padding: "8px 10px",
+                    cursor: "pointer",
+                    color: "var(--text-secondary)",
+                    fontSize: 16,
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    transition: "all 0.15s",
+                    width: 36,
+                    height: 36
+                  }}
+                  onMouseEnter={e => {
+                    e.currentTarget.style.background = "var(--border-light)";
+                    e.currentTarget.style.borderColor = "var(--border-hover)";
+                  }}
+                  onMouseLeave={e => {
+                    e.currentTarget.style.background = "var(--bg-secondary)";
+                    e.currentTarget.style.borderColor = "var(--border-light)";
+                  }}
+                  title={sidebarOpen ? "Collapse sidebar" : "Expand sidebar"}
+                >
+                  {sidebarOpen ? "←" : "→"}
+                </button>
+              )}
+              <div>
                 <h1 style={{ fontSize: isMobile ? 16 : 20, fontWeight: 600, fontFamily: "var(--display)", margin: 0, color: "var(--text-primary)", letterSpacing: "-0.02em" }}>
                   AI PM Roadmap
                 </h1>
@@ -1311,29 +1320,12 @@ export default function AIRoadmap() {
       </div>
 
       {/* Week Tabs */}
-      <WeekTabs activeWeekId={currentWeekId} onWeekChange={setCurrentWeek} isMobile={isMobile} onMobileClose={() => setSidebarOpen(false)} />
-
-      {/* Mobile Backdrop Overlay */}
-      {isMobile && sidebarOpen && (
-        <div
-          onClick={() => setSidebarOpen(false)}
-          style={{
-            position: "fixed",
-            top: 130,
-            left: 0,
-            right: 0,
-            bottom: 0,
-            background: "rgba(0, 0, 0, 0.3)",
-            zIndex: 98,
-            backdropFilter: "blur(1px)"
-          }}
-        />
-      )}
+      <WeekTabs activeWeekId={currentWeekId} onWeekChange={setCurrentWeek} isMobile={isMobile} onMobileClose={() => {}} />
 
       {/* Layout */}
       <div className="layout" style={{ display: "flex", maxWidth: 1600, margin: "0 auto", minHeight: "calc(100vh - 190px)" }}>
-        {/* Lens Sidebar */}
-        {sidebarOpen && <LensSidebar week={week} currentSection={currentSection} isMobile={isMobile} onMobileClose={() => setSidebarOpen(false)} />}
+        {/* TOC Sidebar — desktop only */}
+        {!isMobile && sidebarOpen && <TableOfContents week={week} currentSection={currentSection} />}
 
         {/* Content */}
         <div className="content" ref={contentRef} style={{ flex: 1, padding: "40px 48px", overflowY: "auto", background: "var(--bg-primary)" }}>
@@ -1348,13 +1340,13 @@ export default function AIRoadmap() {
             </div>
           </div>
 
+          {/* Mobile TOC — inline at top of content */}
+          {isMobile && <MobileTOC week={week} />}
+
           {week.sections.map(section => (
             <Section key={section.id} section={section} weekColor={week.color} />
           ))}
         </div>
-
-        {/* Right Sidebar - Resources Only */}
-        <RightSidebar key={currentSection?.id} currentSection={currentSection} />
       </div>
     </div>
   );
