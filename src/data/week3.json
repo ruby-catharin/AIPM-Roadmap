@@ -10,6 +10,7 @@
     {
       "id": "3-1",
       "title": "LLM APIs",
+      "interactive": "apiCostCompare",
       "subtitle": "Building blocks of every AI product",
       "tldr": [
         "Every AI product is an API call — choose providers based on cost, reliability, and roadmap alignment",
@@ -39,6 +40,7 @@
     {
       "id": "3-2",
       "title": "Function Calling & Tool Use",
+      "interactive": "functionCallFlow",
       "subtitle": "Connecting AI to the real world",
       "tldr": [
         "Function calling gives AI hands — it can act on the world, not just describe it",
@@ -70,6 +72,7 @@
     {
       "id": "3-3",
       "title": "AI Agents",
+      "interactive": "agentReliabilityCalc",
       "subtitle": "Autonomous multi-step AI systems",
       "tldr": [
         "Agents autonomously plan and execute multi-step tasks using an observe → think → act loop",
@@ -105,6 +108,7 @@
     {
       "id": "3-4",
       "title": "Evaluation & Evals",
+      "interactive": "evalScorer",
       "subtitle": "How to measure LLM output quality — the feedback loop for AI products",
       "tldr": [
         "You cannot improve what you don't measure — evals are the quality gate for AI",

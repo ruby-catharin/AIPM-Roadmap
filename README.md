@@ -1,6 +1,6 @@
 # AI PM Mastery Roadmap
 
-A structured, 4-week AI learning tool built specifically for Product Managers.
+A structured, 5-week AI learning tool built specifically for Product Managers.
 
 Unlike tutorials aimed at engineers or executives, this roadmap bridges the gap — helping PMs reason about token economics, RAG tradeoffs, agent reliability, and more. Every concept can be explored through four lenses:
 
@@ -13,8 +13,9 @@ No completion badges, no progress bars — just the depth you need, when you nee
 
 ## Stack
 
-- React + Vite
-- Tailwind CSS
+- React 18 + Vite 5
+- Zustand (state management with localStorage persistence)
+- Inline styles with CSS custom properties (dark mode support)
 
 ## Getting Started
 

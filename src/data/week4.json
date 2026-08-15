@@ -10,6 +10,7 @@
     {
       "id": "4-1",
       "title": "Fine-Tuning",
+      "interactive": "fineTuningDecisionTree",
       "subtitle": "When prompting + RAG aren't enough",
       "tldr": [
         "Fine-tune only after exhausting prompt engineering + RAG — it's a significant investment with ongoing maintenance",
@@ -78,6 +79,7 @@
     {
       "id": "4-3",
       "title": "AI Product Management",
+      "interactive": "unitEconomicsCalc",
       "subtitle": "Strategy, metrics, and the PM skill stack",
       "tldr": [
         "AI PMs own the eval framework — define 'what good looks like' before any prompt is written",

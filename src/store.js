@@ -80,9 +80,9 @@ export const useRoadmapStore = create(
         }),
 
       // Getters for computed values
-      getProgressPercentage: (state) => {
-        if (state.completedSections.length === 0) return 0;
-        return Math.round((state.completedSections.length / 100) * 100);
+      getProgressPercentage: (state, totalSections) => {
+        if (state.completedSections.length === 0 || !totalSections) return 0;
+        return Math.round((state.completedSections.length / totalSections) * 100);
       },
     }),
     {

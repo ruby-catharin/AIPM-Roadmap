@@ -1,0 +1,227 @@
+{
+  "id": 5,
+  "title": "Agentic AI & Orchestration",
+  "tag": "AGENTIC",
+  "color": "#E8590C",
+  "accent": "#FFF4E6",
+  "dark": "#1a0a02",
+  "pmAngle": "Ship AI that doesn't just answer questions but resolves issues end-to-end — the defining shift from chatbots to autonomous agents.",
+  "sections": [
+    {
+      "id": "5-1",
+      "title": "Agentic AI Foundations",
+      "subtitle": "From chatbots to autonomous agents",
+      "tldr": [
+        "Agentic AI = AI that plans and executes multi-step tasks autonomously, not just answers questions",
+        "The evolution: rule-based → intent-based → LLM-augmented → fully agentic",
+        "The reliability math is brutal: 95% per step × 10 steps = 60% overall — start simple"
+      ],
+      "keyInsight": "The difference between 'conversational AI' and 'agentic AI' is the difference between an AI that says 'I've transferred you to an agent' (deflection) and one that says 'I've applied the credit, updated your address, and sent confirmation' (resolution).",
+      "depths": {
+        "eli5": "A regular chatbot is like a vending machine — press a button, get a fixed thing. An LLM chatbot is a really smart friend who can answer questions but can't DO anything. An **agentic AI** is a personal assistant who can think, plan, and take actions — booking appointments, processing refunds, checking multiple systems, making decisions. It doesn't just talk. It gets things done.",
+        "normal": "Agent architectures as defined by Anthropic: (1) **Prompt chaining** — sequential LLM calls with validation gates. (2) **Routing** — classify input, dispatch to specialized handler. (3) **Parallelization** — multiple LLM calls simultaneously. (4) **Orchestrator-worker** — central LLM plans and delegates to workers. (5) **Evaluator-optimizer** — one LLM generates, another evaluates, loop until quality threshold. In CX, 'agentic' means the AI can complete entire resolution workflows autonomously — checking billing, updating shipping, processing refunds — not just answering FAQs.",
+        "technical": "The ReAct pattern (Yao et al., 2022) interleaves Thought → Action → Observation loops. Plan-and-execute separates planning from execution for complex tasks. The reliability math: P(success) = p^n where p is per-step success and n is steps. At 95% per step: 3 steps = 86%, 5 steps = 77%, 10 steps = 60%, 20 steps = 36%. This is why Anthropic recommends starting with simple workflows and adding complexity only when measured quality demands it. State management across steps uses typed state graphs (LangGraph), session context (Cognigy), or shared memory stores.",
+        "pm": "The PM decision framework: Use **prompt chains** for well-defined processes (2-3 steps, high reliability). Use **routing** for multiple distinct use cases through one entry point. Use **full agents** for complex, unpredictable resolution paths. BCG predicts agentic AI will autonomously resolve 80% of common CX issues by 2029. Key metrics: task completion rate (aim 85%+), cost per completed task, failure mode distribution. Gartner named Cognigy a Leader in the 2025 Magic Quadrant for Conversational AI specifically for their agentic capabilities."
+      },
+      "quiz": [
+        { "q": "If an agent has 95% success per step and needs 10 steps, what's the overall success rate?", "options": ["95%", "85%", "~60%", "~50%"], "correct": 2, "explanation": "0.95^10 ≈ 0.599 or ~60%. This is why simple 2-3 step chains (86%) often beat complex agents." },
+        { "q": "A customer says 'I was charged twice and the wrong item shipped.' Should you use a prompt chain, routing, or a full agent?", "options": ["Prompt chain — it's straightforward", "Routing — classify and dispatch", "Full agent — dynamic multi-system resolution needed", "Simple FAQ lookup"], "correct": 2, "explanation": "The issue requires dynamic planning across billing + shipping + inventory. Resolution path isn't predictable upfront." }
+      ],
+      "resources": [
+        { "title": "Anthropic: Building Effective Agents (essential read)", "url": "https://www.anthropic.com/research/building-effective-agents", "type": "article" },
+        { "title": "Anthropic: Agent Patterns Cookbook", "url": "https://github.com/anthropics/anthropic-cookbook/tree/main/patterns/agents", "type": "code" },
+        { "title": "DeepLearning.AI: Agentic AI (Andrew Ng)", "url": "https://www.deeplearning.ai/courses/agentic-ai/", "type": "course" },
+        { "title": "ReAct Paper (Yao et al., 2022)", "url": "https://arxiv.org/abs/2210.03629", "type": "paper" },
+        { "title": "Cognigy: Agentic AI Platform", "url": "https://www.cognigy.com/platform/agentic-ai", "type": "docs" }
+      ]
+    },
+    {
+      "id": "5-2",
+      "title": "Multi-LLM Architecture & LLM Gateways",
+      "interactive": "modelRouter",
+      "subtitle": "Orchestrating multiple models for cost, speed, and quality",
+      "tldr": [
+        "Using different LLMs for different tasks optimizes cost (60-70% savings), latency, and capability",
+        "An LLM gateway handles routing, fallbacks, rate limiting, cost tracking, and observability",
+        "Cognigy's Nexus Engine is a CX-purpose-built LLM gateway; NICE's Enlighten models are CX-specialized LLMs"
+      ],
+      "keyInsight": "Model routing is invisible to the user but visible on your P&L. Route 80% of queries to a small model, 20% to a large model = 60-70% cost savings with minimal quality loss.",
+      "depths": {
+        "eli5": "Using one AI model for everything is like using a Ferrari for grocery runs. For simple tasks, use a small efficient model ($0.15/1M tokens). For complex reasoning, use a powerful model ($2.50/1M tokens). **Multi-LLM architecture** switches between models automatically. An **LLM gateway** is the traffic controller that decides which model handles each request.",
+        "normal": "Why multiple LLMs: (1) **Cost optimization** — route 80% to cheap models. (2) **Latency** — fast models (200ms) for voice, powerful ones (500ms) for complex reasoning. (3) **Capability matching** — each model has strengths. (4) **Redundancy** — if OpenAI is down, fallback to Anthropic. Cognigy's Nexus Engine supports OpenAI, Azure OpenAI, Gemini, Claude, Mistral, and their own Cognigy Nexus LLM. NICE's Enlighten Models are purpose-built CX models trained on decades of contact center data.",
+        "technical": "Routing patterns: (1) **Classifier-based** — small model classifies complexity, routes accordingly. (2) **Cost-based** — set budgets per session, escalate models only if quality insufficient. (3) **Capability-based** — match task type to model strength. (4) **Fallback chains** — primary → timeout (5s) → secondary → degraded response. Prompt chaining in enterprise CX: first prompt classifies sentiment → second retrieves knowledge → third generates response → fourth validates safety. Each step can use a different model. The Cognigy Nexus LLM is proprietary, built on open-source, optimized for CX conversations with tighter integration into the Nexus Engine.",
+        "pm": "Build a model cost dashboard from day one tracking: cost/query by model, latency by model, quality by model. Multi-model routing is a vendor decision AND a cost decision. Key insight: at 10K queries/day, routing 80% to GPT-4o-mini vs 100% GPT-4o saves ~$2K/month with <2% quality difference on routine queries. Set up automatic fallback alerts. Monitor model provider SLAs — a 30-minute OpenAI outage costs you 300 failed conversations."
+      },
+      "quiz": [
+        { "q": "Why would you route customer sentiment classification to a different model than response generation?", "options": ["No reason — use the same model", "Classification needs a fast/cheap model; generation needs quality/creativity", "Sentiment is harder than generation", "The models can't do both"], "correct": 1, "explanation": "Classification is a simple task — a $0.15/1M model handles it fine. Response generation needs nuance — worth the $2.50/1M model. Different tasks, different optimal models." }
+      ],
+      "resources": [
+        { "title": "Cognigy: Multi-Model Orchestration & Prompt Chaining", "url": "https://www.cognigy.com/product-updates/generative-ai-prompt-chaining-llm-orchestration", "type": "article" },
+        { "title": "Cognigy Nexus LLM Docs", "url": "https://docs.cognigy.com/ai/agents/develop/gen-ai-and-llms/providers/cognigy-nexus-llm", "type": "docs" },
+        { "title": "NICE: Enlighten AI Models", "url": "https://www.nice.com/products/ai-agents-for-self-service", "type": "docs" }
+      ]
+    },
+    {
+      "id": "5-3",
+      "title": "MCP — Model Context Protocol",
+      "subtitle": "The universal standard for AI tool connectivity",
+      "tldr": [
+        "MCP is 'USB-C for AI' — a standard way to connect any AI to any tool, database, or service",
+        "Client-server architecture: AI agents (clients) connect to MCP servers exposing specific capabilities",
+        "Cognigy implements MCP natively — add an MCP Tool node, point to a server, whitelist tools, go"
+      ],
+      "keyInsight": "MCP turns tool integration from a multi-week engineering project into a configuration task. 100+ pre-built servers exist for common enterprise tools.",
+      "depths": {
+        "eli5": "Before USB-C, every phone had a different charger. **MCP** is USB-C for AI — a standard way to plug any tool into any AI system. Before MCP, connecting an AI agent to Salesforce required weeks of custom code. With MCP, you plug in a Salesforce MCP server and it works immediately.",
+        "normal": "MCP (Model Context Protocol), created by Anthropic (Nov 2024), defines how AI systems connect to external tools and data. **MCP Client** = the AI app (Cognigy agent, Claude, an IDE). **MCP Server** = a connector exposing capabilities (Salesforce server, GitHub server, database server). Servers self-describe their available tools, resources, and prompts — the AI discovers what's available and calls tools as needed. For enterprise CX: connecting to CRM, ticketing, payment systems drops from weeks to hours.",
+        "technical": "Architecture: JSON-RPC 2.0 over stdio (local), SSE (web), or Streamable HTTP (newest). Servers expose three primitives: **Tools** (invokable functions), **Resources** (readable data), **Prompts** (templates). Cognigy implementation: add MCP Tool node in Flow Editor → provide SSE endpoint URL → whitelist/blacklist tools → define execution conditions. The Nexus Engine handles dynamic tool selection and reasoning. A2A (Google, April 2025) complements MCP: MCP = agent-to-tool, A2A = agent-to-agent. Together they form the connectivity layer of the agentic ecosystem.",
+        "pm": "MCP is a platform PM's dream — ecosystem leverage. 100+ pre-built servers means your AI can integrate with tools you haven't considered yet. Decision framework: use MCP for standard connectors (Slack, Jira, Salesforce); build custom APIs for proprietary systems or complex auth flows. Security: each MCP server needs access control — whitelist/blacklist is the right pattern. Time-to-value: Salesforce integration goes from 4-week sprint to afternoon configuration."
+      },
+      "quiz": [
+        { "q": "MCP and A2A are:", "options": ["Competitors — pick one", "The same thing with different names", "Complementary — MCP connects agents to tools, A2A connects agents to agents", "Neither is production-ready"], "correct": 2, "explanation": "MCP handles agent↔tool connectivity. A2A handles agent↔agent collaboration. Together they form the full connectivity stack." }
+      ],
+      "resources": [
+        { "title": "MCP Specification", "url": "https://modelcontextprotocol.io/", "type": "docs" },
+        { "title": "MCP Server Directory (100+ servers)", "url": "https://github.com/modelcontextprotocol/servers", "type": "code" },
+        { "title": "Cognigy: MCP Integration", "url": "https://www.cognigy.com/product-updates/model-context-protocol-mcp", "type": "article" },
+        { "title": "Anthropic: MCP Documentation", "url": "https://docs.anthropic.com/en/docs/agents-and-tools/mcp", "type": "docs" }
+      ]
+    },
+    {
+      "id": "5-4",
+      "title": "A2A — Agent-to-Agent Protocol",
+      "subtitle": "How agents discover and collaborate across vendors",
+      "tldr": [
+        "A2A lets AI agents from different vendors discover each other, delegate tasks, and collaborate",
+        "Core concepts: Agent Cards (discovery), Tasks (work lifecycle), Artifacts (outputs)",
+        "Launched by Google (April 2025), donated to Linux Foundation, 150+ organizations in year one"
+      ],
+      "keyInsight": "A2A enables 'agents-as-services' — instead of building every capability, your agent delegates to specialized agents from other vendors. AI-to-AI communication is growing 20x year-over-year.",
+      "depths": {
+        "eli5": "MCP lets an AI use tools (like plugging in a USB device). **A2A** lets AI agents talk to OTHER agents (like phones calling each other). A travel agent can talk to an airline's agent, a hotel's agent, and a car rental agent — each built by different companies — to plan your entire trip.",
+        "normal": "Google announced A2A at Cloud Next (April 2025) with 50+ partners including Atlassian, Salesforce, SAP, LangChain, PayPal, ServiceNow. Three concepts: (1) **Agent Cards** — machine-readable JSON at /.well-known/agent.json describing capabilities. (2) **Tasks** — work with lifecycle: submitted → working → input-required → completed. (3) **Artifacts** — task outputs passed between agents. Built on HTTP, JSON-RPC 2.0, with OAuth 2.0 and mTLS auth. Grew to 150+ organizations in year one.",
+        "technical": "Three-layer architecture: **Communication** (can we talk? — HTTP/SSE/gRPC), **Syntactic** (same language? — JSON-RPC message structure), **Semantic** (same meaning? — shared intent alignment). AP2 extension (Sep 2025): Google + Coinbase added Agent Payments Protocol as an A2A extension — registered in Agent Card's extensions field. Agent Cards enable discovery without exposing internal logic, memory, or implementation. The A2A spec is at github.com/google/A2A, now under Linux Foundation governance.",
+        "pm": "A2A creates a new product category: specialized agents that serve other agents, not humans. CX implications: a NiCE CXone agent could delegate shipping returns to a logistics agent, payment reversal to a payment agent — each from different vendors. Product decisions: which capabilities to own vs delegate? How to maintain quality when delegating to external agents? What's your Agent Card strategy? Security: how do you vet and trust external agents?"
+      },
+      "quiz": [
+        { "q": "What is an Agent Card in the A2A protocol?", "options": ["A credit card for AI payments", "A machine-readable JSON describing an agent's capabilities for discovery", "A physical card given to AI agents", "A training dataset for agents"], "correct": 1, "explanation": "Agent Cards are JSON files at /.well-known/agent.json that describe an agent's capabilities, inputs/outputs, and auth requirements — enabling other agents to discover and use them." }
+      ],
+      "resources": [
+        { "title": "A2A Protocol Specification (GitHub)", "url": "https://github.com/google/A2A", "type": "code" },
+        { "title": "IBM: What Is A2A Protocol?", "url": "https://www.ibm.com/think/topics/agent2agent-protocol", "type": "article" },
+        { "title": "Atlan: A2A Protocol Explained", "url": "https://atlan.com/know/google-a2a-protocol/", "type": "article" },
+        { "title": "Stellagent: A2A Deep-Dive (150+ orgs)", "url": "https://stellagent.ai/insights/a2a-protocol-google-agent-to-agent", "type": "article" }
+      ]
+    },
+    {
+      "id": "5-5",
+      "title": "Sub-Agents & Multi-Agent Orchestration",
+      "subtitle": "Specialized agents collaborating on complex tasks",
+      "tldr": [
+        "Sub-agents handle specific tasks (billing, returns, tech support) within a larger workflow",
+        "Orchestration patterns: hub-and-spoke, hierarchical, peer-to-peer, pipeline",
+        "Context transfer on handover is the #1 failure mode — customers should never repeat themselves"
+      ],
+      "keyInsight": "Every agent-to-agent handover adds 500ms-2s latency and risks context loss. If Agent A can handle 80% of what Agent B does, maybe they should be merged.",
+      "depths": {
+        "eli5": "A hospital doesn't have one doctor doing everything. There's a receptionist, nurse, specialist, and pharmacist. When you arrive, the receptionist routes you to the right specialist. **Multi-agent orchestration** works the same way — specialized AI agents handle different tasks, and an orchestrator decides who handles what.",
+        "normal": "Cognigy's model: **Job profiles** define what each agent does, what tools it can use, what knowledge it accesses, and what safety boundaries it operates within. Agents autonomously hand over to other specialists or escalate to humans with full context. NICE CXone: **Mpower Copilot** assists human agents in real-time; **Mpower Autopilot** handles customers directly. Agents work across front office (customer-facing), mid-office (approvals), and back-office (fulfillment).",
+        "technical": "Four orchestration patterns: (1) **Hub-and-spoke** — central router classifies and delegates. Simple, debuggable. Most production CX systems. (2) **Hierarchical** — supervisor manages workers, workers can have sub-workers. LangGraph implements this. (3) **Peer-to-peer (swarm)** — agents communicate directly. Flexible but hard to debug. OpenAI Swarm, CrewAI. (4) **Pipeline** — sequential processing. Agent A extracts → B validates → C generates → D checks safety. Context transfer options: full transcript (accurate but expensive), summary handoff (compact but lossy), structured state (efficient for production), shared memory (flexible but complex).",
+        "pm": "Design decisions: (1) How many agents? Start minimal — 3-5 covers 80% of CX. (2) Agent boundaries: split by domain, action authority, or channel. (3) Copilot vs Autopilot: start Copilot, track override rate, move to Autopilot when <5%. (4) Quality measurement: track per-agent AND system-level metrics. A system with brilliant agents but terrible handover logic will fail. The orchestration tax is real — minimize handovers."
+      },
+      "quiz": [
+        { "q": "What's the most common failure mode in multi-agent CX systems?", "options": ["Wrong agent selected", "Poor context transfer on handover — customer repeats themselves", "Too many agents", "Model hallucination"], "correct": 1, "explanation": "When Agent A hands to Agent B without proper context, the customer has to repeat their issue — the #1 source of frustration in AI-assisted CX." }
+      ],
+      "resources": [
+        { "title": "Cognigy: Agentic AI Platform", "url": "https://www.cognigy.com/platform/agentic-ai", "type": "docs" },
+        { "title": "NICE: CXone Mpower Agents", "url": "https://www.nice.com/press-releases/nice-launches-cxone-mpower-agents-enterprise-grade-agentic-ai-agents-built-for-cx-to-deliver-automated-fulfillment", "type": "article" },
+        { "title": "LangGraph (GitHub)", "url": "https://github.com/langchain-ai/langgraph", "type": "code" },
+        { "title": "CrewAI Docs", "url": "https://docs.crewai.com/en/quickstart", "type": "docs" }
+      ]
+    },
+    {
+      "id": "5-6",
+      "title": "Agent Memory",
+      "subtitle": "Short-term, episodic, semantic, and procedural memory",
+      "tldr": [
+        "Without memory, every conversation starts from zero — frustrating for returning customers",
+        "Four types: working (current context), episodic (past experiences), semantic (facts/preferences), procedural (learned strategies)",
+        "NICE's Experience Memory provides persistent memory across interactions AND channels"
+      ],
+      "keyInsight": "Memory is what turns a one-shot tool into a relationship. Competitors can copy your prompts, but they can't copy your accumulated customer interaction history — that's the data flywheel.",
+      "depths": {
+        "eli5": "Imagine meeting someone new every day who has no memory of yesterday. Frustrating, right? **Agent memory** gives AI the ability to remember: what you're talking about now (short-term), what happened last time you called (episodic), facts about you (semantic), and strategies for handling situations (procedural).",
+        "normal": "A 2025 position paper ('Episodic Memory is the Missing Piece for Long-Term LLM Agents') defines five required properties: long-term storage, explicit reasoning, single-shot learning, instance-specific memories, and contextual memories. Implementation patterns: summarization-based (compact but lossy), retrieval-based (accurate but slower), structured extraction (efficient but loses nuance), hybrid (production best practice — combine all three). NICE CXone's Experience Memory persists across interactions and channels — chat history is available when the customer calls.",
+        "technical": "The agent memory ecosystem has converged on a three-tier taxonomy mirroring cognitive science: episodic, semantic, and procedural. What differs is implementation: in-context (fast, context-window limited), vector DB retrieval (scalable, latency cost), structured DB (efficient lookup), or hybrid. Key challenges: context pollution (irrelevant memories degrade reasoning), staleness (facts become outdated — Cognigy's Knowledge Connector Syncing helps), privacy (GDPR right to be forgotten extends to agent memory). Memory frameworks: Mem0, Zep (temporal knowledge graph), MemGPT (LLMs as operating systems).",
+        "pm": "The retention flywheel: better memory → more personalized service → higher satisfaction → more usage → more data → even better service. Design decisions: what to remember vs forget? How long do memories persist? Who owns the memory — customer (portable) or platform (sticky)? GDPR: can customers request deletion of all agent memories? Memory as a moat: NICE's decades of CX interaction data training Enlighten models is memory at platform scale."
+      },
+      "quiz": [
+        { "q": "Why is episodic memory different from semantic memory for AI agents?", "options": ["They're the same thing", "Episodic remembers specific events (who/when/what happened); semantic stores general facts/preferences", "Semantic is for text, episodic is for voice", "Episodic is short-term, semantic is long-term"], "correct": 1, "explanation": "Episodic: 'Customer X called March 3 about a billing issue.' Semantic: 'Customer X prefers email and is on the Enterprise plan.' Different types of knowledge, different storage/retrieval strategies." }
+      ],
+      "resources": [
+        { "title": "Position Paper: Episodic Memory for Long-Term LLM Agents", "url": "https://arxiv.org/abs/2502.06975", "type": "paper" },
+        { "title": "Zylos: AI Agent Memory Architectures (2026)", "url": "https://zylos.ai/research/2026-04-05-ai-agent-memory-architectures-persistent-knowledge/", "type": "article" },
+        { "title": "Redis: Agent Memory Guide", "url": "https://redis.io/blog/build-smarter-ai-agents-manage-short-term-and-long-term-memory-with-redis/", "type": "article" },
+        { "title": "Agent Memory Paper List (GitHub)", "url": "https://github.com/Shichun-Liu/Agent-Memory-Paper-List", "type": "code" },
+        { "title": "Mem0: Production Agent Memory", "url": "https://github.com/mem0ai/mem0", "type": "code" }
+      ]
+    },
+    {
+      "id": "5-7",
+      "title": "Evals & LLM-as-Judge",
+      "subtitle": "Measuring AI quality at scale",
+      "tldr": [
+        "53% of teams with deployed agents use LLM-as-Judge — 80% agreement with humans at 500-5000x lower cost",
+        "Known biases: position bias (10-30%), verbosity bias, self-preference bias — all mitigable",
+        "Measure RESOLUTION (did it solve the problem?), not just CONTAINMENT (did it stay in the AI?)"
+      ],
+      "keyInsight": "An agent scoring 92% on your eval suite can still fail users if your evals don't measure what customers actually care about. Always start with: 'what does success look like to the customer?'",
+      "depths": {
+        "eli5": "How do you know your AI gives good answers? You can't check millions of responses by hand. So you use **another AI to grade the first AI's work** — like a senior teacher checking a junior teacher. But the grading AI has biases (prefers longer answers, picks the first option), so you need to understand and correct for them.",
+        "normal": "Three evaluation approaches: (1) **Automated metrics** — rule-based checks (exact match, regex, schema validation). Fast, cheap, can't assess nuance. (2) **LLM-as-Judge** — a powerful LLM scores outputs against criteria. Three modes: pointwise (score one output), pairwise (compare two), checklist (detailed criteria). 53% adoption per LangChain 2025 survey. (3) **Human evaluation** — gold standard but expensive and slow. Essential for calibrating LLM judges. The RAG Triad: context relevance, groundedness, answer relevance.",
+        "technical": "LLM-as-Judge biases: **Position bias** — prefers first response in 10-30% of pairwise comparisons (mitigation: evaluate both orderings, average). **Verbosity bias** — prefers longer responses (mitigation: instruct that brevity is acceptable). **Self-preference** — prefers own model family (mitigation: use different model for judging). **Anchoring** — first impression dominates (mitigation: chain-of-thought evaluation). Calibration: maintain human-labeled test set, run judge monthly, track agreement. Target: >75% judge-human agreement. Agent-as-a-Judge (emerging): evaluate entire trajectory, not just final output — catches silent failures like unnecessary API calls.",
+        "pm": "Eval-driven development: define evals BEFORE building. The eval hierarchy for CX: (1) Safety evals (hallucination, PII, unauthorized promises) — run on 100% traffic. (2) Quality evals (accuracy, helpfulness, groundedness) — sample 5-10% with LLM-as-judge. (3) Business evals (resolution rate, CSAT, repeat contacts) — post-interaction surveys. Own the eval framework as PM: hallucination rate (<3%), groundedness (>90%), resolution rate (not containment!), eval-human agreement (>80%)."
+      },
+      "quiz": [
+        { "q": "What's the difference between containment rate and resolution rate?", "options": ["They're the same", "Containment = stayed in AI system; resolution = problem actually solved. A bot that loops until hangup has high containment but zero resolution", "Resolution is always higher than containment", "Containment measures voice, resolution measures text"], "correct": 1, "explanation": "Containment just means no human handoff. Resolution means the customer's issue was actually solved. Measure resolution, not containment — it's the metric that drives CSAT." }
+      ],
+      "resources": [
+        { "title": "LangChain: 2025 State of AI Agents Survey", "url": "https://blog.langchain.dev/state-of-ai-agents/", "type": "article" },
+        { "title": "Vadim's Blog: LLM-as-Judge Deep-Dive", "url": "https://vadim.blog/llm-as-judge/", "type": "article" },
+        { "title": "AWS: AI Agent Evaluation Tutorial", "url": "https://dev.to/aws/how-to-evaluate-ai-agents-llm-as-judge-tutorial-4a6h", "type": "article" },
+        { "title": "OpenAI Evals (GitHub)", "url": "https://github.com/openai/evals", "type": "code" },
+        { "title": "RAGAS — RAG Evaluation Framework", "url": "https://docs.ragas.io/", "type": "docs" },
+        { "title": "Promptfoo", "url": "https://www.promptfoo.dev/", "type": "tool" },
+        { "title": "Judging LLM-as-a-Judge Paper", "url": "https://arxiv.org/html/2403.04132v1", "type": "paper" }
+      ]
+    },
+    {
+      "id": "5-8",
+      "title": "Guardrails, Safety & Conversation Design",
+      "interactive": "actionRiskTaxonomy",
+      "subtitle": "Protecting users, the business, and designing for every edge case",
+      "tldr": [
+        "Guardrails operate at three levels: input (catch bad requests), output (catch bad responses), behavioral (what the agent must never do)",
+        "Conversation design covers: happy paths, edge case taxonomy, personality design, action risk taxonomy",
+        "The best production pattern: deterministic flows for high-stakes processes, agentic AI for open-ended interactions, blended seamlessly"
+      ],
+      "keyInsight": "The guardrail paradox: too few = risk, too many = the AI becomes so constrained it can't help anyone. And conversation design IS product design — the difference between a $10M product and a toy demo is often the conversation design, not the model.",
+      "depths": {
+        "eli5": "**Guardrails** are bowling bumpers — the AI can still play, but can't go in the gutter (say harmful things, leak data, make unauthorized promises). **Conversation design** is the restaurant blueprint — what does the AI say first? What if the customer gets angry? What if it doesn't understand? What if the wrong food arrives? Every scenario needs a plan.",
+        "normal": "**Input guardrails:** Jailbreak detection, PII in unexpected places, toxicity, off-topic. **Output guardrails:** Hallucination detection, unauthorized promises, PII leakage, brand safety. **Behavioral guardrails:** Never fabricate data, never access systems without auth, always disclose AI identity. **Conversation design:** (1) Happy path — greeting → intent → gather info → action → confirm → close. (2) Edge cases — no answer, language barrier, ambiguous intent (one clarification loop max), hostile customer, low ASR confidence, mid-call dropout. (3) Personality — formal vs casual, empathy signals, humor handling. (4) Action risk taxonomy: read = seamless, create = confirm, update = confirm + undo window, delete = double confirm.",
+        "technical": "Layered guardrails (production best practice): rule-based first (regex for PII, blocklists — <5ms), then classifier-based (fine-tuned BERT for toxicity/jailbreak — <50ms), then LLM-based (nuanced checks — 200-500ms). Only messages passing all layers reach the user. Cognigy's approach: out-of-the-box content moderation + jailbreak prevention, plus pluggable safety tools. Blending deterministic + agentic: use deterministic flows for payment processing and identity verification (must be predictable), agentic AI for open-ended troubleshooting (must be flexible). Seamless transition between modes within one conversation.",
+        "pm": "Guardrails are a launch requirement, not an afterthought. Checklist: (1) Jailbreak handling? (2) Hallucinated prices/policies? (3) PII in responses? (4) Abusive customers? (5) Who reviews triggers? How fast? (6) False positive rate — over-aggressive guardrails kill UX. Conversation design process: map top 10 intents → design happy path for each → identify top 5 edge cases per intent → define personality → build action risk taxonomy → test with 100 real messages → monitor and iterate weekly."
+      },
+      "quiz": [
+        { "q": "A customer says 'Cancel my account.' What level of action confirmation should this require?", "options": ["No confirmation — just do it", "Single confirmation card", "Confirmation + 30-second undo window", "Double confirmation — 'Are you sure? This cannot be undone.'"], "correct": 3, "explanation": "Account cancellation is an irreversible, high-impact action. The action risk taxonomy says delete/irreversible operations require double confirmation." }
+      ],
+      "resources": [
+        { "title": "NVIDIA NeMo Guardrails (GitHub)", "url": "https://github.com/NVIDIA/NeMo-Guardrails", "type": "code" },
+        { "title": "Guardrails AI (GitHub)", "url": "https://github.com/guardrails-ai/guardrails", "type": "code" },
+        { "title": "Conversation Design Institute", "url": "https://www.conversationdesigninstitute.com/", "type": "course" },
+        { "title": "Cognigy: AI Agent Studio", "url": "https://www.cognigy.com/platform/ai-agent-studio", "type": "docs" },
+        { "title": "Botpress: Conversational AI Design 2026", "url": "https://botpress.com/blog/conversation-design", "type": "article" }
+      ]
+    }
+  ]
+}
