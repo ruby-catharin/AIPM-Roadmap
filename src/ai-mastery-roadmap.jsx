@@ -173,10 +173,10 @@ function TemperatureDemo() {
         ))}
       </div>
       <div style={{ marginTop: 14, padding: 12, background: "var(--bg-primary)", border: "1px solid var(--border-light)", borderRadius: "var(--r-md)", fontSize: 12, color: "var(--text-secondary)", lineHeight: 1.6 }}>
-        {temp < 0.3 ? "Deterministic — always picks the top token. Best for: data extraction, classification, factual Q&A."
-         : temp < 0.8 ? "Balanced — mostly picks likely tokens with some variety. Best for: customer support, summarization."
-         : temp < 1.2 ? "Creative — explores many options. Best for: brainstorming, marketing copy, creative writing."
-         : "Chaotic — even unlikely tokens get selected. Rarely useful in production."}
+        {temp < 0.3 ? "Deterministic. Always picks the top token. Best for: data extraction, classification, factual Q&A."
+         : temp < 0.8 ? "Balanced. Mostly picks likely tokens, with some variety. Best for: customer support, summarization."
+         : temp < 1.2 ? "Creative. Explores many options. Best for: brainstorming, marketing copy, creative writing."
+         : "Chaotic. Even unlikely tokens get selected. Rarely useful in production."}
       </div>
     </div>
   );
@@ -377,8 +377,8 @@ function FunctionCallFlow() {
     { actor: "LLM", msg: "Returns tool_use block:\n{\n  \"name\": \"get_weather\",\n  \"input\": { \"city\": \"Tokyo\" }\n}\nLLM does NOT execute anything.", color: "var(--orange)" },
     { actor: "YOUR APP", msg: "YOUR code calls the weather API:\nfetch('api.weather.com/tokyo')\n→ { temp: 22, condition: 'Sunny' }", color: "var(--violet)" },
     { actor: "YOUR APP", msg: "Sends tool_result back to LLM:\n{ temp: 22, condition: 'Sunny' }", color: "var(--violet)" },
-    { actor: "LLM", msg: "Generates natural response:\n\"It's 22°C and sunny in Tokyo right now!\"", color: "var(--orange)" },
-    { actor: "USER", msg: "Sees: \"It's 22°C and sunny in Tokyo right now!\"", color: "var(--info)" },
+    { actor: "LLM", msg: "Generates natural response:\n\"It's 22°C and sunny in Tokyo right now.\"", color: "var(--orange)" },
+    { actor: "USER", msg: "Sees: \"It's 22°C and sunny in Tokyo right now.\"", color: "var(--info)" },
   ];
   const s = steps[step];
 
@@ -502,7 +502,7 @@ function EvalScorer() {
           </div>
         </div>
       ))}
-      {/* Tinted, not filled — see AgentReliabilityCalc. */}
+      {/* Tinted, not filled: see AgentReliabilityCalc. */}
       <div style={{ background: tint(avgColor), borderLeft: `3px solid ${avgColor}`, borderRadius: "var(--r-md)", padding: "12px 16px", display: "flex", justifyContent: "space-between", alignItems: "center", gap: 12, color: avgColor, transition: "background var(--dur) var(--ease), border-color var(--dur) var(--ease)" }}>
         <div>
           <div style={{ fontSize: 10, fontWeight: 600, letterSpacing: "0.1em", fontFamily: "var(--mono)" }}>VERDICT</div>
@@ -529,7 +529,7 @@ function FineTuningDecisionTree() {
     "stop-gap": { msg: "Fine-tuning can't fix vague problems. Define a specific, measurable quality gap before investing.", color: "var(--warning)" },
     "stop-data": { msg: "You need quality training data. Invest in labeling 200+ examples first.", color: "var(--warning)" },
     "stop-maintain": { msg: "Fine-tuning requires ongoing investment. Budget for maintenance or the model will degrade.", color: "var(--warning)" },
-    "go": { msg: "Fine-tuning is justified! Start with LoRA (10,000x fewer params) on a small model. Measure quality delta vs base.", color: "var(--success)" },
+    "go": { msg: "Fine-tuning is justified. Start with LoRA (10,000x fewer params) on a small model. Measure quality delta vs base.", color: "var(--success)" },
   };
   const currentQ = questions.find(q => !answers[q.id] && (q.id === "prompts" || answers[questions[questions.indexOf(q) - 1]?.id] === "yes"));
   const stoppedAt = Object.entries(answers).find(([, v]) => v === "no");
@@ -570,7 +570,7 @@ function FineTuningDecisionTree() {
           </div>
         );
       })}
-      {/* Tinted, not filled — see AgentReliabilityCalc. */}
+      {/* Tinted, not filled: see AgentReliabilityCalc. */}
       {result && (
         <div role="status" style={{ background: tint(result.color), borderLeft: `3px solid ${result.color}`, borderRadius: "var(--r-md)", padding: 14, marginTop: 8 }}>
           <div style={{ fontSize: 13, lineHeight: 1.6, color: "var(--text-primary)" }}>{result.msg}</div>
@@ -624,7 +624,7 @@ function UnitEconomicsCalc() {
       <div style={{ background: tint(marginColor), borderLeft: `3px solid ${marginColor}`, borderRadius: "var(--r-md)", padding: 12, textAlign: "center", marginTop: 10, color: marginColor, transition: "background var(--dur) var(--ease), border-color var(--dur) var(--ease)" }}>
         <div style={{ fontSize: 10, fontWeight: 600, letterSpacing: "0.1em", fontFamily: "var(--mono)" }}>GROSS MARGIN (AI ONLY)</div>
         <div style={{ fontSize: 24, fontWeight: 800, fontFamily: "var(--display)", letterSpacing: "-0.02em" }}>${margin >= 1000 ? (margin / 1000).toFixed(1) + "K" : margin.toFixed(0)}/mo</div>
-        <div style={{ fontSize: 11, color: "var(--text-muted)", fontFamily: "var(--mono)", marginTop: 2 }}>Traditional SaaS: ~20% COGS · AI SaaS: 40–70% COGS</div>
+        <div style={{ fontSize: 11, color: "var(--text-muted)", fontFamily: "var(--mono)", marginTop: 2 }}>Traditional SaaS: ~20% COGS · AI SaaS: 40-70% COGS</div>
       </div>
     </div>
   );
@@ -701,7 +701,7 @@ function ActionRiskTaxonomy({ color }) {
   // Surfaces derive from `color` via tint(), so there is no second palette to
   // keep in sync per theme.
   const riskLevels = {
-    read: { label: "Read → Seamless", color: "var(--success)", confirm: "No confirmation needed" },
+    read: { label: "Read → No friction", color: "var(--success)", confirm: "No confirmation needed" },
     create: { label: "Create → Confirm", color: "var(--info)", confirm: "Single confirmation" },
     update: { label: "Update → Confirm + Undo", color: "var(--orange)", confirm: "Confirm + undo window" },
     delete: { label: "Delete → Double Confirm", color: "var(--danger)", confirm: "Double confirmation required" },
@@ -757,7 +757,7 @@ function ActionRiskTaxonomy({ color }) {
                   );
                 })}
               </div>
-              {answered && !isCorrect && <div style={{ fontSize: 11, marginTop: 4, fontFamily: "var(--mono)", color: "var(--danger)" }}>→ {riskLevels[action.answer].label} — {action.hint}</div>}
+              {answered && !isCorrect && <div style={{ fontSize: 11, marginTop: 4, fontFamily: "var(--mono)", color: "var(--danger)" }}>→ {riskLevels[action.answer].label} · {action.hint}</div>}
             </div>
           );
         })}
@@ -768,7 +768,7 @@ function ActionRiskTaxonomy({ color }) {
         return (
           <div role="status" style={{ marginTop: 16, padding: 14, borderRadius: "var(--r-md)", background: tint(c), borderLeft: `3px solid ${c}`, textAlign: "center" }}>
             <div style={{ fontSize: 22, fontWeight: 800, fontFamily: "var(--display)", letterSpacing: "-0.02em", color: c }}>{correct}/{actions.length} correct</div>
-            <div style={{ fontSize: 12, fontFamily: "var(--mono)", color: "var(--text-muted)" }}>{correct === actions.length ? "You nailed the risk taxonomy!" : "Review the corrections above — risk classification protects users and the business"}</div>
+            <div style={{ fontSize: 12, fontFamily: "var(--mono)", color: "var(--text-muted)" }}>{correct === actions.length ? "Every action classified correctly." : "Review the corrections above. Risk classification protects users and the business."}</div>
             <button onClick={() => setAnswers({})} style={{ marginTop: 8, fontSize: 11, fontFamily: "var(--mono)", padding: "4px 12px", borderRadius: "var(--r-sm)", border: `1px solid ${c}`, background: "transparent", color: c, cursor: "pointer" }}>Reset</button>
           </div>
         );
@@ -1062,7 +1062,7 @@ function Section({ section, weekColor }) {
         </div>
       )}
 
-      {/* Resources — collapsible */}
+      {/* Resources (collapsible) */}
       {resourcesList.length > 0 && (
         <div style={{ marginTop: 28, paddingTop: 20, borderTop: "1px solid var(--section-separator)" }}>
           <button
@@ -1165,7 +1165,7 @@ function TableOfContents({ week, currentSection }) {
   };
 
   // Each Section owns its own depth state, so ask it to switch, then scroll
-  // one frame later — after the newly selected depth block has mounted.
+  // one frame later, after the newly selected depth block has mounted.
   const scrollToDepth = (sectionId, depth) => {
     window.dispatchEvent(new CustomEvent("roadmap:set-depth", { detail: { sectionId, depth } }));
     requestAnimationFrame(() => {
@@ -1222,7 +1222,7 @@ function TableOfContents({ week, currentSection }) {
                 {section.title}
               </button>
 
-              {/* Depth levels — active section only */}
+              {/* Depth levels for the active section only */}
               {isActive && (
                 <div style={{ display: "flex", flexDirection: "column", gap: 1, marginTop: 2, marginLeft: 10, paddingLeft: 8, borderLeft: "1px solid var(--border-hover)" }}>
                   {["eli5", "normal", "technical", "pm"].map((depth) => (
@@ -1336,7 +1336,7 @@ export default function AIRoadmap() {
     setCurrentSection(week.sections[0] || null);
   }, [activeWeek, week.sections]);
 
-  // Track which section is in view — debounced so TOC only updates after scroll stops
+  // Track which section is in view. Debounced so the TOC only updates after scroll stops
   useEffect(() => {
     const OFFSET = 200; // below sticky header + week tabs
     let scrollTimer = null;
@@ -1379,21 +1379,21 @@ export default function AIRoadmap() {
   return (
     <div style={{ minHeight: "100dvh", background: "var(--bg-primary)", color: "var(--text-primary)" }}>
       <style>{`
-        /* Fonts are loaded in index.html with preconnect — never @import at runtime. */
+        /* Fonts are loaded in index.html with preconnect. Never @import at runtime. */
 
         :root {
           --display: 'Outfit', sans-serif;
           --body: 'Source Sans 3', sans-serif;
           --mono: 'IBM Plex Mono', monospace;
 
-          /* Surfaces — off-white, never pure #fff */
+          /* Surfaces: off-white, never pure #fff */
           --bg-primary: #fcfcfb;
           --bg-secondary: #f6f6f3;
           --bg-tertiary: #f1f1ed;
           --bg-input: #ffffff;
           --bg-card: var(--bg-primary);
 
-          /* Text — near-black, never pure #000 */
+          /* Text: near-black, never pure #000 */
           --text-primary: #16161a;
           --text-secondary: #3d3d45;
           --text-muted: #6b6b74;
@@ -1412,7 +1412,7 @@ export default function AIRoadmap() {
           --accent-text: #ffffff;
           --accent-hover: rgba(37, 99, 235, 0.08);
 
-          /* Semantic palette — every ad-hoc hex in the app maps to one of these */
+          /* Semantic palette: every ad-hoc hex in the app maps to one of these */
           --success: #2F7A43;
           --warning: #A16207;
           --danger: #C2333A;
@@ -1421,8 +1421,8 @@ export default function AIRoadmap() {
           --orange: #C2560C;
           --pink: #B32B5E;
 
-          /* Tinted surfaces come from tint() in JS — a color-mix over the semantic
-             token above — so there is no hand-maintained pastel palette per theme. */
+          /* Tinted surfaces come from tint() in JS, a color-mix over the semantic
+             token above, so there is no hand-maintained pastel palette per theme. */
 
           /* Tinted shadows read as depth; pure black reads as dirt */
           --shadow-sm: rgba(24, 24, 40, 0.05);
@@ -1490,7 +1490,7 @@ export default function AIRoadmap() {
         h1, h2, h3, h4 { text-wrap: balance; }
         p, li { text-wrap: pretty; }
 
-        /* Numbers in this app are mostly compared column-wise — align them */
+        /* Numbers in this app are mostly compared column-wise, so align them */
         [style*="--mono"], code, pre, input[type=number] {
           font-variant-numeric: tabular-nums;
         }
@@ -1627,7 +1627,7 @@ export default function AIRoadmap() {
         }
       `}</style>
 
-      {/* First focusable element on the page — the .skip-link CSS above pulls it
+      {/* First focusable element on the page. The .skip-link CSS above pulls it
           offscreen until it takes focus. */}
       <a className="skip-link" href="#main">Skip to content</a>
 
@@ -1669,6 +1669,29 @@ export default function AIRoadmap() {
                   {sidebarOpen ? "←" : "→"}
                 </button>
               )}
+              {/* Monogram: inverts with the theme because it borrows the text and
+                  surface tokens rather than hardcoding black on white. */}
+              <div
+                aria-hidden="true"
+                style={{
+                  width: 34,
+                  height: 34,
+                  flexShrink: 0,
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  borderRadius: 9,
+                  background: "var(--text-primary)",
+                  color: "var(--bg-primary)",
+                  fontFamily: "var(--display)",
+                  fontWeight: 700,
+                  fontSize: 14,
+                  letterSpacing: "-0.03em",
+                  paddingRight: 1
+                }}
+              >
+                RC
+              </div>
               <div>
                 <h1 style={{ fontSize: isMobile ? 16 : 20, fontWeight: 600, fontFamily: "var(--display)", margin: 0, color: "var(--text-primary)", letterSpacing: "-0.02em" }}>
                   AI PM Roadmap
@@ -1690,7 +1713,7 @@ export default function AIRoadmap() {
 
       {/* Layout */}
       <div className="layout" style={{ display: "flex", maxWidth: 1600, margin: "0 auto", minHeight: "calc(100dvh - 190px)" }}>
-        {/* TOC Sidebar — desktop only */}
+        {/* TOC sidebar, desktop only */}
         {!isMobile && sidebarOpen && <TableOfContents week={week} currentSection={currentSection} />}
 
         {/* Content */}
@@ -1706,7 +1729,7 @@ export default function AIRoadmap() {
             </div>
           </div>
 
-          {/* Mobile TOC — inline at top of content */}
+          {/* Mobile TOC, inline at top of content */}
           {isMobile && <MobileTOC week={week} />}
 
           {week.sections.map(section => (
